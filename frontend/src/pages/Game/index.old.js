@@ -2,6 +2,7 @@ import React from "react"
 import { Stage } from '@inlet/react-pixi'
 
 import Player from "../../components/Player"
+import Maze from "../../components/Maze"
 
 function Game() {
 
@@ -17,6 +18,7 @@ function Game() {
         }}>
 
             <Player />
+            <Maze />
 
         </Stage>
     )

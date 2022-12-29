@@ -55,7 +55,7 @@ function Player() {
     const draw = useCallback(g => {
         g.beginFill(0x0033cc, 1)
         g.lineStyle(4,0,1) 
-        g.drawRect(-50, -50, 100, 100)
+        g.drawRect(50, 50, 100, 100)
         g.endFill()
     },[]);
 

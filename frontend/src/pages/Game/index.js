@@ -39,6 +39,7 @@ function Game() {
             backgroundColor: 0x3d3d3d}
         }>
 
+    	    <Maze />
             <Player />
 
         </Stage>

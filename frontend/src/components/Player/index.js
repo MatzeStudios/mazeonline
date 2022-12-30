@@ -3,8 +3,8 @@ import React, { useState, useCallback } from "react"
 import { Graphics, useTick } from '@inlet/react-pixi'
 
 function Player() {
-    const [x, setX] = useState(0)
-    const [y, setY] = useState(0)
+    const [x, setX] = useState(100)
+    const [y, setY] = useState(100)
 
     const [leftHeld, setLeftHeld] = useState(false);
     const [rightHeld, setRightHeld] = useState(false);
@@ -53,14 +53,15 @@ function Player() {
     });
 
     const draw = useCallback(g => {
+        g.clear()
         g.beginFill(0x0033cc, 1)
-        g.lineStyle(4,0,1) 
-        g.drawRect(50, 50, 100, 100)
+        g.lineStyle(4,0,1)
+        g.drawRect(x - 50, y - 50, 100, 100)
         g.endFill()
-    },[]);
+    },[x, y]);
 
     return(
-        <Graphics draw={draw} x={x} y={y} />
+        <Graphics draw={draw} />
     )
 }
 

@@ -260,9 +260,11 @@ function Maze() {
         }
     }
 
-    let maze = new Maze(20,20)
-    maze.carve_passages()
     
+    let m = new MazeClass(10,10)
+    m.carve_passages()
+    
+
     const draw = useCallback(g => {
         g.clear()
         g.beginFill(0xff3300)
@@ -286,8 +288,9 @@ function Maze() {
     
     },[]);
     
+
     return(
-            <Graphics draw={draw} x={100} y={100}/>
+        <Graphics draw={draw} x={100} y={100} />
     )
 }
 

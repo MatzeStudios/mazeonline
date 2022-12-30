@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react"
 import { Stage } from '@inlet/react-pixi'
 import "./style.css"
 
-import Maze from "../../components/Maze"
-import MazeClass from "../../components/Maze"
+import Maze, { MazeClass } from "../../components/Maze"
 import Player from "../../components/Player"
-
 
 const useResize = () => {
     const [size, setSize] = useState([window.innerWidth, window.innerHeight]);

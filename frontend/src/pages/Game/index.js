@@ -3,7 +3,9 @@ import { Stage } from '@inlet/react-pixi'
 import "./style.css"
 
 import Maze from "../../components/Maze"
+import MazeClass from "../../components/Maze"
 import Player from "../../components/Player"
+
 
 const useResize = () => {
     const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
@@ -27,6 +29,8 @@ const useResize = () => {
 
 function Game() {
 
+    const [maze, setMaze] = useState(new MazeClass(10,10));
+
     const [width, height] = useResize();
 
     return (
@@ -36,11 +40,11 @@ function Game() {
         options={{
             antialias: true,
             autoDensity: true,
-            backgroundColor: 0x3d3d3d}
-        }>
+            backgroundColor: 0x3d3d3d}}
+        >
 
-    	    <Maze />
-            <Player />
+    	    <Maze maze={maze} />
+            <Player maze={maze} />
 
         </Stage>
     )

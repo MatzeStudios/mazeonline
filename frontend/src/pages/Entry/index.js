@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
-import {socketIOClient, io} from "socket.io-client"
 
 // styles
 import './index.css'
@@ -10,26 +9,15 @@ import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
 import '../../fonts/Inter/static/Inter-Regular.ttf'
 
 
-const socket = io()
-
-function Entry() {
+function Entry(props) {
+    const socket = props.socket
     const [nickname, setNickname] = useState('')
-    const [isConnected, setIsConnected] = useState(socket.connected)
-    
-    useEffect(() => {
-        socket.on('connect', () => {
-            setIsConnected(true);
-          })
-      
-        socket.on('disconnect', () => {
-            setIsConnected(false);
-        })
-          
-    }, [])
 
-    const sendPing = () => {
-        socket.emit('ping');
-      }
+    useEffect(() => {
+        socket.on("FromAPI", data => {
+            
+        });
+    }, [])
 
     return (
         <div className='page'>
@@ -39,6 +27,7 @@ function Entry() {
 
             <div className='container-input-nickname'>
                 <label className='text-input-title' htmlFor='nickname'>Digite seu nickname</label>
+
                 <input className='input-nickname' type='text' name='nickname' id='nickname' onChange={event => setNickname(event.target.value)}/>
                 <Link
                     to={{

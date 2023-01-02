@@ -6,6 +6,7 @@ import { BASE_SIZE } from '../../settings/constants'
 function Player(props) {
 
     const maze = props.maze
+    const socket = props.socket
 
     const [x, setX] = useState(maze.sx + 0.5);
     const [y, setY] = useState(maze.sy + 0.5);
@@ -60,7 +61,10 @@ function Player(props) {
 
         setX(nx)
         setY(ny)
+
+        socket.emit("positionUpdate", {x: x, y: y});
     })
+
 
     const draw = useCallback(g => {
         g.clear()

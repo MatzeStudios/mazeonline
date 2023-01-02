@@ -4,6 +4,7 @@ import "./style.css"
 
 import Maze, { MazeClass } from "../../components/Maze"
 import Player from "../../components/Player"
+import OtherPlayers from "../../components/OtherPlayers"
 
 const useResize = () => {
     const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
@@ -25,9 +26,10 @@ const useResize = () => {
     return size;
 };
 
-function Game() {
+function Game(props) {
+    const socket = props.socket
 
-    const [maze, setMaze] = useState(new MazeClass(10,10));
+    const [maze, setMaze] = useState(new MazeClass(15,15)); 
 
     const [width, height] = useResize();
 
@@ -42,7 +44,8 @@ function Game() {
         >
 
     	    <Maze maze={maze} />
-            <Player maze={maze} />
+    	    <OtherPlayers socket={socket} />
+            <Player maze={maze} socket={socket}/>
 
         </Stage>
     )

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { Stage } from '@inlet/react-pixi'
 import "./style.css"
+import socket from "../../services/socket"
 
-import Maze, { MazeClass } from "../../components/Maze"
+import Maze from "../../components/Maze"
 import Player from "../../components/Player"
 import OtherPlayers from "../../components/OtherPlayers"
 
@@ -26,14 +27,20 @@ const useResize = () => {
     return size;
 };
 
-function Game(props) {
-    const socket = props.socket
-
-    const [maze, setMaze] = useState(new MazeClass(15,15)); 
-
+function Game() {
+    
     const [width, height] = useResize();
 
-    return (
+    const [maze, setMaze] = useState();
+
+    useEffect(() => {
+        socket.emit("getMaze") // asks for the maze
+        socket.on("getMaze", data => { // get response from server
+            setMaze(data)
+        })
+    }, []);
+
+    if(maze) return (
         <Stage
         width={width}
         height={height}
@@ -44,10 +51,14 @@ function Game(props) {
         >
 
     	    <Maze maze={maze} />
-    	    <OtherPlayers socket={socket} />
-            <Player maze={maze} socket={socket}/>
+    	    <OtherPlayers />
+            <Player maze={maze} />
 
         </Stage>
+    )
+
+    return (
+        <p> Loading... </p>
     )
 }
 

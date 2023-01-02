@@ -1,18 +1,19 @@
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import { Graphics } from '@inlet/react-pixi'
 import { BASE_SIZE } from '../../settings/constants'
+import socket from "../../services/socket"
 
-function OtherPlayers(props) {
-
-    const socket = props.socket
-
+function OtherPlayers() {
+    
     const [players, setPlayers] = useState([])
 
     const radius = BASE_SIZE / 5;
 
-    socket.on("positions", data => {
-        setPlayers(data)
-    });
+    useEffect(() => {
+        socket.on("positions", data => {
+            setPlayers(data)
+        });
+    }, []);
 
     const draw = useCallback(g => {
         

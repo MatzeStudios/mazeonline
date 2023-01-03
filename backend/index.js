@@ -21,8 +21,6 @@ const io = new socketIo.Server(httpServer, {
     }
 })
 
-let next_id = 1
-
 let maze = new Maze(15,15,2)
 
 const players = []
@@ -31,26 +29,21 @@ setInterval(() => {
     console.log(players)
 }, 1000)
 
+let updater = setInterval(() => {
+    // if(gameRunning)
+    io.emit("positions", players);
+}, 50)
 
 io.on("connection", (socket) => {
-    let interval;
-    let player = new Player(next_id)
-
-    if(next_id == 1000) next_id = 0
-    next_id++
+    let player = new Player(socket.id)
 
     players.push(player)
 
     console.log("New client connected")
 
-    interval = setInterval(() => {
-        socket.emit("positions", players);
-    }, 50)
-
     socket.on("disconnect", () => {
         console.log("Client disconnected")
         players.splice(players.indexOf(player), 1);
-        clearInterval(interval)
     })
 
     socket.on("nameDefine", data => {
@@ -64,6 +57,10 @@ io.on("connection", (socket) => {
 
     socket.on("getMaze", () => {
         socket.emit("getMaze", maze)
+    })
+
+    socket.on("getId", () => {
+        socket.emit("getId", socket.id)
     })
 })
 

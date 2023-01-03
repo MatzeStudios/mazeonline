@@ -114,7 +114,7 @@ function Player(props) {
         socket.emit("positionUpdate", {x: x, y: y})
     }
 
-    // logica para usar uma função que mutável
+    // logica para usar uma função que mutável no setInterval
     const savedCallback = useRef();
 
     useEffect(() => {

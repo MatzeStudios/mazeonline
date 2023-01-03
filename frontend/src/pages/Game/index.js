@@ -49,7 +49,7 @@ function Game() {
             autoDensity: true,
             backgroundColor: 0x3d3d3d}}
         >
-
+            
     	    <Maze maze={maze} />
     	    <OtherPlayers />
             <Player maze={maze} />

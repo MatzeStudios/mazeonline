@@ -51,6 +51,22 @@ const verifyMovement = (xi, yi, xf, yf, radius, maze) => {
         return (maze.grid[yiI][xiI] & N) != 0 ? [xf,yf] : [xf,yi]
 }
 
+const appendVisitedCells = (x, y, visitedCells) => {
+    x = Math.floor(x)
+    y = Math.floor(y)
+    for(let i=0;i < visitedCells.length;i++){
+        if(visitedCells[i].x == x && visitedCells[i].y == y){
+            // takeOffVisited(1+i, visitedCells)
+            return
+        }
+    }
+    visitedCells.push({x:x, y:y})
+}
+
+const takeOffVisited = (index, visitedCells) => {
+    visitedCells.splice(index, visitedCells.length - index)
+}
+
 function Player(props) {
 
     const maze = props.maze
@@ -64,6 +80,8 @@ function Player(props) {
     const [upHeld, setUpHeld] = useState(false);
     const [downHeld, setDownHeld] = useState(false);
     const [shiftHeld, setShiftHeld] = useState(false);
+
+    const visitedCells = useState([])[0];
     
     useEventListener('keydown', (event) => {
         if(event.key.toLowerCase() == 'w') setUpHeld(true)
@@ -105,6 +123,8 @@ function Player(props) {
         }
 
         [nx, ny] = verifyMovement(x, y, nx, ny, radius, maze)
+        
+        appendVisitedCells(nx, ny, visitedCells)
 
         setX(nx)
         setY(ny)
@@ -126,7 +146,7 @@ function Player(props) {
         return () => clearInterval(interval)
     }, []);
 
-    const draw = useCallback(g => {
+    const drawPlayer = useCallback(g => {
         g.clear()
         g.beginFill(0x0033cc, 1)
         g.lineStyle(2,0,1)
@@ -134,8 +154,26 @@ function Player(props) {
         g.endFill()
     }, []);
 
+    const drawPath = useCallback(g => {
+        if(visitedCells.length == 0) return
+        g.clear()
+        g.lineStyle(0,0,1)
+        g.beginFill(0x0063cc, 0.3)
+        // g.moveTo((visitedCells[0].x + 0.5) * BASE_SIZE, (visitedCells[0].y + 0.5) * BASE_SIZE)
+        for(let i=0;i<visitedCells.length;i++){
+            let x = (visitedCells[i].x ) * BASE_SIZE
+            let y = (visitedCells[i].y ) * BASE_SIZE
+            // g.lineTo(x, y)
+            g.drawRect(x, y, BASE_SIZE, BASE_SIZE)
+        }
+        g.endFill()
+    }, [visitedCells.length]);
+
     return(
-        <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} />
+        <>
+        <Graphics draw={drawPath} /> 
+        <Graphics draw={drawPlayer} x={x * BASE_SIZE} y={y * BASE_SIZE} /> 
+        </>
     )
 }
 

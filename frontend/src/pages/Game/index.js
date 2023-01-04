@@ -52,7 +52,7 @@ function Game() {
 
     	    <Maze maze={maze} />
     	    <OtherPlayers />
-            <Player maze={maze} />
+            <Player maze={maze} />  
 
         </Stage>
     )

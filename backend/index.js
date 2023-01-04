@@ -29,9 +29,9 @@ setInterval(() => {
     console.log(players)
 }, 1000)
 
-let updater = setInterval(() => {
+const updater = setInterval(() => {
     // if(gameRunning)
-    io.emit("positions", players);
+    io.emit("positions", players)
 }, 50)
 
 io.on("connection", (socket) => {
@@ -44,7 +44,8 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         console.log("Client disconnected")
-        players.splice(players.indexOf(player), 1);
+        players.splice(players.indexOf(player), 1)
+        io.emit("getNumPlayers", players.length)
     })
 
     socket.on("nameDefine", data => {
@@ -56,6 +57,14 @@ io.on("connection", (socket) => {
         player.y = data.y
     })
 
+    socket.on("playerStart", () => {
+        players.push(player) 
+
+        if (players.length == 1) {
+            socket.emit("startGame", true)
+        }
+    })
+
     socket.on("getMaze", () => {
         socket.emit("getMaze", maze)
     })
@@ -63,6 +72,11 @@ io.on("connection", (socket) => {
     socket.on("getId", () => {
         socket.emit("getId", socket.id)
     })
+
+    socket.on("getNumPlayers", () => {
+        socket.emit("getNumPlayers", players.length)
+    })
+
 })
 
 httpServer.listen(port, () => console.log(`Listening on port ${port}`))

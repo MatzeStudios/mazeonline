@@ -36,9 +36,10 @@ let updater = setInterval(() => {
 
 io.on("connection", (socket) => {
     let player = new Player(socket.id)
+    player.setInicialPosition(maze)
 
     players.push(player)
-
+    
     console.log("New client connected")
 
     socket.on("disconnect", () => {

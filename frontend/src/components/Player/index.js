@@ -54,6 +54,7 @@ const verifyMovement = (xi, yi, xf, yf, radius, maze) => {
 const appendVisitedCells = (x, y, visitedCells) => {
     x = Math.floor(x)
     y = Math.floor(y)
+    if(visitedCells[visitedCells.length-1].x == x && visitedCells[visitedCells.length-1].y == y) return
     for(let i=0;i < visitedCells.length;i++){
         if(visitedCells[i].x == x && visitedCells[i].y == y){
             // takeOffVisited(1+i, visitedCells)

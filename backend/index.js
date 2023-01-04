@@ -35,10 +35,10 @@ const updater = setInterval(() => {
 }, 50)
 
 io.on("connection", (socket) => {
-    let player = new Player(socket.id)
+    const player = new Player(socket.id)
     player.setInicialPosition(maze)
 
-    players.push(player)
+    io.emit("getNumPlayers", players.length)
     
     console.log("New client connected")
 

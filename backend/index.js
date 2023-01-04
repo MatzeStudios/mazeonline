@@ -5,8 +5,7 @@ const socketIo = require("socket.io")
 const port = process.env.PORT || 9000
 const index = require("./routes/index")
 
-const Player = require("./src/classes/player")
-const Maze = require("./src/classes/maze")
+const Game = require("./src/controller/game")
 
 const app = express()
 app.use(index)
@@ -21,63 +20,10 @@ const io = new socketIo.Server(httpServer, {
     }
 })
 
-let maze = new Maze(15,15,2)
-
-const players = []
+let game = new Game(io)
 
 setInterval(() => {
-    console.log(players)
+    console.log(game.players)
 }, 1000)
-
-const updater = setInterval(() => {
-    // if(gameRunning)
-    io.emit("positions", players)
-}, 50)
-
-io.on("connection", (socket) => {
-    const player = new Player(socket.id)
-    player.setInicialPosition(maze)
-
-    io.emit("getNumPlayers", players.length)
-    
-    console.log("New client connected")
-
-    socket.on("disconnect", () => {
-        console.log("Client disconnected")
-        players.splice(players.indexOf(player), 1)
-        io.emit("getNumPlayers", players.length)
-    })
-
-    socket.on("playerStart", data => {
-        player.nickname = data
-        players.push(player) 
-        
-        io.emit("getNumPlayers", players.length)
-        
-        if (players.length == 1) {
-            socket.emit("startGame", true)
-        }
-    })
-
-    socket.on("positionUpdate", data => {
-        player.x = data.x
-        player.y = data.y
-    })
-
-    socket.on("getMaze", () => {
-       players.indexOf(player) != -1 ? socket.emit("getMaze", maze) : socket.emit("getMaze", undefined)
-    })
-
-    socket.on("getId", () => {
-        socket.emit("getId", socket.id)
-    })
-
-    socket.on("getNumPlayers", () => {
-        socket.emit("getNumPlayers", players.length)
-    })
-
-   
-
-})
 
 httpServer.listen(port, () => console.log(`Listening on port ${port}`))

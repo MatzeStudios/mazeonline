@@ -16,7 +16,7 @@ function Entry() {
     const navigate = useNavigate()
     const handleOnClick = useCallback(() => {
         navigate('/game', {replace: false})
-        socket.emit("nameDefine", nickname)
+        socket.emit("playerStart", nickname)
     }, [navigate, nickname])
 
     useEffect(() => {

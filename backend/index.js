@@ -47,8 +47,15 @@ io.on("connection", (socket) => {
         io.emit("getNumPlayers", players.length)
     })
 
-    socket.on("nameDefine", data => {
+    socket.on("playerStart", data => {
         player.nickname = data
+        players.push(player) 
+        
+        io.emit("getNumPlayers", players.length)
+        
+        if (players.length == 1) {
+            socket.emit("startGame", true)
+        }
     })
 
     socket.on("positionUpdate", data => {
@@ -56,16 +63,8 @@ io.on("connection", (socket) => {
         player.y = data.y
     })
 
-    socket.on("playerStart", () => {
-        players.push(player) 
-
-        if (players.length == 1) {
-            socket.emit("startGame", true)
-        }
-    })
-
     socket.on("getMaze", () => {
-        socket.emit("getMaze", maze)
+       players.indexOf(player) != -1 ? socket.emit("getMaze", maze) : socket.emit("getMaze", undefined)
     })
 
     socket.on("getId", () => {
@@ -75,6 +74,8 @@ io.on("connection", (socket) => {
     socket.on("getNumPlayers", () => {
         socket.emit("getNumPlayers", players.length)
     })
+
+   
 
 })
 

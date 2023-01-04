@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Stage } from '@inlet/react-pixi'
 import "./style.css"
 import socket from "../../services/socket"
+import {useNavigate} from 'react-router-dom'
 
 import Maze from "../../components/Maze"
 import Player from "../../components/Player"
@@ -32,11 +33,17 @@ function Game() {
     const [width, height] = useResize();
 
     const [maze, setMaze] = useState();
+    
+    const navigate = useNavigate()
+
+    const handleRedirectHome = useCallback(() => {
+        navigate('/', {replace: true})
+    }, [navigate])
 
     useEffect(() => {
         socket.emit("getMaze") // asks for the maze
         socket.on("getMaze", data => { // get response from server
-            setMaze(data)
+            data ? setMaze(data) : handleRedirectHome()
         })
     }, []);
 
@@ -49,7 +56,7 @@ function Game() {
             autoDensity: true,
             backgroundColor: 0x3d3d3d}}
         >
-            
+
     	    <Maze maze={maze} />
     	    <OtherPlayers />
             <Player maze={maze} />

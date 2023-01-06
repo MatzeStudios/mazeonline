@@ -57,7 +57,7 @@ function Game() {
 
         socket.on("gameRunning", () => { setFreeze(false) })
 
-    }, []);
+    }, [handleRedirectHome]);
 
     const [xp, setXp] = useState(undefined);
     const [yp, setYp] = useState(undefined);
@@ -75,7 +75,7 @@ function Game() {
                 <VisitedCells xp={xp} yp={yp} maze={maze} />
                 <Path xp={xp} yp={yp} />
                 <Maze maze={maze} />
-                <OtherPlayers />
+                <OtherPlayers maze={maze} />
                 <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}/>  
             </Container>
         </Stage>

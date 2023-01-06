@@ -77,7 +77,7 @@ class Game {
 
         socket.on("positionUpdate", data => {
             player.setPosition(data.x, data.y)
-            player.setVelocity(data.vx, data.vy)
+            player.setVelocity(data.vx, data.vy, data.running)
         })
 
         socket.on("getMaze", () => {

@@ -35,7 +35,7 @@ function Entry() {
             <div className='container-input-nickname'>
                 <label className='text-input-title' htmlFor='nickname'>Digite seu nickname</label>
 
-                <input className='input-nickname' type='text' name='nickname' id='nickname' autoFocus onChange={event => setNickname(event.target.value) } onKeyDown={ (event) => {if (event.key == 'Enter') handleOnClick()} } />
+                <input className='input-nickname' type='text' name='nickname' id='nickname' autoFocus onChange={event => setNickname(event.target.value) } onKeyDown={ (event) => {if (event.key === 'Enter') handleOnClick()} } />
                 <button className='button-nickname' type='button' onClick={handleOnClick} ><div className='arrRight' type="submit"></div></button>
             </div>
             <div className='container-players-online'>

@@ -30,14 +30,14 @@ function VisitedCells(props) {
             aux.push(line);
         }
         setVisitedCells(aux)
-    }, [])
+    }, [maze.height, maze.width])
 
     useEventListener('keydown', (event) => {
-        if(event.key.toLowerCase() == 'e') setIsVisible(c => !c)
+        if(event.key.toLowerCase() === 'e') setIsVisible(c => !c)
     })
 
     const draw = useCallback(g => {
-        if(!visitedCells || xp == undefined || yp == undefined) return
+        if(!visitedCells || xp === undefined || yp === undefined) return
 
         let changed = appendVisitedCell(xp, yp, visitedCells)
         if(!changed && !isVisible) {
@@ -46,7 +46,7 @@ function VisitedCells(props) {
         }
 
         g.clear()
-        if(visitedCells.length == 0 || !isVisible) return
+        if(visitedCells.length === 0 || !isVisible) return
 
         g.lineStyle(0,0,1)
         g.beginFill(0x0063cc, 0.3)
@@ -57,7 +57,7 @@ function VisitedCells(props) {
             }
         }
         g.endFill()
-    }, [xp, yp, isVisible, visitedCells]);
+    }, [xp, yp, isVisible, visitedCells, maze.height, maze.width]);
 
     return(
         <Graphics draw={draw} />

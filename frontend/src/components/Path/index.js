@@ -6,9 +6,9 @@ import useEventListener from '@use-it/event-listener'
 const appendVisitedCell = (x, y, visitedCells) => {
     x = Math.floor(x)
     y = Math.floor(y)
-    if(visitedCells.length != 0 && visitedCells[visitedCells.length-1].x == x && visitedCells[visitedCells.length-1].y == y) return
+    if(visitedCells.length !== 0 && visitedCells[visitedCells.length-1].x === x && visitedCells[visitedCells.length-1].y === y) return
     for(let i=0;i < visitedCells.length;i++){
-        if(visitedCells[i].x == x && visitedCells[i].y == y){
+        if(visitedCells[i].x === x && visitedCells[i].y === y){
             takeOffVisited(i+1, visitedCells)
             return
         }
@@ -28,14 +28,14 @@ function Path(props) {
     const [isVisible, setIsVisible] = useState(false)
 
     useEventListener('keydown', (event) => {
-        if(event.key.toLowerCase() == 'q') setIsVisible(c => !c)
+        if(event.key.toLowerCase() === 'q') setIsVisible(c => !c)
     })
 
     const draw = useCallback(g => {
         appendVisitedCell(xp, yp, visitedCells)
         
         g.clear()
-        if(visitedCells.length == 0 || !isVisible) return
+        if(visitedCells.length === 0 || !isVisible) return
         g.lineStyle(2,0,1)
         g.moveTo((visitedCells[0].x + 0.5) * BASE_SIZE, (visitedCells[0].y + 0.5) * BASE_SIZE)
         for(let i=0;i<visitedCells.length;i++){
@@ -44,7 +44,7 @@ function Path(props) {
             g.lineTo(x, y)
         }
         g.endFill()
-    }, [xp, yp, isVisible]);
+    }, [xp, yp, isVisible, visitedCells]);
 
     return(
         <Graphics draw={draw} />

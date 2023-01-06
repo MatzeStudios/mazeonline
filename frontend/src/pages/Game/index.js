@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react"
-import { Stage, Container } from '@inlet/react-pixi'
+import React, { useState, useEffect, useCallback, useRef, forwardRef } from "react"
+import { Stage, Container, PixiComponent, useApp } from '@inlet/react-pixi'
 import "./style.css"
 import socket from "../../services/socket"
 import {useNavigate} from 'react-router-dom'
+import { Viewport } from "pixi-viewport";
 
 import Maze from "../../components/Maze"
 import Player from "../../components/Player"
@@ -30,8 +31,48 @@ const useResize = () => {
     return size;
 };
 
+const PixiViewportComponent = PixiComponent("Viewport", {
+    create(props) {
+        const { app, ...viewportProps } = props;
+
+        const viewport = new Viewport({
+            ticker: props.app.ticker,
+            interaction: props.app.renderer.plugins.interaction,
+            ...viewportProps
+        });
+
+        // activate plugins
+        (props.plugins || []).forEach((plugin) => {
+            viewport[plugin]();
+        });
+
+        return viewport;
+    },
+    applyProps(viewport, _oldProps, _newProps) {
+        const { plugins: oldPlugins, children: oldChildren, ...oldProps } = _oldProps;
+        const { plugins: newPlugins, children: newChildren, ...newProps } = _newProps;
+
+        Object.keys(newProps).forEach((p) => {
+            if (oldProps[p] !== newProps[p]) {
+                viewport[p] = newProps[p];
+            }
+        });
+    },
+    didMount() {
+        console.log("viewport mounted");
+    }
+});
+
+// create a component that can be consumed
+// that automatically pass down the app
+const PixiViewport = forwardRef((props, ref) => (
+    <PixiViewportComponent ref={ref} app={useApp()} {...props} />
+));
+
 function Game() {
     
+    const viewportRef = useRef();
+
     const [width, height] = useResize();
 
     const [maze, setMaze] = useState();
@@ -67,17 +108,24 @@ function Game() {
         width={width}
         height={height}
         options={{
-            antialias: true,
+            antialias: false,
             autoDensity: true,
             backgroundColor: 0x3d3d3d}}
         >
-            <Container position={[100, 100]}>
+            <PixiViewport
+            ref={viewportRef}
+            plugins={["drag", "pinch", "wheel"]}//, "decelerate"]}
+            screenWidth={width}
+            screenHeight={height}
+            worldWidth={width * 4}
+            worldHeight={height * 4}
+            >
                 <VisitedCells xp={xp} yp={yp} maze={maze} />
                 <Path xp={xp} yp={yp} />
                 <Maze maze={maze} />
                 <OtherPlayers maze={maze} />
-                <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}/>  
-            </Container>
+                <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}/>
+            </PixiViewport>
         </Stage>
     )
 

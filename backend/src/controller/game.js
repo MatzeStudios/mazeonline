@@ -1,25 +1,29 @@
+// possible States:
 // off
 // starting
 // running
 // finishing
 // end
-
 const Player = require("../classes/player")
 const Maze = require("../classes/maze")
+
+const startCount = 3000
 
 class Game {
     constructor(io) {
         this.io = io
         this.players = []
-        this.createMaze(15, 15)
+        this.maze = undefined
+        this.state = 'off'
+        this.startTime = -1
 
         this.updater = setInterval(() => this.updatePositions(), 50)
 
         this.io.on("connection", (socket) => this.newConnection(socket))
     }
 
-    createMaze(w, h) {
-        this.maze = new Maze(w,h,2)
+    createMaze() {
+        this.maze = new Maze(15,15,2)
     }
 
     updatePositions() {
@@ -31,11 +35,12 @@ class Game {
         console.log("Client disconnected")
         this.players.splice(this.players.indexOf(player), 1)
         this.io.emit("getNumPlayers", this.players.length)
+
+        if(this.players.length == 0) this.state = 'off'
     }
 
     newConnection(socket) {
         const player = new Player(socket.id)
-        player.setInicialPosition(this.maze)
 
         this.io.emit("getNumPlayers", this.players.length)
         
@@ -43,20 +48,36 @@ class Game {
 
         socket.on("disconnect", () => this.playerDisconnected(player))
 
-        socket.on("playerStart", data => {
-            player.nickname = data
+        socket.on("playerStart", data => { // player clicked 'play' button
+            player.nickname = data.trim() == '' ? 'Unnamed' : data.trim()
             this.players.push(player) 
             
             this.io.emit("getNumPlayers", this.players.length)
             
-            if (this.players.length == 1) {
-                socket.emit("startGame", true)
+            if(this.state == 'off') { // first player to connect
+                this.state = 'starting'
+                this.createMaze()
+
+                this.startTime = Date.now()
+                socket.emit("gameStarting", startCount)
+                
+                setTimeout(() => {if(this.state == 'starting') this.state = 'running'}, startCount)
             }
+            else if(this.state == 'starting') { // joined while game is starting
+    
+                socket.emit("gameStarting", startCount - (Date.now() - this.startTime))
+            }
+            else if(this.state == 'running') { // joined while game is running
+    
+                socket.emit("gameRunning")
+            }
+
+            player.setInicialPosition(this.maze)
         })
 
         socket.on("positionUpdate", data => {
-            player.x = data.x
-            player.y = data.y
+            player.setPosition(data.x, data.y)
+            player.setVelocity(data.vx, data.vy)
         })
 
         socket.on("getMaze", () => {

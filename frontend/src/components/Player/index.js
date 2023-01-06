@@ -9,7 +9,7 @@ const E = 2
 const W = 4
 const S = 8
 
-const verifyMovement = (xi, yi, xf, yf, radius, maze) => {
+export const verifyMovement = (xi, yi, xf, yf, maze) => {
     let xiI = Math.floor(xi)
     let yiI = Math.floor(yi)
     let xfI = Math.floor(xf)
@@ -51,29 +51,31 @@ const verifyMovement = (xi, yi, xf, yf, radius, maze) => {
         return (maze.grid[yiI][xiI] & N) != 0 ? [xf,yf] : [xf,yi]
 }
 
-const appendVisitedCells = (x, y, visitedCells) => {
-    x = Math.floor(x)
-    y = Math.floor(y)
-    if(visitedCells[visitedCells.length-1].x == x && visitedCells[visitedCells.length-1].y == y) return
-    for(let i=0;i < visitedCells.length;i++){
-        if(visitedCells[i].x == x && visitedCells[i].y == y){
-            // takeOffVisited(1+i, visitedCells)
-            return
-        }
+export const newPosition = (x, y, vx, vy, m) => {
+    const invsqrt2 = 0.70710678118
+    var nx, ny
+    if(vx == 0 || vy == 0) {
+        nx = x + vx * m
+        ny = y + vy * m
     }
-    visitedCells.push({x:x, y:y})
-}
-
-const takeOffVisited = (index, visitedCells) => {
-    visitedCells.splice(index, visitedCells.length - index)
+    else {
+        nx = x + vx * m * invsqrt2
+        ny = y + vy * m * invsqrt2
+    }
+    return [nx,ny]
 }
 
 function Player(props) {
 
     const maze = props.maze
+    let freeze = props.freeze
 
     const [x, setX] = useState(maze.sx + .5);
     const [y, setY] = useState(maze.sy + .5);
+    const [xC, setXC] = useState(undefined);
+    const [yC, setYC] = useState(undefined);
+    const [vx, setVX] = useState(0);
+    const [vy, setVY] = useState(0);
     const radius = BASE_SIZE / 5;
 
     const [leftHeld, setLeftHeld] = useState(false);
@@ -81,8 +83,6 @@ function Player(props) {
     const [upHeld, setUpHeld] = useState(false);
     const [downHeld, setDownHeld] = useState(false);
     const [shiftHeld, setShiftHeld] = useState(false);
-
-    const visitedCells = useState([])[0];
     
     useEventListener('keydown', (event) => {
         if(event.key.toLowerCase() == 'w') setUpHeld(true)
@@ -101,7 +101,7 @@ function Player(props) {
     })
 
     useTick(delta => {
-        let invsqrt2 = 0.70710678118
+        if(freeze) return
 
         let base = shiftHeld ? 0.1 : 0.05
 
@@ -113,26 +113,29 @@ function Player(props) {
         vy += upHeld ? -1 : 0
         vy += downHeld ? 1 : 0
 
-        let nx, ny
-        if(vx == 0 || vy == 0) {
-            nx = x + vx * delta * base
-            ny = y + vy * delta * base
-        }
-        else {
-            nx = x + vx * delta * base * invsqrt2
-            ny = y + vy * delta * base * invsqrt2
-        }
+        setVX(vx)
+        setVY(vy)
 
-        [nx, ny] = verifyMovement(x, y, nx, ny, radius, maze)
-        
-        appendVisitedCells(nx, ny, visitedCells)
+        let nx, ny;
+        [nx, ny] = newPosition(x, y, vx, vy, delta * base);
+        [nx, ny] = verifyMovement(x, y, nx, ny, maze);
 
         setX(nx)
         setY(ny)
+
+        let cxc = Math.floor(nx)
+        let cyc = Math.floor(ny)
+
+        if(cxc != xC || cyc != yC) {
+            setXC(cxc)
+            setYC(cyc)
+            props.setXp(cxc)
+            props.setYp(cyc)
+        }
     })
 
     const emitPosition = () => {
-        socket.emit("positionUpdate", {x: x, y: y})
+        socket.emit("positionUpdate", {x: x, y: y, vx: vx, vy: vy})
     }
 
     // logica para usar uma função que mutável no setInterval
@@ -149,30 +152,33 @@ function Player(props) {
 
     const drawPlayer = useCallback(g => {
         g.clear()
-        g.beginFill(0x0033cc, 1)
+        if(freeze)
+            g.beginFill(0xff0000, 1)
+        else
+            g.beginFill(0x0033cc, 1)
         g.lineStyle(2,0,1)
         g.drawRect(-radius, -radius, radius*2, radius*2)
         g.endFill()
-    }, []);
+    }, [freeze]);
 
-    const drawPath = useCallback(g => {
-        if(visitedCells.length == 0) return
-        g.clear()
-        g.lineStyle(0,0,1)
-        g.beginFill(0x0063cc, 0.3)
-        // g.moveTo((visitedCells[0].x + 0.5) * BASE_SIZE, (visitedCells[0].y + 0.5) * BASE_SIZE)
-        for(let i=0;i<visitedCells.length;i++){
-            let x = (visitedCells[i].x ) * BASE_SIZE
-            let y = (visitedCells[i].y ) * BASE_SIZE
-            // g.lineTo(x, y)
-            g.drawRect(x, y, BASE_SIZE, BASE_SIZE)
-        }
-        g.endFill()
-    }, [visitedCells.length]);
+    // const drawVisited = useCallback(g => {
+    //     if(visitedCells.length == 0) return
+    //     g.clear()
+    //     g.lineStyle(0,0,1)
+    //     g.beginFill(0x0063cc, 0.3)
+    //     // g.moveTo((visitedCells[0].x + 0.5) * BASE_SIZE, (visitedCells[0].y + 0.5) * BASE_SIZE)
+    //     for(let i=0;i<visitedCells.length;i++){
+    //         let x = (visitedCells[i].x ) * BASE_SIZE
+    //         let y = (visitedCells[i].y ) * BASE_SIZE
+    //         // g.lineTo(x, y)
+    //         g.drawRect(x, y, BASE_SIZE, BASE_SIZE)
+    //     }
+    //     g.endFill()
+    // }, [visitedCells.length]);
 
     return(
         <>
-        <Graphics draw={drawPath} /> 
+        {/* <Graphics draw={drawVisited} />  */}
         <Graphics draw={drawPlayer} x={x * BASE_SIZE} y={y * BASE_SIZE} /> 
         </>
     )

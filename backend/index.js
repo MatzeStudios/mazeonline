@@ -22,7 +22,8 @@ const io = new socketIo.Server(httpServer, {
 
 let game = new Game(io)
 
-setInterval(() => {
+setInterval(() => { 
+    console.log(game.state)
     console.log(game.players)
 }, 1000)
 

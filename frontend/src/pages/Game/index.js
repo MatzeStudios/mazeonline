@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, forwardRef } from "react"
-import { Stage, Container, PixiComponent, useApp } from '@inlet/react-pixi'
+import { Stage, PixiComponent, useApp } from '@inlet/react-pixi'
 import "./style.css"
 import socket from "../../services/socket"
 import {useNavigate} from 'react-router-dom'
@@ -10,6 +10,7 @@ import Player from "../../components/Player"
 import OtherPlayers from "../../components/OtherPlayers"
 import Path from "../../components/Path"
 import VisitedCells  from '../../components/VisitedCells'
+import { BASE_SIZE } from "../../settings/constants"
 
 const useResize = () => {
     const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
@@ -100,6 +101,10 @@ function Game() {
 
     }, [handleRedirectHome]);
 
+    useEffect(() => {
+        if(maze && viewportRef.current) viewportRef.current.snap(maze.width * BASE_SIZE/2,maze.height * BASE_SIZE/2, {time: 0, removeOnComplete: true})
+    }, [viewportRef.current, maze])
+
     const [xp, setXp] = useState(undefined);
     const [yp, setYp] = useState(undefined);
 
@@ -117,8 +122,8 @@ function Game() {
             plugins={["drag", "pinch", "wheel"]}//, "decelerate"]}
             screenWidth={width}
             screenHeight={height}
-            worldWidth={width * 4}
-            worldHeight={height * 4}
+            worldWidth={maze.width * BASE_SIZE}
+            worldHeight={maze.height * BASE_SIZE}
             >
                 <VisitedCells xp={xp} yp={yp} maze={maze} />
                 <Path xp={xp} yp={yp} />

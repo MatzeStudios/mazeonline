@@ -23,7 +23,7 @@ class Game {
     }
 
     createMaze() {
-        this.maze = new Maze(15,15,2)
+        this.maze = new Maze(10,10,2)
     }
 
     updatePositions() {

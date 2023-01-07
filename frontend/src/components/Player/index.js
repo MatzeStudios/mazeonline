@@ -130,7 +130,10 @@ function Player(props) {
         g.clear()
         g.beginFill(0x0033cc, 1)
         g.lineStyle(2,0,1)
-        g.drawRect(-radius, -radius, radius*2, radius*2)
+        g.drawRect(-radius
+            , -radius
+            , radius*2
+            , radius*2) //para modificar o formato (desenha retangulo) g, raio(radius) e numero de lados(n)
         g.endFill()
     }, []);
 

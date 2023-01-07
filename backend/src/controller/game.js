@@ -23,7 +23,7 @@ class Game {
     }
 
     createMaze() {
-        this.maze = new Maze(10,10,2)
+        this.maze = new Maze(15,15,2)
     }
 
     updatePositions() {
@@ -35,6 +35,7 @@ class Game {
         console.log("Client disconnected")
         this.players.splice(this.players.indexOf(player), 1)
         this.io.emit("getNumPlayers", this.players.length)
+        this.io.emit("playerDisconnected", player.id)
 
         if(this.players.length == 0) this.state = 'off'
     }
@@ -77,7 +78,6 @@ class Game {
 
         socket.on("positionUpdate", data => {
             player.setPosition(data.x, data.y)
-            player.setVelocity(data.vx, data.vy, data.running)
         })
 
         socket.on("getMaze", () => {

@@ -1,75 +1,32 @@
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useCallback, useEffect, useRef } from "react"
 import { Graphics, useTick } from '@inlet/react-pixi'
 import { BASE_SIZE, PLAYER_RADIUS } from '../../settings/constants'
 import socket from "../../services/socket"
 
-const N = 1
-const E = 2
-const W = 4
-const S = 8
-
-const verifyMovement = (xi, yi, xf, yf, maze) => {
-    let xiI = Math.floor(xi)
-    let yiI = Math.floor(yi)
-    let xfI = Math.floor(xf)
-    let yfI = Math.floor(yf)
-
-    if(xiI === xfI && yiI === yfI) // não muda de célula -> realiza o movimento
-        return [xf,yf]
-
-    // muda de célula
-
-    if(xiI !== xfI && yiI !== yfI) { // tentando mudar de célula na diagonal
-        if(xfI > xiI  && (maze.grid[yiI][xiI] & E) !== 0)
-            return [xf,yi]
-
-        if(xfI < xiI  && (maze.grid[yiI][xiI] & W) !== 0)
-            return [xf,yi]
-
-        if(yfI > yiI  && (maze.grid[yiI][xiI] & S) !== 0)
-            return [xi,yf]
-
-        if(yfI < yiI  && (maze.grid[yiI][xiI] & N) !== 0)
-            return [xi,yf]
-
-        return [xi,yi]
+const findById = (players, id) => {
+    for(let i = 0; i < players.length; i++) {
+        if(players[i].id === id) return i
     }
-
-    if(xfI > xiI)
-        return (maze.grid[yiI][xiI] & E) !== 0 ? [xf,yf] : [xi,yf]   // -> realiza somente o movimento que não é na direção
-                                                                    // da parede, se ela existir, e o movimento completo
-                                                                    // se ela não existir existir
-
-    if(xfI < xiI)
-        return (maze.grid[yiI][xiI] & W) !== 0 ? [xf,yf] : [xi,yf]
-
-    if(yfI > yiI)
-        return (maze.grid[yiI][xiI] & S) !== 0 ? [xf,yf] : [xf,yi]
-
-    if(yfI < yiI)
-        return (maze.grid[yiI][xiI] & N) !== 0 ? [xf,yf] : [xf,yi]
-}
-
-const newPosition = (x, y, vx, vy, m) => {
-    const invsqrt2 = 0.70710678118
-    var nx, ny
-    if(vx === 0 || vy === 0) {
-        nx = x + vx * m
-        ny = y + vy * m
-    }
-    else {
-        nx = x + vx * m * invsqrt2
-        ny = y + vy * m * invsqrt2
-    }
-    return [nx,ny]
+    return -1
 }
 
 function OtherPlayers(props) {
     
-    const maze = props.maze
     const [players, setPlayers] = useState([])
     const [id, setId] = useState()
     const [forceRedraw, setForceRedraw] = useState(false)
+
+    const [x, setX] = useState(0)
+    const [y, setY] = useState(0)
+
+    const [xp, setXP] = useState(0)
+    const [yp, setYP] = useState(0)
+
+    const [xd, setXD] = useState(0)
+    const [yd, setYD] = useState(0)
+
+    const [lastUpdateTime, setLastUpdateTime] = useState(0)
+    const refreshPositionDelay = 50
     
     useEffect(() => {
         socket.emit("getId")
@@ -79,24 +36,45 @@ function OtherPlayers(props) {
     }, []);
 
     useEffect(() => {
-        socket.on("positions", data => {
-            setPlayers(data)
-        });
+        socket.on("positions", (data) => {
+            for(let i = 0; i < data.length; i++) {
+                let pd = data[i]
+                let j = findById(players, pd.id)
+                if(j != -1) { // already exists
+                    let pp = players[j]
+                    pp.xp = pp.x
+                    pp.yp = pp.y
+                    pp.xd = pd.x
+                    pp.yd = pd.y
+                }
+                else { // new player
+                    pd.xp = pd.x
+                    pd.yp = pd.y
+                    pd.xd = pd.x
+                    pd.yd = pd.y
+                    players.push(pd)
+                }
+            }
+            setLastUpdateTime(Date.now())
+        })
+
+        socket.on('playerDisconnected', id => {
+            let i = findById(players, id)
+            if(i === -1) return
+            players.splice(i, 1)
+        })
     }, []);
 
     useTick(delta => {
 
-        for(let i = 0; i < players.length; i++) {
-            let p = players[i]
+        if(Date.now() - lastUpdateTime > refreshPositionDelay) return
 
-            let base = p.running ? 0.1 : 0.05
+        let t = (Date.now() - lastUpdateTime) / refreshPositionDelay
 
-            let nx, ny;
-            [nx, ny] = newPosition(p.x, p.y, p.vx, p.vy, delta * base);
-            [nx, ny] = verifyMovement(p.x, p.y, nx, ny, maze);
-    
-            p.x = nx
-            p.y = ny
+        for(let i=0; i<players.length; i++) {
+            let player = players[i]
+            player.x = player.xp + t * (player.xd - player.xp)
+            player.y = player.yp + t * (player.yd - player.yp)
         }
 
         setForceRedraw(c => !c)

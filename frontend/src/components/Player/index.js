@@ -74,9 +74,7 @@ function Player(props) {
     const [y, setY] = useState(maze.sy + .5);
     const [xC, setXC] = useState(undefined);
     const [yC, setYC] = useState(undefined);
-    const [vx, setVX] = useState(0);
-    const [vy, setVY] = useState(0);
-
+    
     const [leftHeld, setLeftHeld] = useState(false);
     const [rightHeld, setRightHeld] = useState(false);
     const [upHeld, setUpHeld] = useState(false);
@@ -112,9 +110,6 @@ function Player(props) {
         vy += upHeld ? -1 : 0
         vy += downHeld ? 1 : 0
 
-        setVX(vx)
-        setVY(vy)
-
         let nx, ny;
         [nx, ny] = newPosition(x, y, vx, vy, delta * base);
         [nx, ny] = verifyMovement(x, y, nx, ny, maze);
@@ -138,10 +133,9 @@ function Player(props) {
 
     useEffect(() => {
         savedCallback.current = () => {
-            socket.emit("positionUpdate", {x: x, y: y, vx: vx, vy: vy, running: shiftHeld})
+            socket.emit("positionUpdate", {x: x, y: y})
         }
-
-    }, [x,y,vx,vy,shiftHeld]);
+    }, [x,y]);
 
     useEffect(() => {
         const interval = setInterval(() => savedCallback.current(), 50)

@@ -47,6 +47,8 @@ const PixiViewportComponent = PixiComponent("Viewport", {
             viewport[plugin]();
         });
 
+        viewport.snap(props.maze.width * BASE_SIZE/2, props.maze.height * BASE_SIZE/2, {time: 0, removeOnComplete: true})
+
         return viewport;
     },
     applyProps(viewport, _oldProps, _newProps) {
@@ -101,10 +103,6 @@ function Game() {
 
     }, [handleRedirectHome]);
 
-    useEffect(() => {
-        if(maze && viewportRef.current) viewportRef.current.snap(maze.width * BASE_SIZE/2,maze.height * BASE_SIZE/2, {time: 0, removeOnComplete: true})
-    }, [viewportRef.current, maze])
-
     const [xp, setXp] = useState(undefined);
     const [yp, setYp] = useState(undefined);
 
@@ -124,6 +122,7 @@ function Game() {
             screenHeight={height}
             worldWidth={maze.width * BASE_SIZE}
             worldHeight={maze.height * BASE_SIZE}
+            maze={maze}
             >
                 <VisitedCells xp={xp} yp={yp} maze={maze} />
                 <Path xp={xp} yp={yp} />

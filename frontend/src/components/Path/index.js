@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react"
 import { Graphics } from '@inlet/react-pixi'
-import { BASE_SIZE } from '../../settings/constants'
+import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'
 import useEventListener from '@use-it/event-listener'
 
 const appendVisitedCell = (x, y, visitedCells) => {
@@ -36,7 +36,7 @@ function Path(props) {
         
         g.clear()
         if(visitedCells.length === 0 || !isVisible) return
-        g.lineStyle(2,0,1)
+        g.lineStyle(LARGE_LINE_WIDTH,0,1)
         g.moveTo((visitedCells[0].x + 0.5) * BASE_SIZE, (visitedCells[0].y + 0.5) * BASE_SIZE)
         for(let i=0;i<visitedCells.length;i++){
             let x = (visitedCells[i].x + 0.5) * BASE_SIZE

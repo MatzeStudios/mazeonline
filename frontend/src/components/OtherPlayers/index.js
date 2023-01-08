@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react"
 import { Graphics, useTick } from '@inlet/react-pixi'
-import { BASE_SIZE, PLAYER_RADIUS } from '../../settings/constants'
+import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../settings/constants'
 import socket from "../../services/socket"
 
 const findById = (players, id) => {
@@ -83,7 +83,7 @@ function OtherPlayers(props) {
     const draw = useCallback(g => {
         g.clear()
         g.beginFill(0x0033cc, 1)
-        g.lineStyle(2,0,1)
+        g.lineStyle(THIN_LINE_WIDTH,0,1)
 
         for(let i=0; i<players.length; i++) {
             let player = players[i]

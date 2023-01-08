@@ -47,7 +47,8 @@ const PixiViewportComponent = PixiComponent("Viewport", {
             viewport[plugin]();
         });
 
-        viewport.snap(props.maze.width * BASE_SIZE/2, props.maze.height * BASE_SIZE/2, {time: 0, removeOnComplete: true})
+        viewport.fit()
+        viewport.moveCenter(props.maze.width * BASE_SIZE/2, props.maze.height * BASE_SIZE/2)
 
         return viewport;
     },
@@ -120,8 +121,8 @@ function Game() {
             plugins={["drag", "pinch", "wheel"]}//, "decelerate"]}
             screenWidth={width}
             screenHeight={height}
-            worldWidth={maze.width * BASE_SIZE}
-            worldHeight={maze.height * BASE_SIZE}
+            worldWidth={(maze.width + 2) * BASE_SIZE}
+            worldHeight={(maze.height + 2) * BASE_SIZE}
             maze={maze}
             >
                 <VisitedCells xp={xp} yp={yp} maze={maze} />

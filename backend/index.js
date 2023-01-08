@@ -14,7 +14,7 @@ const httpServer = http.createServer(app)
 
 const io = new socketIo.Server(httpServer, {
     cors: {
-        origin: ["http://10.244.151.77:3000", "http://localhost:3000"],
+        origin: ["http://10.244.151.77:3000", "http://localhost:3000", "http://192.168.0.100:3000"],
         allowedHeaders: ["my-custom-header"],
         credentials: true
     }

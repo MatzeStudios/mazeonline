@@ -15,7 +15,7 @@ function Maze(props) {
     const draw = g => { // removed useCallback because map is only drawn once
 
         g.clear()
-        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xffffff, alpha: 1, cap: PIXI.LINE_CAP.SQUARE})
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xffffff, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
         
         g.moveTo(maze.width * BASE_SIZE, maze.height * BASE_SIZE)
         g.lineTo(0, maze.height * BASE_SIZE)

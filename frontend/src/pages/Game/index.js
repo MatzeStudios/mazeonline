@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, forwardRef } from "react"
-import { Stage, PixiComponent, useApp } from '@inlet/react-pixi'
+import { Stage, PixiComponent, useApp, Container } from '@inlet/react-pixi'
 import "./style.css"
 import socket from "../../services/socket"
 import {useNavigate} from 'react-router-dom'
@@ -48,8 +48,21 @@ const PixiViewportComponent = PixiComponent("Viewport", {
         });
 
         viewport.fit()
-        viewport.moveCenter(props.maze.width * BASE_SIZE/2, props.maze.height * BASE_SIZE/2)
+        viewport.moveCenter(viewport.worldWidth/2, viewport.worldHeight/2)
+        viewport.clamp({ direction: 'all' })
+        
+        // this is only runs once, to keep updating the clamp in resize there's
+        // a copy of this code inside an useEffect in the Game component.
+        let czOpts = { minWidth: BASE_SIZE, minHeight: BASE_SIZE }
 
+        let screenAspRat = viewport.screenWidth/viewport.screenHeight
+        let worldAspRat  = viewport.worldWidth/viewport.worldHeight
+
+        if(screenAspRat < worldAspRat) czOpts.maxWidth = viewport.worldWidth*1.5
+        else czOpts.maxHeight = viewport.worldHeight*1.5
+
+        viewport.clampZoom(czOpts)
+        
         return viewport;
     },
     applyProps(viewport, _oldProps, _newProps) {
@@ -104,6 +117,20 @@ function Game() {
 
     }, [handleRedirectHome]);
 
+    useEffect(() => { // adjust zoom clamp of viewport in resize
+        let viewport = viewportRef.current
+        if(!viewport) return
+        let czOpts = { minWidth: BASE_SIZE, minHeight: BASE_SIZE }
+
+        let screenAspRat = viewport.screenWidth/viewport.screenHeight
+        let worldAspRat  = viewport.worldWidth/viewport.worldHeight
+
+        if(screenAspRat < worldAspRat) czOpts.maxWidth = viewport.worldWidth*1.5
+        else czOpts.maxHeight = viewport.worldHeight*1.5
+
+        viewport.clampZoom(czOpts)
+    }, [viewportRef.current, width, height])
+
     const [xp, setXp] = useState(undefined);
     const [yp, setYp] = useState(undefined);
 
@@ -118,18 +145,19 @@ function Game() {
         >
             <PixiViewport
             ref={viewportRef}
-            plugins={["drag", "pinch", "wheel"]}//, "decelerate"]}
             screenWidth={width}
             screenHeight={height}
             worldWidth={(maze.width + 2) * BASE_SIZE}
             worldHeight={(maze.height + 2) * BASE_SIZE}
-            maze={maze}
+            plugins={["drag", "pinch", "wheel", "decelerate"]}
             >
-                <VisitedCells xp={xp} yp={yp} maze={maze} />
-                <Path xp={xp} yp={yp} />
-                <Maze maze={maze} />
-                <OtherPlayers maze={maze} />
-                <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}/>
+                <Container position={[BASE_SIZE, BASE_SIZE]}>
+                    <VisitedCells xp={xp} yp={yp} maze={maze} />
+                    <Path xp={xp} yp={yp} />
+                    <Maze maze={maze} />
+                    <OtherPlayers maze={maze} />
+                    <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}/>
+                </Container>
             </PixiViewport>
         </Stage>
     )

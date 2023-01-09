@@ -153,8 +153,8 @@ function Game() {
             >
                 <Container position={[BASE_SIZE, BASE_SIZE]}>
                     <VisitedCells xp={xp} yp={yp} maze={maze} />
-                    <Path xp={xp} yp={yp} />
                     <Maze maze={maze} />
+                    <Path xp={xp} yp={yp} />
                     <OtherPlayers maze={maze} />
                     <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}/>
                 </Container>

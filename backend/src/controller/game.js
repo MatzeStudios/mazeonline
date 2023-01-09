@@ -30,10 +30,11 @@ class Game {
         //if(gameRunning)
         this.io.emit("positions", this.players)
     }
-
+a
     playerDisconnected(player) {
         console.log("Client disconnected")
-        this.players.splice(this.players.indexOf(player), 1)
+        let i = this.players.indexOf(player)
+        if(i !== -1) this.players.splice(i, 1)
         this.io.emit("getNumPlayers", this.players.length)
         this.io.emit("playerDisconnected", player.id)
 

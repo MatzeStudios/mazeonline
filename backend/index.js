@@ -22,9 +22,4 @@ const io = new socketIo.Server(httpServer, {
 
 let game = new Game(io)
 
-setInterval(() => { 
-    console.log(game.state)
-    console.log(game.players)
-}, 1000)
-
 httpServer.listen(port, () => console.log(`Listening on port ${port}`))

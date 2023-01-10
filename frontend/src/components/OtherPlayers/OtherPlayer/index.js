@@ -39,11 +39,11 @@ function OtherPlayer(props) {
             if (showName) {
                 setShowName(false);
             }
-        };
-        document.addEventListener('mousedown', handleClick);
+        }
+        document.addEventListener('mousedown', handleClick)
         return () => {
-            document.removeEventListener('mousedown', handleClick);
-        };
+            document.removeEventListener('mousedown', handleClick)
+        }
     }, [showName]);
 
     const draw = useCallback(g => {

@@ -97,6 +97,20 @@ function Player(props) {
         if(event.key.toLowerCase() === 'shift') setShiftHeld(false)
     })
 
+    useEffect(() => {
+        const deactivatePresses = () => {
+            setUpHeld(false)
+            setLeftHeld(false)
+            setDownHeld(false)
+            setRightHeld(false)
+            setShiftHeld(false)
+        };
+        window.addEventListener('blur', deactivatePresses);
+        return () => {
+            window.removeEventListener('blur', deactivatePresses);
+        };
+    }, [])
+
     useTick(delta => {
         if(freeze) return
 

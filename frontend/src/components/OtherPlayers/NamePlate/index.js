@@ -23,16 +23,21 @@ function NamePlate(props) {
     let verticalSpacing = textMetrics.height/2 + PLAYER_RADIUS/2 + 17
 
     const draw = useCallback(g => {
+        let spacing = 10 // horizontal, to add more space between end of the text and end of NamePlate box.
+        let triangleHeight = 10
+        let minWidth = 55
+
+        let targetWidth = textMetrics.width + 2*spacing
+        let rectWidth = targetWidth > minWidth ? targetWidth : minWidth
+
         g.clear()
         g.beginFill(0x303030, 1)
         g.lineStyle(LARGE_LINE_WIDTH,0,1)
 
-        let spacing = 10
 
-        g.drawRoundedRect(-textMetrics.width/2 - spacing, -textMetrics.height/2, textMetrics.width + 2*spacing, textMetrics.height, 10)
+        g.drawRoundedRect(-rectWidth/2, -textMetrics.height/2, rectWidth, textMetrics.height, 10)
         g.endFill()
 
-        let triangleHeight = 10
 
         g.lineStyle(LARGE_LINE_WIDTH,0x303030,1)
         g.beginFill(0x303030);
@@ -43,11 +48,11 @@ function NamePlate(props) {
         g.endFill()
         
         g.lineStyle(LARGE_LINE_WIDTH,0,1)
-        g.moveTo(-triangleHeight-10, -textMetrics.height/2);
+        g.moveTo(-triangleHeight-5, -textMetrics.height/2);
         g.lineTo(-triangleHeight, -textMetrics.height/2);
         g.lineTo(0, -triangleHeight -textMetrics.height/2);
         g.lineTo(+triangleHeight, -textMetrics.height/2);
-        g.lineTo(+triangleHeight+10, -textMetrics.height/2);
+        g.lineTo(+triangleHeight+5, -textMetrics.height/2);
     }, []);
 
     return(

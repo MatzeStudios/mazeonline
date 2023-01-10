@@ -39,7 +39,7 @@ function Path(props) {
         
         g.clear()
         if(visitedCells.length === 0 || !isVisible) return
-        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x000000, alpha: 1, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.ROUND})
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x000000, alpha: 1, cap: PIXI.LINE_CAP.SQUARE, join: PIXI.LINE_JOIN.BEVEL})
         g.moveTo((visitedCells[0].x + 0.5) * BASE_SIZE, (visitedCells[0].y + 0.5) * BASE_SIZE)
         for(let i=1;i<visitedCells.length;i++){
             let x = (visitedCells[i].x + 0.5) * BASE_SIZE

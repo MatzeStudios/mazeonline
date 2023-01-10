@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef, forwardRef } from "react"
 import { Stage, PixiComponent, useApp, Container } from '@inlet/react-pixi'
-import "./style.css"
 import socket from "../../services/socket"
 import {useNavigate} from 'react-router-dom'
 import { Viewport } from "pixi-viewport";
+
+import "./style.css"
 
 import Maze from "../../components/Maze"
 import Player from "../../components/Player"
@@ -129,7 +130,7 @@ function Game() {
         else czOpts.maxHeight = viewport.worldHeight*1.5
 
         viewport.clampZoom(czOpts)
-    }, [viewportRef.current, width, height])
+    }, [width, height])
 
     const [xp, setXp] = useState(undefined);
     const [yp, setYp] = useState(undefined);
@@ -156,7 +157,11 @@ function Game() {
                     <Maze maze={maze} />
                     <Path xp={xp} yp={yp} />
                     <OtherPlayers maze={maze} />
-                    <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}/>
+                    <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}
+                            interactive={true}
+                            pointerdown={() => {
+                                console.log("click");
+                            }}/>
                 </Container>
             </PixiViewport>
         </Stage>

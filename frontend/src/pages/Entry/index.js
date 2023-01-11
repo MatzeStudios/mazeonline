@@ -17,7 +17,7 @@ function Entry() {
     const handleOnClick = useCallback(() => {
         navigate('/game', {replace: true})
         socket.emit("playerStart", nickname)
-    }, [navigate, nickname])
+    }, [navigate, nickname])    
 
     useEffect(() => {
         socket.emit("getNumPlayers")

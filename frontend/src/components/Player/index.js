@@ -1,7 +1,7 @@
 import useEventListener from '@use-it/event-listener'
 import React, { useState, useCallback, useEffect, useRef } from "react"
 import { Graphics, useTick } from '@inlet/react-pixi'
-import { BASE_SIZE, PLAYER_RADIUS } from '../../settings/constants'
+import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../settings/constants'
 import socket from "../../services/socket"
 
 const N = 1
@@ -107,6 +107,20 @@ function Player(props) {
         if(event.key.toLowerCase() === 'shift') setShiftHeld(false)
     })
 
+    useEffect(() => {
+        const deactivatePresses = () => {
+            setUpHeld(false)
+            setLeftHeld(false)
+            setDownHeld(false)
+            setRightHeld(false)
+            setShiftHeld(false)
+        };
+        window.addEventListener('blur', deactivatePresses);
+        return () => {
+            window.removeEventListener('blur', deactivatePresses);
+        };
+    }, [])
+
     useTick(delta => {
         if(freeze) return
 
@@ -158,7 +172,7 @@ function Player(props) {
             g.beginFill(0xff0000, 1)
         else
             g.beginFill(0x0033cc, 1)
-        g.lineStyle(2,0,1)
+        g.lineStyle(THIN_LINE_WIDTH,0,1)
         drawPlayer(0, 0, PLAYER_RADIUS, g, 0)
         g.endFill()
     }, [freeze]);

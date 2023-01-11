@@ -14,17 +14,12 @@ const httpServer = http.createServer(app)
 
 const io = new socketIo.Server(httpServer, {
     cors: {
-        origin: ["http://10.244.151.77:3000", "http://localhost:3000"],
+        origin: ["http://192.168.0.100:3000", "http://localhost:3000", "http://10.244.151.77:3000", "http://10.244.234.230:3000"],
         allowedHeaders: ["my-custom-header"],
         credentials: true
     }
 })
 
 let game = new Game(io)
-
-setInterval(() => { 
-    console.log(game.state)
-    console.log(game.players)
-}, 1000)
 
 httpServer.listen(port, () => console.log(`Listening on port ${port}`))

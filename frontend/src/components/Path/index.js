@@ -1,9 +1,11 @@
 import React, { useState, useCallback } from "react"
+import * as PIXI from 'pixi.js'
 import { Graphics } from '@inlet/react-pixi'
-import { BASE_SIZE } from '../../settings/constants'
+import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'
 import useEventListener from '@use-it/event-listener'
 
 const appendVisitedCell = (x, y, visitedCells) => {
+    if(x == undefined || x == NaN || y == undefined || y == NaN) return
     x = Math.floor(x)
     y = Math.floor(y)
     if(visitedCells.length !== 0 && visitedCells[visitedCells.length-1].x === x && visitedCells[visitedCells.length-1].y === y) return
@@ -33,12 +35,13 @@ function Path(props) {
 
     const draw = useCallback(g => {
         appendVisitedCell(xp, yp, visitedCells)
+        if(visitedCells.length === 0) return
         
         g.clear()
         if(visitedCells.length === 0 || !isVisible) return
-        g.lineStyle(2,0,1)
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x000000, alpha: 1, cap: PIXI.LINE_CAP.SQUARE, join: PIXI.LINE_JOIN.BEVEL})
         g.moveTo((visitedCells[0].x + 0.5) * BASE_SIZE, (visitedCells[0].y + 0.5) * BASE_SIZE)
-        for(let i=0;i<visitedCells.length;i++){
+        for(let i=1;i<visitedCells.length;i++){
             let x = (visitedCells[i].x + 0.5) * BASE_SIZE
             let y = (visitedCells[i].y + 0.5) * BASE_SIZE
             g.lineTo(x, y)

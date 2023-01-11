@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react"
 import { Graphics, useTick } from '@inlet/react-pixi'
 import { BASE_SIZE, PLAYER_RADIUS } from '../../settings/constants'
 import socket from "../../services/socket"
+import { drawPlayer } from "../Player"
 
 const findById = (players, id) => {
     for(let i = 0; i < players.length; i++) {
@@ -87,7 +88,7 @@ function OtherPlayers(props) {
 
         for(let i=0; i<players.length; i++) {
             let player = players[i]
-            if(player.id !== id) g.drawRect(player.x*BASE_SIZE - PLAYER_RADIUS, player.y*BASE_SIZE - PLAYER_RADIUS, PLAYER_RADIUS*2, PLAYER_RADIUS*2)
+            if(player.id !== id) drawPlayer(player.x*BASE_SIZE, player.y*BASE_SIZE, PLAYER_RADIUS, g, 4)
         }
 
         g.endFill()

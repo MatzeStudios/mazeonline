@@ -9,6 +9,16 @@ const E = 2
 const W = 4
 const S = 8
 
+export const drawPlayer = (x, y, radius, g, nSides) => {
+    if(nSides === 0) {
+        g.drawCircle(x, y, radius)
+    }
+    else {
+        let sideSize = Math.sqrt(2) * radius
+        g.drawRect(x-sideSize/2, y-sideSize/2, sideSize, sideSize)
+    }
+}
+
 const verifyMovement = (xi, yi, xf, yf, maze) => {
     let xiI = Math.floor(xi)
     let yiI = Math.floor(yi)
@@ -142,20 +152,20 @@ function Player(props) {
         return () => clearInterval(interval)
     }, []);
 
-    const drawPlayer = useCallback(g => {
+    const draw = useCallback(g => {
         g.clear()
         if(freeze)
             g.beginFill(0xff0000, 1)
         else
             g.beginFill(0x0033cc, 1)
         g.lineStyle(2,0,1)
-        g.drawRect(-PLAYER_RADIUS, -PLAYER_RADIUS, PLAYER_RADIUS*2, PLAYER_RADIUS*2)
+        drawPlayer(0, 0, PLAYER_RADIUS, g, 0)
         g.endFill()
     }, [freeze]);
 
     return(
         <>
-        <Graphics draw={drawPlayer} x={x * BASE_SIZE} y={y * BASE_SIZE} /> 
+        <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} /> 
         </>
     )
 }

@@ -52,7 +52,7 @@ function OtherPlayer(props) {
         g.beginFill(0x0033cc, 1)
         g.lineStyle(THIN_LINE_WIDTH,0,1)
 
-        drawPlayer(0, 0, PLAYER_RADIUS, g, 4)
+        drawPlayer(0, 0, PLAYER_RADIUS, g, 1)
         g.endFill()
     }, []);
 

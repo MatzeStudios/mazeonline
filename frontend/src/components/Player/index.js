@@ -1,5 +1,6 @@
 import useEventListener from '@use-it/event-listener'
 import React, { useState, useCallback, useEffect, useRef } from "react"
+import * as PIXI from 'pixi.js'
 import { Graphics, useTick } from '@inlet/react-pixi'
 import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../settings/constants'
 import socket from "../../services/socket"
@@ -13,9 +14,22 @@ export const drawPlayer = (x, y, radius, g, nSides) => {
     if(nSides === 0) {
         g.drawCircle(x, y, radius)
     }
+    else if(nSides === 1) {
+        g.drawCircle(x, y, 2)
+    }
     else {
-        let sideSize = Math.sqrt(2) * radius
-        g.drawRect(x-sideSize/2, y-sideSize/2, sideSize, sideSize)
+        const angle = (360 / nSides) * Math.PI / 180
+        let rotation = 0
+        if(nSides === 3) rotation = - Math.PI / 2
+        else if(nSides === 4) rotation = Math.PI / 4
+        else if(nSides === 5) rotation = - Math.PI / 10
+        else if(nSides === 6) rotation = 0
+        else if(nSides === 7) rotation = Math.PI / 14
+        else if(nSides === 8) rotation = Math.PI / 8
+
+        g.moveTo(radius * Math.cos(rotation), radius * Math.sin(rotation))
+        for (let i = 1; i <= nSides+1; i++)
+            g.lineTo(radius * Math.cos(angle * i + rotation), radius * Math.sin(angle * i + rotation))
     }
 }
 
@@ -80,6 +94,8 @@ function Player(props) {
     const maze = props.maze
     let freeze = props.freeze
 
+    const [n, setN] = useState(3);
+
     const [x, setX] = useState(maze.sx + .5);
     const [y, setY] = useState(maze.sy + .5);
     const [xC, setXC] = useState(undefined);
@@ -97,6 +113,8 @@ function Player(props) {
         if(event.key.toLowerCase() === 's') setDownHeld(true)
         if(event.key.toLowerCase() === 'd') setRightHeld(true)
         if(event.key.toLowerCase() === 'shift') setShiftHeld(true)
+        if(event.key.toLowerCase() === 'r') setN(n + 1)
+        if(event.key.toLowerCase() === 'f') setN(n - 1)
     })
     
     useEventListener('keyup', (event) => {
@@ -173,13 +191,13 @@ function Player(props) {
         else
             g.beginFill(0x0033cc, 1)
         g.lineStyle(THIN_LINE_WIDTH,0,1)
-        drawPlayer(0, 0, PLAYER_RADIUS, g, 0)
+        drawPlayer(0, 0, PLAYER_RADIUS, g, n)
         g.endFill()
-    }, [freeze]);
+    }, [freeze, n]);
 
     return(
         <>
-        <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} /> 
+        <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} />
         </>
     )
 }

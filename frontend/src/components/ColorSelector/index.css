@@ -2,13 +2,14 @@
     display: flex;
     flex-direction: row;
     background-color: #D9D9D9;
-    padding: 0px 20px 0px 20px;
+    padding: 0px 50px 0px 20px;
     border-radius: 100px;
     box-shadow: 8px 9px 8px #565656;
 }
 
 .wrapper-player-color {
     margin: 30px;
+    margin-right: 0px;
     padding: 2px;
     width: 50px;
     height: 50px;

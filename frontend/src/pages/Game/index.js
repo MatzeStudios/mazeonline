@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, forwardRef } from "react"
 import { Stage, PixiComponent, useApp, Container } from '@inlet/react-pixi'
 import socket from "../../services/socket"
-import {useNavigate} from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Viewport } from "pixi-viewport";
 
 import "./style.css"
@@ -88,7 +88,8 @@ const PixiViewport = forwardRef((props, ref) => (
 ));
 
 function Game() {
-    
+
+    const {nickname, color} = useLocation().state
     const viewportRef = useRef();
 
     const [width, height] = useResize();
@@ -153,7 +154,7 @@ function Game() {
             plugins={["drag", "pinch", "wheel", "decelerate"]}
             >
                 <Container position={[BASE_SIZE, BASE_SIZE]}>
-                    <VisitedCells xp={xp} yp={yp} maze={maze} />
+                    <VisitedCells xp={xp} yp={yp} maze={maze} color={color}/>
                     <Maze maze={maze} />
                     <Path xp={xp} yp={yp} />
                     <OtherPlayers maze={maze} />
@@ -161,7 +162,8 @@ function Game() {
                             interactive={true}
                             pointerdown={() => {
                                 console.log("click");
-                            }}/>
+                            }}
+                            color={color}/>
                 </Container>
             </PixiViewport>
         </Stage>

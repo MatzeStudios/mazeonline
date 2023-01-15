@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react"
 import { Graphics } from '@inlet/react-pixi'
 import { BASE_SIZE } from '../../settings/constants'
 import useEventListener from '@use-it/event-listener'
+import { utils } from 'pixi.js';
 
 const appendVisitedCell = (x, y, visitedCells) => {
     x = Math.floor(x)
@@ -17,6 +18,7 @@ function VisitedCells(props) {
     const xp = props.xp
     const yp = props.yp
     const maze = props.maze
+    const color = props.color
     const [visitedCells, setVisitedCells] = useState(undefined)
     const [isVisible, setIsVisible] = useState(false)
 
@@ -49,7 +51,7 @@ function VisitedCells(props) {
         if(visitedCells.length === 0 || !isVisible) return
 
         g.lineStyle(0,0,1)
-        g.beginFill(0x0063cc, 0.3)
+        g.beginFill(utils.string2hex(color), 0.3)
         for(let y=0; y<maze.height; y++){
             for(let x=0; x<maze.width; x++){
                 if(visitedCells[y][x])

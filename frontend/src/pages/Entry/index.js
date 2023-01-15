@@ -12,12 +12,13 @@ import '../../fonts/Inter/static/Inter-Regular.ttf'
 
 function Entry() {
     const [nickname, setNickname] = useState('')
+    const [color, setColor] = useState('')
     const [numPlayers, setNumPlayers] = useState('')
     const navigate = useNavigate()
     const handleOnClick = useCallback(() => {
-        navigate('/game', {replace: true})
+        navigate('/game', {state: { nickname, color }, replace: true})
         socket.emit("playerStart", nickname)
-    }, [navigate, nickname])    
+    }, [navigate, nickname, color])    
 
     useEffect(() => {
         socket.emit("getNumPlayers")
@@ -38,7 +39,7 @@ function Entry() {
                 <input className='input-nickname' type='text' name='nickname' id='nickname' autoFocus onChange={event => setNickname(event.target.value) } onKeyDown={ (event) => {if (event.key === 'Enter') handleOnClick()} } />
                 <button className='button-nickname' type='button' onClick={handleOnClick} ><div className='arrRight' type="submit"></div></button>
             </div>
-            <ColorSelector />
+            <ColorSelector onSelect={color => setColor(color)} />
             <div className='container-players-online'>
                 <p className='text-num-players'> {numPlayers} </p>
                 <p className='text-players-online'> players online </p>

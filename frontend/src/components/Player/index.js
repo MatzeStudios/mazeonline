@@ -1,6 +1,6 @@
 import useEventListener from '@use-it/event-listener'
 import React, { useState, useCallback, useEffect, useRef } from "react"
-import * as PIXI from 'pixi.js'
+import { utils } from 'pixi.js';
 import { Graphics, useTick } from '@inlet/react-pixi'
 import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../settings/constants'
 import socket from "../../services/socket"
@@ -92,6 +92,7 @@ const newPosition = (x, y, vx, vy, m) => {
 function Player(props) {
 
     const maze = props.maze
+    const color = props.color
     let freeze = props.freeze
 
     const [n, setN] = useState(3);
@@ -189,7 +190,7 @@ function Player(props) {
         if(freeze)
             g.beginFill(0xff0000, 1)
         else
-            g.beginFill(0x0033cc, 1)
+            g.beginFill(utils.string2hex(color), 1)
         g.lineStyle(THIN_LINE_WIDTH,0,1)
         drawPlayer(0, 0, PLAYER_RADIUS, g, n)
         g.endFill()
@@ -197,7 +198,7 @@ function Player(props) {
 
     return(
         <>
-        <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} />
+            <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} />
         </>
     )
 }

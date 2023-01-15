@@ -62,8 +62,10 @@ a
 
         socket.on("playerStart", data => { // player clicked 'play' button
 
-            player.nickname = data.trim() == '' ? 'Unnamed' : data.trim()
-            this.players.push(player) 
+            player.setNickname(data.nickname)
+            player.setColor(data.color)
+            
+            this.players.push(player)
             
             this.io.emit("getNumPlayers", this.players.length)
             

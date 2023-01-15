@@ -3,6 +3,7 @@ import { Graphics, Text, useTick } from '@inlet/react-pixi'
 import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../../settings/constants'
 import { drawPlayer } from "../../Player"
 import NamePlate from "../NamePlate"
+import { utils } from 'pixi.js';
 
 function OtherPlayer(props) {
 
@@ -49,12 +50,12 @@ function OtherPlayer(props) {
 
     const draw = useCallback(g => {
         g.clear()
-        g.beginFill(0x0033cc, 1)
+        g.beginFill(utils.string2hex(player.color), 1)
         g.lineStyle(THIN_LINE_WIDTH,0,1)
 
-        drawPlayer(0, 0, PLAYER_RADIUS, g, 1)
+        drawPlayer(0, 0, PLAYER_RADIUS, g, 4)
         g.endFill()
-    }, []);
+    }, [player]);
 
     return(
         <>

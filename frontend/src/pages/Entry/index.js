@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import {useNavigate} from 'react-router-dom'
 import socket from "../../services/socket"
-
+import ColorSelector from "../../components/ColorSelector/index"
 // styles
 import './index.css'
 
@@ -38,6 +38,7 @@ function Entry() {
                 <input className='input-nickname' type='text' name='nickname' id='nickname' autoFocus onChange={event => setNickname(event.target.value) } onKeyDown={ (event) => {if (event.key === 'Enter') handleOnClick()} } />
                 <button className='button-nickname' type='button' onClick={handleOnClick} ><div className='arrRight' type="submit"></div></button>
             </div>
+            <ColorSelector />
             <div className='container-players-online'>
                 <p className='text-num-players'> {numPlayers} </p>
                 <p className='text-players-online'> players online </p>

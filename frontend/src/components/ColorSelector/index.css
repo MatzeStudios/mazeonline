@@ -1,0 +1,25 @@
+.container-select-player-color {
+    display: flex;
+    flex-direction: row;
+    background-color: #D9D9D9;
+    padding: 0px 20px 0px 20px;
+    border-radius: 100px;
+    box-shadow: 8px 9px 8px #565656;
+}
+
+.wrapper-player-color {
+    margin: 30px;
+    padding: 2px;
+    width: 50px;
+    height: 50px;
+    box-sizing: border-box;
+
+    cursor: pointer;
+}
+
+.wrapper-player-color:hover {
+    border: 2px solid rgb(63, 63, 63);
+}
+.selected {
+    border: 2px solid #000;
+}

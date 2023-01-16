@@ -154,7 +154,7 @@ function Game() {
             plugins={["drag", "pinch", "wheel", "decelerate"]}
             >
                 <Container position={[BASE_SIZE, BASE_SIZE]}>
-                    <VisitedCells xp={xp} yp={yp} maze={maze} color={color}/>
+                    <VisitedCells xp={xp} yp={yp} maze={maze} />
                     <Maze maze={maze} />
                     <Path xp={xp} yp={yp} />
                     <OtherPlayers maze={maze} />

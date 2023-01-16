@@ -136,15 +136,14 @@ function Player(props) {
         let vx = 0
         let vy = 0
 
-        if(!rightMouseButtonPressed) {
-            vx += leftHeld ? -1 : 0
-            vx += rightHeld ? 1 : 0
-            vy += upHeld ? -1 : 0
-            vy += downHeld ? 1 : 0
-        }
-        else {
-            vx = mousePosition.x - x
-            vy = mousePosition.y - y
+        vx += leftHeld ? -1 : 0
+        vx += rightHeld ? 1 : 0
+        vy += upHeld ? -1 : 0
+        vy += downHeld ? 1 : 0
+
+        if(rightMouseButtonPressed) {
+            vx += mousePosition.x - x
+            vy += mousePosition.y - y
         }
 
         // normalize velocity vector

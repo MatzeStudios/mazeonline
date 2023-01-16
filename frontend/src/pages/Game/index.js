@@ -3,6 +3,7 @@ import { Stage, PixiComponent, useApp, Container } from '@inlet/react-pixi'
 import socket from "../../services/socket"
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Viewport } from "pixi-viewport";
+import * as PIXI from 'pixi.js'
 
 import "./style.css"
 
@@ -99,6 +100,13 @@ function Game() {
 
     const navigate = useNavigate()
 
+    const [xp, setXp] = useState(undefined);
+    const [yp, setYp] = useState(undefined);
+
+    const [mousePosition, setMousePosition] = useState({x: 0, y: 0});
+    const [rightMouseButtonPressed, setRightMouseButtonPressed] = useState(false);
+    const appRef = useRef(null);
+
     const handleRedirectHome = useCallback(() => {
         navigate('/', {replace: true})
     }, [navigate])
@@ -133,18 +141,52 @@ function Game() {
         viewport.clampZoom(czOpts)
     }, [width, height])
 
-    const [xp, setXp] = useState(undefined);
-    const [yp, setYp] = useState(undefined);
+    useEffect(() => {
+        const deactivateRightPress = () => {
+            setRightMouseButtonPressed(false);
+        };
+        window.addEventListener('blur', deactivateRightPress);
+        return () => {
+            window.removeEventListener('blur', deactivateRightPress);
+        };
+    }, [])
+
+    useEffect(() => {
+        if(appRef.current === null) return
+        appRef.current.app.stage.interactive = true;
+        const pointerMoveCallback = (event) => {
+            const newMousePosition = event.data.global;
+            let worldCoords = viewportRef.current.toWorld(newMousePosition.x, newMousePosition.y)
+            worldCoords.x = worldCoords.x/BASE_SIZE - 1
+            worldCoords.y = worldCoords.y/BASE_SIZE - 1
+            setMousePosition(worldCoords);
+        }
+        const pointerDownCallback = (event) => {
+            if(event.data.button === 1) setRightMouseButtonPressed(true);
+        }
+        const pointerUpCallback = (event) => {
+            if(event.data.button === 1) setRightMouseButtonPressed(false);
+        }
+        appRef.current.app.stage.on('pointermove', pointerMoveCallback);
+        appRef.current.app.stage.on('pointerdown', pointerDownCallback);
+        appRef.current.app.stage.on('pointerup', pointerUpCallback);
+        return () => {
+            appRef.current.app.stage.off('pointermove', pointerMoveCallback);
+            appRef.current.app.stage.off('pointerdown', pointerDownCallback);
+            appRef.current.app.stage.off('pointerup', pointerUpCallback);
+        }
+    }, [maze]);
 
     if(maze) return (
-        <Stage
+        <Stage 
         width={width}
         height={height}
         options={{
             antialias: false,
             autoDensity: true,
             backgroundColor: 0x3d3d3d}}
-        >
+        ref={appRef} >
+
             <PixiViewport
             ref={viewportRef}
             screenWidth={width}
@@ -163,7 +205,9 @@ function Game() {
                             pointerdown={() => {
                                 console.log("click");
                             }}
-                            color={color}/>
+                            color={color}
+                            mousePosition={mousePosition}
+                            rightMouseButtonPressed={rightMouseButtonPressed}/>
                 </Container>
             </PixiViewport>
         </Stage>

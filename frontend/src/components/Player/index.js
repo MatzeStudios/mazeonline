@@ -75,25 +75,13 @@ const verifyMovement = (xi, yi, xf, yf, maze) => {
         return (maze.grid[yiI][xiI] & N) !== 0 ? [xf,yf] : [xf,yi]
 }
 
-const newPosition = (x, y, vx, vy, m) => {
-    const invsqrt2 = 0.70710678118
-    var nx, ny
-    if(vx === 0 || vy === 0) {
-        nx = x + vx * m
-        ny = y + vy * m
-    }
-    else {
-        nx = x + vx * m * invsqrt2
-        ny = y + vy * m * invsqrt2
-    }
-    return [nx,ny]
-}
-
 function Player(props) {
 
     const maze = props.maze
     const color = props.color
     let freeze = props.freeze
+    const mousePosition = props.mousePosition;
+    const rightMouseButtonPressed = props.rightMouseButtonPressed;
 
     const [n, setN] = useState(3);
 
@@ -143,18 +131,29 @@ function Player(props) {
     useTick(delta => {
         if(freeze) return
 
-        let base = shiftHeld ? 0.1 : 0.05
+        let base = shiftHeld || rightMouseButtonPressed ? 0.1 : 0.05
 
         let vx = 0
         let vy = 0
 
-        vx += leftHeld ? -1 : 0
-        vx += rightHeld ? 1 : 0
-        vy += upHeld ? -1 : 0
-        vy += downHeld ? 1 : 0
+        if(!rightMouseButtonPressed) {
+            vx += leftHeld ? -1 : 0
+            vx += rightHeld ? 1 : 0
+            vy += upHeld ? -1 : 0
+            vy += downHeld ? 1 : 0
+        }
+        else {
+            vx = mousePosition.x - x
+            vy = mousePosition.y - y
+        }
 
-        let nx, ny;
-        [nx, ny] = newPosition(x, y, vx, vy, delta * base);
+        // normalize velocity vector
+        const length = Math.sqrt(vx * vx + vy * vy);
+        vx /= length
+        vy /= length
+
+        let nx = x + vx * base * delta;
+        let ny = y + vy * base * delta;
         [nx, ny] = verifyMovement(x, y, nx, ny, maze);
 
         setX(nx)

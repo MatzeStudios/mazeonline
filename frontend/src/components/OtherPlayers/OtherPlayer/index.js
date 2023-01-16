@@ -48,6 +48,11 @@ function OtherPlayer(props) {
         }
     }, [showName]);
 
+    const handleClick = (event) => {
+        event.stopPropagation();
+        setShowName(true);
+    }
+
     const draw = useCallback(g => {
         g.clear()
         g.beginFill(utils.string2hex(player.color), 1)
@@ -59,7 +64,7 @@ function OtherPlayer(props) {
 
     return(
         <>
-            <Graphics ref={ref} draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} interactive pointerdown={() => setShowName(true)} />
+            <Graphics ref={ref} draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} interactive pointerdown={handleClick} />
             { showName && <NamePlate name={player.nickname} x={x * BASE_SIZE} y={y * BASE_SIZE} />}
         </>
     )

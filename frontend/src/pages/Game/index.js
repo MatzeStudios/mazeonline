@@ -49,6 +49,10 @@ const PixiViewportComponent = PixiComponent("Viewport", {
             viewport[plugin]();
         });
 
+        viewport.drag({
+            mouseButtons: 'right'
+        })
+
         viewport.fit()
         viewport.moveCenter(viewport.worldWidth/2, viewport.worldHeight/2)
         viewport.clamp({ direction: 'all' })
@@ -155,21 +159,24 @@ function Game() {
         if(appRef.current === null) return
         appRef.current.app.stage.interactive = true;
         const pointerMoveCallback = (event) => {
-            const newMousePosition = event.data.global;
-            let worldCoords = viewportRef.current.toWorld(newMousePosition.x, newMousePosition.y)
-            worldCoords.x = worldCoords.x/BASE_SIZE - 1
-            worldCoords.y = worldCoords.y/BASE_SIZE - 1
-            setMousePosition(worldCoords);
+            requestAnimationFrame(() => {
+                const newMousePosition = event.data.global;
+                let worldCoords = viewportRef.current.toWorld(newMousePosition.x, newMousePosition.y)
+                worldCoords.x = worldCoords.x/BASE_SIZE - 1
+                worldCoords.y = worldCoords.y/BASE_SIZE - 1
+                setMousePosition(worldCoords);
+            });
         }
         const pointerDownCallback = (event) => {
-            if(event.data.button === 1) setRightMouseButtonPressed(true);
+            if(event.data.button === 0) setRightMouseButtonPressed(true);
         }
         const pointerUpCallback = (event) => {
-            if(event.data.button === 1) setRightMouseButtonPressed(false);
+            if(event.data.button === 0) setRightMouseButtonPressed(false);
         }
         appRef.current.app.stage.on('pointermove', pointerMoveCallback);
         appRef.current.app.stage.on('pointerdown', pointerDownCallback);
         appRef.current.app.stage.on('pointerup', pointerUpCallback);
+
         return () => {
             appRef.current.app.stage.off('pointermove', pointerMoveCallback);
             appRef.current.app.stage.off('pointerdown', pointerDownCallback);
@@ -193,7 +200,8 @@ function Game() {
             screenHeight={height}
             worldWidth={(maze.width + 2) * BASE_SIZE}
             worldHeight={(maze.height + 2) * BASE_SIZE}
-            plugins={["drag", "pinch", "wheel", "decelerate"]}
+            plugins={["pinch", "wheel", "decelerate"]} //, "drag"]} -> Set separetly
+            disableOnContextMenu={true}
             >
                 <Container position={[BASE_SIZE, BASE_SIZE]}>
                     <VisitedCells xp={xp} yp={yp} maze={maze} />

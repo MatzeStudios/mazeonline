@@ -49,7 +49,7 @@ function VisitedCells(props) {
         if(visitedCells.length === 0 || !isVisible) return
 
         g.lineStyle(0,0,1)
-        g.beginFill(0x0033cc, 0.3)
+        g.beginFill(0x0063cc, 0.3)
         for(let y=0; y<maze.height; y++){
             for(let x=0; x<maze.width; x++){
                 if(visitedCells[y][x])

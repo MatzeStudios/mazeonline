@@ -29,7 +29,7 @@ function ColorSelector({ onSelect }) {
                 </div>
             ))}
 
-            <div className='wrapper-player-color color-select'> </div>
+            <div className='wrapper-player-color color-select'>  </div>
         </div>
     )
 }

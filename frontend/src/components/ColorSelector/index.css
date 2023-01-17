@@ -18,9 +18,25 @@
     cursor: pointer;
 }
 
-.wrapper-player-color:hover {
-    border: 2px solid rgb(63, 63, 63);
+.wrapper-player-color:hover:not(.selected) {
+    outline: 2px solid rgba(0, 0, 0, 0.459);
+}
+
+.color-select {
+    background: linear-gradient(to right, 
+    red, orange, yellow, green, blue, indigo, violet);
+    position: relative;
+    animation: onda 10s linear infinite;
 }
 .selected {
-    border: 2px solid #000;
+    outline: 2px solid #000;
 }
+
+@keyframes onda {
+    0% {
+      background-position: 0%;
+    }
+    100% {
+      background-position: 100%;
+    }
+  }

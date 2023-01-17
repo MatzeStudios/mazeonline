@@ -132,6 +132,15 @@ function Game() {
         viewport.clampZoom(czOpts)
     }, [width, height])
 
+    useEffect(() => {
+        const content = document.querySelector('html')
+        content.style.overflow = 'hidden'
+
+        return () => {
+            content.style.overflow = 'visible'
+        }
+    }, [])
+
     const [xp, setXp] = useState(undefined);
     const [yp, setYp] = useState(undefined);
 

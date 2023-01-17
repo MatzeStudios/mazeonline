@@ -17,9 +17,14 @@ function ColorSelector() {
     
     const handleSelected = (e) => {     
         const divs = document.querySelector('.container-select-player-color').querySelectorAll(".wrapper-player-color")
-        divs.forEach((div) => div.classList.remove('selected'))
-        e.classList.add('selected')
-        setSelected(window.getComputedStyle(e).getPropertyValue("background-color"))
+        divs.forEach((div, i) => {
+            if (div !== e) {
+                div.classList.remove('selected')
+            } else {
+                e.classList.add('selected')
+                setSelected(colors[i])
+            }
+        })
     }
 
     return (
@@ -32,7 +37,7 @@ function ColorSelector() {
             <div className={`wrapper-player-color color-default-5`} onClick={(e) => handleSelected(e.target)}> </div>
             <div className={`wrapper-player-color color-default-6`} onClick={(e) => handleSelected(e.target)}> </div>
 
-            <div className='wrapper-player-color color-select'> </div>
+            <div className='wrapper-player-color color-select'>  </div>
         </div>
     )
 }

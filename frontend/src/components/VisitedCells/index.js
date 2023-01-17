@@ -52,7 +52,7 @@ function VisitedCells(props) {
         g.beginFill(0x0063cc, 0.3)
         for(let y=0; y<maze.height; y++){
             for(let x=0; x<maze.width; x++){
-                if(visitedCells[y][x])
+                if(visitedCells[y][x] && (x != maze.sx || y != maze.sy) && (x != maze.ex || y != maze.ey))
                     g.drawRect(x*BASE_SIZE, y*BASE_SIZE, BASE_SIZE, BASE_SIZE)
             }
         }

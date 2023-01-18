@@ -148,7 +148,7 @@ function Player(props) {
 
         // normalize velocity vector
         const length = Math.sqrt(vx * vx + vy * vy);
-        if(length > 0.5) {
+        if(length > 0.1) {
             vx /= length
             vy /= length
         }
@@ -197,9 +197,7 @@ function Player(props) {
     }, [freeze, n]);
 
     return(
-        <>
-            <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} />
-        </>
+        <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} />
     )
 }
 

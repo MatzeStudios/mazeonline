@@ -31,7 +31,7 @@ class Game {
     updatePositions() {
         this.io.emit("positions", this.players)
     }
-a
+
     playerDisconnected(player) {
         let i = this.players.indexOf(player)
         if(i === -1) {

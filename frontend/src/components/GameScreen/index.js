@@ -133,15 +133,6 @@ function GameScreen(props) {
     }, [width, height])
 
     useEffect(() => {
-        const content = document.querySelector('html')
-        content.style.overflow = 'hidden'
-
-        return () => {
-            content.style.overflow = 'visible'
-        }
-    }, [])
-
-    useEffect(() => {
         const deactivateRightPress = () => {
             setRightMouseButtonPressed(false);
         };

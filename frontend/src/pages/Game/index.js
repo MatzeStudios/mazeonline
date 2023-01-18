@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react'
 import {useNavigate} from 'react-router-dom'
 import socket from "../../services/socket"
 
+import './style.css'
+
 import GameScreen from '../../components/GameScreen'
 import Counter from '../../components/Counter'
 
@@ -42,6 +44,15 @@ function Game() {
         })
     }, [])
 
+    useEffect(() => {
+        const content = document.querySelector('html')
+        content.style.overflow = 'hidden'
+
+        return () => {
+            content.style.overflow = 'visible'
+        }
+    }, [])
+
     if(gameInfoReceived) return (
         <>
             <Counter time={startTime} />
@@ -49,7 +60,7 @@ function Game() {
         </>
     )
 
-    else return <p>Loading...</p>
+    else return <p className='loading-container'>Loading...</p>
 }
 
 export default Game

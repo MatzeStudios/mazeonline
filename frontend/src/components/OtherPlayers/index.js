@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import socket from "../../services/socket"
-import { drawPlayer } from "../Player"
 import OtherPlayer from "./OtherPlayer"
 
 const findById = (players, id) => {
@@ -12,17 +11,11 @@ const findById = (players, id) => {
 
 function OtherPlayers(props) {
     
+    const id = props.playerId
+
     const players = useState([])[0]
-    const [id, setId] = useState()
 
     const [lastUpdateTime, setLastUpdateTime] = useState(0)
-    
-    useEffect(() => {
-        socket.emit("getId")
-        socket.on("getId", data => {
-            setId(data)
-        })
-    }, []);
 
     useEffect(() => {
         socket.on("positions", (data) => {

@@ -13,6 +13,7 @@ import OtherPlayers from "../../components/OtherPlayers"
 import Path from "../../components/Path"
 import VisitedCells  from '../../components/VisitedCells'
 import { BASE_SIZE } from "../../settings/constants"
+import SoundManager from "../../components/SoundManager";
 
 const useResize = () => {
     const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
@@ -194,6 +195,8 @@ function Game() {
     }, [maze]);
 
     if(maze) return (
+        <>
+        <SoundManager />
         <Stage 
         width={width}
         height={height}
@@ -213,7 +216,7 @@ function Game() {
             disableOnContextMenu={true}
             >
                 <Container position={[BASE_SIZE, BASE_SIZE]}>
-                    <VisitedCells xp={xp} yp={yp} maze={maze} />
+                    <VisitedCells xp={xp} yp={yp} maze={maze} color={color}/>
                     <Maze maze={maze} />
                     <Path xp={xp} yp={yp} />
                     <OtherPlayers maze={maze} />
@@ -228,6 +231,7 @@ function Game() {
                 </Container>
             </PixiViewport>
         </Stage>
+        </>
     )
 
     return (

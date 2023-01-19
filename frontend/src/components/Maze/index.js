@@ -57,19 +57,19 @@ function Maze(props) {
 
         
         g.lineStyle(0,0,0,0)
-        g.beginFill(0x00ff00, 0.3)
+        g.beginFill(0x00ff00, 0.6)
         g.drawRect(maze.sx*BASE_SIZE, maze.sy*BASE_SIZE, BASE_SIZE, BASE_SIZE)
         g.endFill()
 
-        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x00ff00, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xffffff, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
         drawCellWalls(g, maze, maze.sx, maze.sy, true)
 
         g.lineStyle(0,0,0,0)
-        g.beginFill(0xff0000, 0.3)
+        g.beginFill(0xff0000, 0.6)
         g.drawRect(maze.ex*BASE_SIZE, maze.ey*BASE_SIZE, BASE_SIZE, BASE_SIZE)
         g.endFill()
         
-        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xff0000, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xffffff, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
         drawCellWalls(g, maze, maze.ex, maze.ey, true)
     }
     

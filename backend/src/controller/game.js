@@ -31,7 +31,7 @@ class Game {
     updatePositions() {
         this.io.emit("positions", this.players)
     }
-a
+
     playerDisconnected(player) {
         let i = this.players.indexOf(player)
         if(i === -1) {
@@ -40,7 +40,7 @@ a
         }
 
         this.players.splice(i, 1)
-        this.io.emit("getNumPlayers", this.players.length)
+        this.io.emit("numPlayers", this.players.length)
         this.io.emit("playerDisconnected", player.id)
 
         console.log("Client disconnected, player removed.")
@@ -54,8 +54,6 @@ a
     newConnection(socket) {
         const player = new Player(socket.id)
 
-        this.io.emit("getNumPlayers", this.players.length)
-        
         console.log("New client connected")
 
         socket.on("disconnect", () => this.playerDisconnected(player))
@@ -67,7 +65,7 @@ a
             
             this.players.push(player)
             
-            this.io.emit("getNumPlayers", this.players.length)
+            this.io.emit("numPlayers", this.players.length)
             
             if(this.state == 'off') { // first player to connect
                 this.state = 'starting'
@@ -75,7 +73,6 @@ a
                 this.createMaze()
 
                 this.startTime = Date.now()
-                socket.emit("gameStarting", startCount)
                 
                 setTimeout(() => {
                     if(this.state == 'starting') {
@@ -84,14 +81,6 @@ a
                     }
                 }, startCount)
             }
-            else if(this.state == 'starting') { // joined while game is starting
-    
-                socket.emit("gameStarting", startCount - (Date.now() - this.startTime))
-            }
-            else if(this.state == 'running') { // joined while game is running
-    
-                socket.emit("gameRunning")
-            }
 
             player.setInicialPosition(this.maze)
 
@@ -99,20 +88,29 @@ a
             console.log(this.players)
         })
 
+        socket.on("getGameInfo", () => {
+            if(this.players.indexOf(player) === -1) {
+                socket.emit("gameInfo")
+                return
+            }
+
+            const infoPackage = {}
+
+            infoPackage.maze = this.maze
+            infoPackage.state = this.state
+            if(this.state === 'starting') infoPackage.startTime = startCount - (Date.now() - this.startTime)
+            infoPackage.player = this.players[this.players.indexOf(player)]
+
+
+            socket.emit("gameInfo", infoPackage)
+        })
+
         socket.on("positionUpdate", data => {
             player.setPosition(data.x, data.y)
         })
 
-        socket.on("getMaze", () => {
-            this.players.indexOf(player) != -1 ? socket.emit("getMaze", this.maze) : socket.emit("getMaze", undefined)
-        })
-
-        socket.on("getId", () => {
-            socket.emit("getId", socket.id)
-        })
-
         socket.on("getNumPlayers", () => {
-            socket.emit("getNumPlayers", this.players.length)
+            socket.emit("numPlayers", this.players.length)
         })
     } 
 }

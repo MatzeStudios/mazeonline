@@ -1,0 +1,12 @@
+.counter-number {
+    font-family: BungeeShade;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: black;
+    font-size: 30vh;
+    pointer-events: none;
+    user-select: none;
+}

@@ -16,13 +16,13 @@ function Entry() {
     const [numPlayers, setNumPlayers] = useState('')
     const navigate = useNavigate()
     const handleOnClick = useCallback(() => {
-        navigate('/game', {state: { nickname, color }, replace: true})
+        navigate('/game', {replace: true})
         socket.emit("playerStart", {nickname: nickname, color: color})
     }, [navigate, nickname, color])    
 
     useEffect(() => {
         socket.emit("getNumPlayers")
-        socket.on("getNumPlayers", data => {
+        socket.on("numPlayers", data => {
             setNumPlayers(data)
         })
     }, [])

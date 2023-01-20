@@ -33,7 +33,7 @@ export const drawPlayer = (x, y, radius, g, nSides) => {
     }
 }
 
-const verifyMovement = (xi, yi, xf, yf, maze) => {
+const verifyMovement = (xi, yi, xf, yf, maze, freeze) => {
     let xiI = Math.floor(xi)
     let yiI = Math.floor(yi)
     let xfI = Math.floor(xf)
@@ -45,34 +45,36 @@ const verifyMovement = (xi, yi, xf, yf, maze) => {
     // muda de célula
 
     if(xiI !== xfI && yiI !== yfI) { // tentando mudar de célula na diagonal
-        if(xfI > xiI  && (maze.grid[yiI][xiI] & E) !== 0)
-            return [xf,yi]
+        if(!freeze){
+            if(xfI > xiI  && (maze.grid[yiI][xiI] & E) !== 0)
+                return [xf,yi]
 
-        if(xfI < xiI  && (maze.grid[yiI][xiI] & W) !== 0)
-            return [xf,yi]
+            if(xfI < xiI  && (maze.grid[yiI][xiI] & W) !== 0)
+                return [xf,yi]
 
-        if(yfI > yiI  && (maze.grid[yiI][xiI] & S) !== 0)
-            return [xi,yf]
+            if(yfI > yiI  && (maze.grid[yiI][xiI] & S) !== 0)
+                return [xi,yf]
 
-        if(yfI < yiI  && (maze.grid[yiI][xiI] & N) !== 0)
-            return [xi,yf]
-
+            if(yfI < yiI  && (maze.grid[yiI][xiI] & N) !== 0)
+                return [xi,yf]
+        }
         return [xi,yi]
     }
 
-    if(xfI > xiI)
-        return (maze.grid[yiI][xiI] & E) !== 0 ? [xf,yf] : [xi,yf]   // -> realiza somente o movimento que não é na direção
+    if(xfI > xiI)                       // Tentando mudar para celula adjacente
+        return ((maze.grid[yiI][xiI] & E) !== 0 && !freeze) ? [xf,yf] : [xi,yf]   // -> realiza somente o movimento que não é na direção
                                                                     // da parede, se ela existir, e o movimento completo
                                                                     // se ela não existir existir
 
-    if(xfI < xiI)
-        return (maze.grid[yiI][xiI] & W) !== 0 ? [xf,yf] : [xi,yf]
+    if(xfI < xiI)                       // Tentando mudar para celula adjacente
+        return ((maze.grid[yiI][xiI] & W) !== 0 && !freeze) ? [xf,yf] : [xi,yf]
 
-    if(yfI > yiI)
-        return (maze.grid[yiI][xiI] & S) !== 0 ? [xf,yf] : [xf,yi]
+    if(yfI > yiI)                       // Tentando mudar para celula adjacente
+        return ((maze.grid[yiI][xiI] & S) !== 0 && !freeze) ? [xf,yf] : [xf,yi]
 
-    if(yfI < yiI)
-        return (maze.grid[yiI][xiI] & N) !== 0 ? [xf,yf] : [xf,yi]
+    if(yfI < yiI)                       // Tentando mudar para celula adjacente
+        return ((maze.grid[yiI][xiI] & N) !== 0 && !freeze) ? [xf,yf] : [xf,yi]
+
 }
 
 function Player(props) {
@@ -129,7 +131,7 @@ function Player(props) {
     }, [])
 
     useTick(delta => {
-        if(freeze) return
+        // if(freeze) return
 
         let base = shiftHeld || rightMouseButtonPressed ? 0.1 : 0.05
 
@@ -155,7 +157,7 @@ function Player(props) {
 
         let nx = x + vx * base * delta;
         let ny = y + vy * base * delta;
-        [nx, ny] = verifyMovement(x, y, nx, ny, maze);
+        [nx, ny] = verifyMovement(x, y, nx, ny, maze, freeze);
 
         setX(nx)
         setY(ny)

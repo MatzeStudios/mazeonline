@@ -192,7 +192,7 @@ function GameScreen(props) {
             >
                 <Container position={[BASE_SIZE, BASE_SIZE]}>
                     <VisitedCells xp={xp} yp={yp} maze={maze} color={playerColor}/>
-                    <Maze maze={maze} />
+                    <Maze maze={maze} freeze={freezePlayer}/>
                     <Path xp={xp} yp={yp} />
                     <OtherPlayers maze={maze} playerId={playerId} />
                     <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}

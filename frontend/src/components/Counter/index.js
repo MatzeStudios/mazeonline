@@ -24,7 +24,7 @@ function Counter(props) {
             setTimeout(() => {
                 setTime(t => t-1)
                 clearInterval(intervalRef)
-            }, 333) // delay to clear "Go!" text
+            }, 500) // delay to clear "Go!" text
         }
     }, [time]);
 

@@ -7,7 +7,7 @@
 const Player = require("../classes/player")
 const Maze = require("../classes/maze")
 
-const startCount = 3000
+const startCount = 20000
 
 class Game {
     constructor(io) {

@@ -1,0 +1,40 @@
+.wasd {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    font-family: Inter;
+    color: white;
+    width: 150px;
+    height: 100px;
+}
+
+.key {
+    width: 45px;
+    height: 45px;
+    border: 2px solid white;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 50px;
+    position: absolute;
+    font-size: 20px;
+}
+
+#w {
+    top: 0;
+    left: 40px;
+}
+
+#a {
+    top: 50px;
+    left: 0;
+}
+
+#s {
+    top: 50px;
+    left: 50px;
+}
+
+#d {
+    top: 50px;
+    left: 100px;
+}

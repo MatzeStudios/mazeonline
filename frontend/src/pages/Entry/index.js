@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import {useNavigate} from 'react-router-dom'
 import socket from "../../services/socket"
-import ColorSelector from "../../components/ColorSelector/index"
+import ColorSelector from "../../components/ColorSelector"
+import Controls from "../../components/Controls"
+
 // styles
 import './index.css'
 
@@ -40,6 +42,7 @@ function Entry() {
                 <button className='button-nickname' type='button' onClick={handleOnClick} ><div className='arrRight' type="submit"></div></button>
             </div>
             <ColorSelector onSelect={color => setColor(color)} />
+            {/* <Controls /> */}
             <div className='container-players-online'>
                 <p className='text-num-players'> {numPlayers} </p>
                 <p className='text-players-online'> players online </p>

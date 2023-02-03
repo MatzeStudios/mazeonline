@@ -42,11 +42,11 @@ function Entry() {
                 <button className='button-nickname' type='button' onClick={handleOnClick} ><div className='arrRight' type="submit"></div></button>
             </div>
             <ColorSelector onSelect={color => setColor(color)} />
-            {/* <Controls /> */}
             <div className='container-players-online'>
                 <p className='text-num-players'> {numPlayers} </p>
-                <p className='text-players-online'> players online </p>
+                <p className='text-players-online'> Jogadores Online </p>
             </div>
+            <Controls />
         </div>
     )
 }

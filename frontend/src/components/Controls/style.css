@@ -1,14 +1,71 @@
-.wasd {
+.container-controls {
+    margin-top: 50px;
+    border: solid 3px #272727;
+    padding: 20px 40px 20px 40px;
+    margin-bottom: 50px;
+
+}
+
+.container-controls h2 {
+    font-family: 'BungeeShade';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 58px;
+    font-size: 40px;
+    color: #7BBF7A;
+    margin-bottom: 50px;
+}
+
+.container-controls h3 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 58px;
+    font-size: 20px;
+    color: white;
+}
+
+.wrapper-controls {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.row-1 {
+    margin-bottom: 50px;
+}
+
+.text-key {
+    font-family: Inter;
+    color: white;
+    font-size: 20px;
+}
+
+.wrapper-flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.wrapper-gap-40 {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.wrapper-keys {
     display: flex;
     justify-content: center;
     position: relative;
-    font-family: Inter;
-    color: white;
     width: 150px;
     height: 100px;
+    user-select: none;
+
 }
 
-.key {
+.wrapper-key {
     width: 45px;
     height: 45px;
     border: 2px solid white;
@@ -16,7 +73,15 @@
     text-align: center;
     line-height: 50px;
     position: absolute;
-    font-size: 20px;
+}
+
+.wrapper-mouse {
+    user-select: none;
+}
+
+.single-key {
+    position: relative;
+    user-select: none;
 }
 
 #w {
@@ -38,3 +103,55 @@
     top: 50px;
     left: 100px;
 }
+
+#arrow-up {
+    top: 0;
+    left: 50px;
+}
+
+#arrow-left {
+    top: 50px;
+    left: 0;
+    transform: rotate(-90deg);
+}
+
+#arrow-down {
+    top: 50px;
+    left: 50px;
+    transform: rotate(180deg);
+
+}
+
+#arrow-right {
+    top: 50px;
+    left: 100px;
+    transform: rotate(90deg);
+}
+
+.btn-shift {
+    width: 120px;
+    height: 45px;
+    border: 2px solid white;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 20px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    user-select: none;
+
+}
+
+.btn-shift .btn-shift-arrow {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-right: 5px;
+}
+
+
+

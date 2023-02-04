@@ -20,6 +20,17 @@ function Counter(props) {
                 setTime(t => t-1)
                 return
             }
+            document.querySelector('.counter-number').animate(
+                [
+                    { opacity: '1' },
+                    { opacity: '0' }
+                  ],
+
+                  {
+                    duration: 500,
+                    iterations: 1,
+                  }
+            )
             setTime(t => t-1)
             setTimeout(() => {
                 setTime(t => t-1)

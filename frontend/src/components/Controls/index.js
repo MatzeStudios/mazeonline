@@ -57,12 +57,12 @@ function Controls() {
             <div className='wrapper-controls row-2'>
                 <div className='wrapper-flex-column'>
                     <div className="wrapper-key text-key single-key" id="q">Q</div>
-                    <h3>Marcação de caminho</h3>
+                    <h3>Marcação de <br />caminho</h3>
                 </div>
                 
                 <div className='wrapper-flex-column'>
                     <div className="wrapper-key text-key single-key" id="E">E</div>
-                    <h3>Marcação de caminho</h3>
+                    <h3>Marcação de <br />caminho</h3>
                 </div>
 
                 <div className='wrapper-mouse'>

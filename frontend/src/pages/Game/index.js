@@ -6,6 +6,7 @@ import './style.css'
 
 import GameScreen from '../../components/GameScreen'
 import Counter from '../../components/Counter'
+import Pause from '../../components/Pause'
 import SoundManager from '../../components/SoundManager'
 
 function Game() {
@@ -56,7 +57,8 @@ function Game() {
 
     if(gameInfoReceived) return (
         <>
-            <SoundManager />
+            {/* <SoundManager /> */}
+            <Pause />
             <Counter time={startTime} />
             <GameScreen state={gameState} freeze={startTime} maze={maze} color={playerColor} playerId={playerId} />
         </>

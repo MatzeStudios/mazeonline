@@ -1,0 +1,15 @@
+.btn-menu {
+    all: unset;
+
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+    cursor: pointer;
+    opacity: 0.5;
+    
+}
+
+.btn-menu:hover {
+    opacity:1 ;
+}

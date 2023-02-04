@@ -20,7 +20,7 @@
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    line-height: 58px;
+    line-height: 24px;
     font-size: 20px;
     color: white;
 }
@@ -82,8 +82,13 @@
 .single-key {
     position: relative;
     user-select: none;
+
+    margin-bottom: 30px;
 }
 
+#text-movimentation-player {
+    margin-top: 24px;
+}
 #w {
     top: 0;
     left: 40px;
@@ -143,6 +148,8 @@
     justify-content: center;
 
     user-select: none;
+
+    margin-bottom: 30px;
 
 }
 

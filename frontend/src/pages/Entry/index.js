@@ -46,7 +46,7 @@ function Entry() {
                 <p className='text-num-players'> {numPlayers} </p>
                 <p className='text-players-online'> Jogadores Online </p>
             </div>
-            <Controls />
+            <Controls border={true}/>
         </div>
     )
 }

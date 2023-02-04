@@ -13,8 +13,15 @@ import MouseScroll from '../../../src/assets/mouse-scroll.svg'
 import ArrowKeyUp from '../../../src/assets/arrow-key-up.svg'
 import ArrowUp from '../../../src/assets/arrow-up.svg'
 
-function Controls() {
+function Controls(props) {
     
+    useEffect(() => {
+        if(props.border) {
+            var box = document.querySelector(".container-controls");
+            box.style.border = "solid 3px #272727";
+        }
+    }, [])
+
     return(
         <>
         <div className='container-controls'>
@@ -66,13 +73,13 @@ function Controls() {
                 </div>
 
                 <div className='wrapper-mouse'>
-                            <img src={MouseRight} alt="click right in mouse" />
-                            <h3>Mover câmera</h3>
+                    <img src={MouseRight} alt="click right in mouse" />
+                    <h3>Mover câmera</h3>
                 </div>
 
                 <div className='wrapper-mouse'>
-                            <img src={MouseScroll} alt="scroll mouse" />
-                            <h3>Zoom</h3>
+                    <img src={MouseScroll} alt="scroll mouse" />
+                    <h3>Zoom</h3>
                 </div>
             </div>
         </div>

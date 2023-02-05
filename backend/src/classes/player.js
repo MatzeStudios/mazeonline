@@ -6,6 +6,7 @@ class Player {
         this.id = id
         this.color = "#FFFFFF"
         this.nickname = "Unnamed"
+        this.nSides = 3
     }
 
     setInicialPosition(maze) {

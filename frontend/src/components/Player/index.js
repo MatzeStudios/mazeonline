@@ -84,8 +84,7 @@ function Player(props) {
     let freeze = props.freeze
     const mousePosition = props.mousePosition;
     const rightMouseButtonPressed = props.rightMouseButtonPressed;
-
-    const [n, setN] = useState(3);
+    const nSides = props.nSides
 
     const [x, setX] = useState(maze.sx + .5);
     const [y, setY] = useState(maze.sy + .5);
@@ -104,8 +103,6 @@ function Player(props) {
         if(event.key.toLowerCase() === 's') setDownHeld(true)
         if(event.key.toLowerCase() === 'd') setRightHeld(true)
         if(event.key.toLowerCase() === 'shift') setShiftHeld(true)
-        if(event.key.toLowerCase() === 'r') setN(n + 1)
-        if(event.key.toLowerCase() === 'f') setN(n - 1)
     })
     
     useEventListener('keyup', (event) => {
@@ -131,7 +128,6 @@ function Player(props) {
     }, [])
 
     useTick(delta => {
-        // if(freeze) return
 
         let base = shiftHeld || rightMouseButtonPressed ? 0.1 : 0.05
 
@@ -194,9 +190,9 @@ function Player(props) {
         else
             g.beginFill(utils.string2hex(color), 1)
         g.lineStyle(THIN_LINE_WIDTH,0,1)
-        drawPlayer(0, 0, PLAYER_RADIUS, g, n)
+        drawPlayer(0, 0, PLAYER_RADIUS, g, nSides)
         g.endFill()
-    }, [freeze, n]);
+    }, [freeze]);
 
     return(
         <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} />

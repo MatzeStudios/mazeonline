@@ -10,7 +10,9 @@ import '../../fonts/Inter/static/Inter-Regular.ttf'
 
 import Controls from '../Controls'
 
-function Pause() {
+function Pause(props) {
+
+    const setOtherPlayersVisibility = props.setOtherPlayersVisibility
 
     const [showMenu, setShowMenu] = useState(false)
 
@@ -39,7 +41,13 @@ function Pause() {
             {
                 showMenu && (
                 <div className='container-menu'>
+                    
                     <Controls border={false} />
+
+                    <button onClick={() => setOtherPlayersVisibility('normal')} > normal </button>
+                    <button onClick={() => setOtherPlayersVisibility('restricted')} > restricted </button>
+                    <button onClick={() => setOtherPlayersVisibility('none')} > none </button>
+
                 </div>
                 )
             }

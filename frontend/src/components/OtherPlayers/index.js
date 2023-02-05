@@ -12,6 +12,7 @@ const findById = (players, id) => {
 function OtherPlayers(props) {
     
     const id = props.playerId
+    const visibility = props.visibility
 
     const players = useState([])[0]
 
@@ -47,11 +48,12 @@ function OtherPlayers(props) {
         })
     }, []);
 
+    if(visibility === 'none') return null
     return(
         <>
             {players.map((item, index) => {
                 if(item.id === id) return null;
-                return <OtherPlayer lastUpdate={lastUpdateTime} player={item} key={item.id} />
+                return <OtherPlayer lastUpdate={lastUpdateTime} player={item} key={item.id} visibility={visibility}/>
             })}
         </>
     );

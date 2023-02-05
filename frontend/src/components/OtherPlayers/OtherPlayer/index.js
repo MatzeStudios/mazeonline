@@ -9,6 +9,7 @@ function OtherPlayer(props) {
 
     const player = props.player
     const lastUpdateTime = props.lastUpdate
+    const visibility = props.visibility
     const refreshPositionDelay = 50
     const [x, setX] = useState(player.x)
     const [y, setY] = useState(player.x)
@@ -58,9 +59,10 @@ function OtherPlayer(props) {
         g.beginFill(utils.string2hex(player.color), 1)
         g.lineStyle(THIN_LINE_WIDTH,0,1)
 
-        drawPlayer(0, 0, PLAYER_RADIUS, g, 4)
+        if(visibility === 'normal') drawPlayer(0, 0, PLAYER_RADIUS, g, player.nSides)
+        else drawPlayer(0, 0, PLAYER_RADIUS, g, 1)
         g.endFill()
-    }, [player]);
+    }, [player, visibility]);
 
     return(
         <>

@@ -94,6 +94,8 @@ function GameScreen(props) {
     const gameState = props.state
     const freezeDuration = props.freeze
     const playerId = props.playerId
+    const playerNSides = props.playerNSides
+    const otherPlayersVisibility = props.otherPlayersVisibility
 
     const viewportRef = useRef();
 
@@ -194,7 +196,7 @@ function GameScreen(props) {
                     <VisitedCells xp={xp} yp={yp} maze={maze} color={playerColor}/>
                     <Maze maze={maze} freeze={freezePlayer}/>
                     <Path xp={xp} yp={yp} />
-                    <OtherPlayers maze={maze} playerId={playerId} />
+                    <OtherPlayers maze={maze} playerId={playerId} visibility={otherPlayersVisibility} />
                     <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}
                             interactive={true}
                             pointerdown={() => {
@@ -202,7 +204,8 @@ function GameScreen(props) {
                             }}
                             color={playerColor}
                             mousePosition={mousePosition}
-                            rightMouseButtonPressed={rightMouseButtonPressed}/>
+                            rightMouseButtonPressed={rightMouseButtonPressed}
+                            nSides={playerNSides} />
                 </Container>
             </PixiViewport>
         </Stage>

@@ -17,6 +17,9 @@ function Game() {
     const [maze, setMaze] = useState(undefined)
     const [playerColor, setPlayerColor] = useState(undefined)
     const [playerId, setPlayerId] = useState(undefined)
+    const [playerNSides, setPlayerNSides] = useState(undefined)
+
+    const [otherPlayersVisibility, setOtherPlayersVisibility] = useState('normal') // normal, restricted, none
 
     const navigate = useNavigate()
     const handleRedirectHome = useCallback(() => {
@@ -36,6 +39,7 @@ function Game() {
             setMaze(data.maze)
             setPlayerColor(data.player.color)
             setPlayerId(data.player.id)
+            setPlayerNSides(data.player.nSides)
 
             setGameState(data.state)
             
@@ -58,9 +62,9 @@ function Game() {
     if(gameInfoReceived) return (
         <>
             {/* <SoundManager /> */}
-            <Pause />
+            <Pause setOtherPlayersVisibility={setOtherPlayersVisibility} />
             <Counter time={startTime} />
-            <GameScreen state={gameState} freeze={startTime} maze={maze} color={playerColor} playerId={playerId} />
+            <GameScreen state={gameState} freeze={startTime} maze={maze} color={playerColor} playerId={playerId} playerNSides={playerNSides} otherPlayersVisibility={otherPlayersVisibility} />
         </>
     )
 

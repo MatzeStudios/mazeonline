@@ -1,4 +1,4 @@
-.btn-menu {
+.wrapper-btn-click {
     all: unset;
 
     position: absolute;
@@ -10,8 +10,33 @@
     
 }
 
-.btn-menu:hover {
+.wrapper-btn-click:hover {
     opacity:1 ;
+}
+
+.container-btn-eye {
+    position: relative;
+    
+    float: right;
+    padding-bottom: 20px;
+}
+
+.wrapper-btn-eye {
+    all: unset;
+    cursor: pointer;
+
+    margin: 20px 20px 0px 20px;
+}
+.wrapper-btn-eye:hover {
+    opacity: .5 ;
+}
+
+.btn-line-select {
+    height: 3px;
+    width: 25%;
+    background-color: white;
+    position: absolute;
+    transition: all 0.2s;
 }
 
 .container-menu {

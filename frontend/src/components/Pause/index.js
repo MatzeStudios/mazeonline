@@ -3,6 +3,10 @@ import React, { useEffect, useState, useRef } from 'react'
 import './index.css'
 
 import Gear from '../../assets/gear.svg'
+import Close from '../../assets/close.svg'
+import EyeOpen from '../../assets/eye-open.svg'
+import EyeClosed from '../../assets/eye-closed.svg'
+import EyeBlocked from '../../assets/eye-blocked.svg'
 
 //fonts 
 import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
@@ -15,7 +19,8 @@ function Pause(props) {
     const setOtherPlayersVisibility = props.setOtherPlayersVisibility
 
     const [showMenu, setShowMenu] = useState(false)
-
+    const [btnEyeSelected, setBtnEyeSelected] = useState(0)
+    
     const toggleMenu = () => {
         setShowMenu(!showMenu);
     };
@@ -36,18 +41,27 @@ function Pause(props) {
 
     return (
         <>
-            <button className='btn-menu'><img src={Gear} alt="gear button for open menu" onClick={toggleMenu}/></button>
+            <button className='wrapper-btn-click'  onClick={toggleMenu} ><img src={Gear} alt="gear button for open menu"/></button>
 
             {
                 showMenu && (
                 <div className='container-menu'>
-                    
+                    <button className='wrapper-btn-click' onClick={toggleMenu} ><img src={Close} alt="close button" /></button>
                     <Controls border={false} />
 
-                    <button onClick={() => setOtherPlayersVisibility('normal')} > normal </button>
-                    <button onClick={() => setOtherPlayersVisibility('restricted')} > restricted </button>
-                    <button onClick={() => setOtherPlayersVisibility('none')} > none </button>
 
+                    <hr />
+                    <div className='container-btn-eye'>
+                    <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('normal'), setBtnEyeSelected(0)]} > <img src={EyeOpen} alt="button for players visible"  /> </button>
+                    <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('restricted'), setBtnEyeSelected(1)]} > <img src={EyeClosed} alt="button for players point" /> </button>
+                    <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('none'), setBtnEyeSelected(2)]} > <img src={EyeBlocked} alt="button for players hidden"  /> </button>
+                    <div
+                        className='btn-line-select'
+                        style={{
+                        transform: `translateX(${btnEyeSelected * 133.333 + 16.666}%)`,
+                        }}
+                    />    
+                    </div>
                 </div>
                 )
             }

@@ -42,19 +42,26 @@ class Maze {
         this.height = height;
         this.n_paths = n_paths;
 
-        this.grid = [];
+        while(true) {
+            this.grid = [];
 
-        for (var i = 0; i < height; i++) {
-            let line = [];
-            for (var j = 0; j < width; j++) {
-                line.push(0);
+            for (var i = 0; i < height; i++) {
+                let line = [];
+                for (var j = 0; j < width; j++) {
+                    line.push(0);
+                }
+                this.grid.push(line);
+            } // Initializes the grid with zeros.
+    
+            this.carve_passages();
+            let sucess = this.choose_endpoints(); // repeat until it can find endpoints
+
+            if(sucess) {
+                this.more_paths(this.sx,this.sy,this.ex,this.ey,n_paths-1);
+                break;
             }
-            this.grid.push(line);
-        } // Initializes the grid with zeros.
-
-        this.carve_passages();
-        this.choose_endpoints();
-        this.more_paths(this.sx,this.sy,this.ex,this.ey,n_paths-1);
+        }
+        
     }
 
     carve_passages_from(cx, cy) {
@@ -198,43 +205,135 @@ class Maze {
         }   
     }
 
-    choose_endpoints() {
-        // choose the start and end points of the maze, making sure that they are dead-ends and maximazing the distance.
+    // funcoes para a nova logica de escolha de endpoints
 
-        const possible = []
-        
-        for (var y = 0; y < this.height; y++) {
-            for (var x = 0; x < this.width; x++) {
-                let aux = this.grid[y][x];
-                if(aux == N || aux == E || aux == W || aux == S) possible.push([x,y])
-            }
-        }
+    create_rect_region(x1, y1, width, height) {
+        // returns a region, an array of pairs [x,y] of all positions inside a rectangle
+        // considering the rectangle with (x1,y1) as it's top-left point
 
-        let start = random_item(possible)
-        this.sx = start[0]
-        this.sy = start[1]
+        const region = [];
 
-        const dists = this.distance_to(this.sx, this.sy)
+        for(let y = y1; y < y1 + height; y++)
+        for(let x = x1; x < x1 + width; x++)
+            region.push([x,y]);
 
-        let maiorDist = 0;
-        let mx = this.sx;
-        let my = this.sy;
-
-        for(var i = 0; i < possible.length; i++) {
-            let x = possible[i][0];
-            let y = possible[i][1];
-            if(dists[y][x] > maiorDist) {
-                maiorDist = dists[y][x];
-                mx = x;
-                my = y;
-            }
-        }
-
-        this.ex = mx;
-        this.ey = my;
-
-        this.main_path_length = maiorDist;
+        return region;
     }
+
+    filter_endpoints_in_region(region) {
+        // receives an array of pairs [x,y], returns another array with all the pairs that are end points of the maze.
+
+        const endpoints = [];
+
+        for(let i = 0; i < region.length; i++) {
+            let x = region[i][0];
+            let y = region[i][1];
+
+            let aux = this.grid[y][x];
+            if(aux == N || aux == E || aux == W || aux == S) endpoints.push([x,y]);
+        }
+
+        return endpoints;
+    }
+
+    choose_endpoints_regions(region1, region2) {
+        // returns undefined, if region1 or region2 have no endpoints.
+        // or returns an array of the form [[x1, y1], [x2,y2]]
+        // where (x1,y1) and (x2,y2) are points of the region 1 and 2 respectively.
+
+        const filtered1 = this.filter_endpoints_in_region(region1);
+        const filtered2 = this.filter_endpoints_in_region(region2);
+
+        if(filtered1.length === 0 || filtered2.length === 0) return undefined;
+
+        const ends = [];
+        ends.push(random_item(filtered1));
+        ends.push(random_item(filtered2));
+
+        return ends;
+    }
+
+    choose_endpoints() {
+        // choose the start and end points of the maze, making sure that they are dead-ends and chossing in the\
+        // geografic extremes of the maze.
+        // returns true if endpoints could be found, and false otherwise
+
+        const region_pairs = [];
+
+        region_pairs.push([this.create_rect_region(0,0,3,3), this.create_rect_region(this.width-3,this.height-3,3,3)]);
+        region_pairs.push([this.create_rect_region(this.width-3,0,3,3), this.create_rect_region(0,this.height-3,3,3)]);
+
+        if(this.width%2 === 1) {
+            let middle = (this.width-1)/2;
+            region_pairs.push([this.create_rect_region(middle,0,1,3), this.create_rect_region(middle,this.height-3,1,3)]);
+        }
+
+        if(this.height%2 === 1) {
+            let middle = (this.height-1)/2;
+            region_pairs.push([this.create_rect_region(0,middle,3,1), this.create_rect_region(this.width-3,middle,3,1)]);
+        }
+
+        const possible_end_points = [];
+
+        for(let i = 0; i<region_pairs.length; i++) {
+            let ends = this.choose_endpoints_regions(region_pairs[i][0], region_pairs[i][1])
+            if(ends) possible_end_points.push(ends)
+        }
+
+        if(possible_end_points.length === 0) return false
+
+        const endpoints = random_item(possible_end_points)
+        
+        shuffle(endpoints)
+
+        this.sx = endpoints[0][0]
+        this.sy = endpoints[0][1]
+        this.ex = endpoints[1][0]
+        this.ey = endpoints[1][1]
+
+        const dists = this.distance_to(this.sx, this.sy);
+        this.main_path_length = dists[this.ey][this.ex];
+
+        return true;
+    }
+
+    // choose_endpoints() {
+    //     // choose the start and end points of the maze, making sure that they are dead-ends and maximazing the distance.
+
+    //     const possible = []
+        
+    //     for (var y = 0; y < this.height; y++) {
+    //         for (var x = 0; x < this.width; x++) {
+    //             let aux = this.grid[y][x];
+    //             if(aux == N || aux == E || aux == W || aux == S) possible.push([x,y])
+    //         }
+    //     }
+
+    //     let start = random_item(possible)
+    //     this.sx = start[0]
+    //     this.sy = start[1]
+
+    //     const dists = this.distance_to(this.sx, this.sy)
+
+    //     let maiorDist = 0;
+    //     let mx = this.sx;
+    //     let my = this.sy;
+
+    //     for(var i = 0; i < possible.length; i++) {
+    //         let x = possible[i][0];
+    //         let y = possible[i][1];
+    //         if(dists[y][x] > maiorDist) {
+    //             maiorDist = dists[y][x];
+    //             mx = x;
+    //             my = y;
+    //         }
+    //     }
+
+    //     this.ex = mx;
+    //     this.ey = my;
+
+    //     this.main_path_length = maiorDist;
+    // }
 
     printConsole() {
         // prints the maze and some info in the console.

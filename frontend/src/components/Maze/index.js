@@ -39,9 +39,6 @@ function Maze(props) {
     const freeze = props.freeze
 
     const drawEndPoints = useCallback(g => {
-
-        console.log("draw endPoints")
-
         g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xff0000, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
         g.drawRect(maze.ex*BASE_SIZE, maze.ey*BASE_SIZE, BASE_SIZE, BASE_SIZE)
 
@@ -50,8 +47,6 @@ function Maze(props) {
     }, [])
 
     const drawMaze = useCallback(g => {
-
-        console.log("draw maze")
 
         g.clear()
 

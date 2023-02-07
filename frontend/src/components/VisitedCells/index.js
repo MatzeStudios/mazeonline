@@ -38,7 +38,6 @@ function VisitedCells(props) {
     })
 
     const draw = useCallback(g => {
-        console.log("draw visited cells")
         if(!visitedCells || xp === undefined || yp === undefined) return
 
         let changed = appendVisitedCell(xp, yp, visitedCells)

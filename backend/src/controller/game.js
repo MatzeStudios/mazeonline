@@ -114,8 +114,10 @@ class Game {
         this.io.emit("gameEnd")
 
         setTimeout(() => {
-            this.gameStart()
-            this.io.emit("nextGame")
+            if(this.state === 'end') {
+                this.gameStart()
+                this.io.emit("nextGame")
+            }
         }, 5_000)
     }
 

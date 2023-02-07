@@ -184,7 +184,6 @@ function Player(props) {
     }, []);
 
     const draw = useCallback(g => {
-        console.log("draw player")
         g.clear()
         g.beginFill(utils.string2hex(color), 1)
         g.lineStyle(THIN_LINE_WIDTH,0,1)

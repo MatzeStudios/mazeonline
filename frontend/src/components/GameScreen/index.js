@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef, forwardRef } from "rea
 import { Stage, PixiComponent, useApp, Container } from '@inlet/react-pixi'
 import { Viewport } from "pixi-viewport";
 
+import socket from "../../services/socket"
+
 import Maze from "../Maze"
 import Player from "../Player"
 import OtherPlayers from "../OtherPlayers"
@@ -106,6 +108,8 @@ function GameScreen(props) {
     const [xp, setXp] = useState(undefined);
     const [yp, setYp] = useState(undefined);
 
+    const [playerFinished, setPlayerFinished] = useState(false);
+
     const [mousePosition, setMousePosition] = useState({x: 0, y: 0});
     const [rightMouseButtonPressed, setRightMouseButtonPressed] = useState(false);
     const appRef = useRef(null);
@@ -173,6 +177,13 @@ function GameScreen(props) {
         }
     }, []);
 
+    useEffect(() => {
+        if(!playerFinished && xp === maze.ex && yp === maze.ey) {
+            socket.emit("finished")
+            setPlayerFinished(true)
+        }
+    }, [xp, yp])
+
     return (
         <Stage 
         width={width}
@@ -198,10 +209,6 @@ function GameScreen(props) {
                     <Path xp={xp} yp={yp} />
                     <OtherPlayers maze={maze} playerId={playerId} visibility={otherPlayersVisibility} />
                     <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}
-                            interactive={true}
-                            pointerdown={() => {
-                                console.log("click");
-                            }}
                             color={playerColor}
                             mousePosition={mousePosition}
                             rightMouseButtonPressed={rightMouseButtonPressed}

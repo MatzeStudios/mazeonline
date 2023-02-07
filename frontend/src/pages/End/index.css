@@ -1,0 +1,125 @@
+@font-face {
+    font-family: "BungeeShade";
+    src: local("BungeeShade"),
+     url("../../fonts/Bungee_Shade/BungeeShade-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: local("Inter"),
+    url("../../fonts/Inter/static/Inter-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+.page {
+    margin: auto;
+    padding-top: 50px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.container-title {
+    width: 100%;
+    height: 100%;    
+}
+
+.text-title {
+    font-family: 'BungeeShade';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 96px;
+    line-height: 115px;
+    color: #7BBF7A;
+
+    user-select: none; 
+}
+
+.container-input-nickname {
+    width: 1200px;
+    height: 300px;
+    margin-top: 50px;
+}
+
+.text-input-title {
+    position: relative;
+    left: -400px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+
+    color: #FFFFFF;
+}
+
+.input-nickname {
+    all: unset;
+    width: 800px;
+    height: 180px;
+    border-radius: 25px;
+    padding: 10px 230px 10px 50px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 96px;
+    line-height: 24px;
+    text-align: left; 
+
+    color: #3D3D3D;
+    background-color: #D9D9D9;
+    box-shadow: 8px 9px 8px #565656;
+
+}
+.button-nickname {
+    all: unset;
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin-left: -220px;
+    top: 25px;
+
+    border-radius: 100px;
+
+    background-color: #7BBF7A;
+}
+.button-nickname:hover {
+    background-color: #7ab47a;
+    cursor: pointer;
+}
+
+.arrRight {
+    width: 0;
+    height: 0;
+    position: relative;
+    left: 60px;
+    border-top: 60px solid transparent;
+    border-bottom: 60px solid transparent;
+    border-left: 100px solid #295F38;
+}
+
+.container-players-online {
+    margin-top: 30px;
+    margin-bottom: 50px;
+    font-family: 'BungeeShade';
+    font-style: normal;
+    font-weight: 400;
+    
+    line-height: 58px;
+
+    color: #D3D3D3;
+}
+
+.text-num-players {
+    font-size: 48px;
+}
+
+.text-players-online {
+    font-size: 30px;
+}
+

@@ -178,9 +178,11 @@ class Maze {
                     if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height
                                                                 && groups[ny][nx] == 1 && (this.grid[py][px] & dir) == 0) {
                         
-                        if(this.main_path_length == undefined ||
-                            dists_i[py][px] + dists_f[ny][nx] > Math.floor(this.main_path_length * 0.7)) {
+                        if((this.main_path_length == undefined ||
+                            dists_i[py][px] + dists_f[ny][nx] > Math.floor(this.main_path_length * 0.7)) &&
+                            dists_i[py][px] !== 0 && dists_f[ny][nx] !== 0) {
                             // não remove se a remoção criar um caminho muito pequeno
+                            // ou se a distancia até o final ou incio for zero -> criaria um endpoint não cercado por 3 paredes.
                             this.grid[py][px] |= dir;
                             this.grid[ny][nx] |= opposite(dir);
                             over = true;
@@ -193,7 +195,7 @@ class Maze {
 
             // se over ainda é false, não removeu pois o caminho ficaria pequeno
             if(!over) n_new_paths++;
-        }
+        }   
     }
 
     choose_endpoints() {

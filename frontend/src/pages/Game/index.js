@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import socket from "../../services/socket"
 
 import './style.css'
 
 import GameScreen from '../../components/GameScreen'
-import Counter from '../../components/Counter'
+import StartCounter from '../../components/StartCounter'
+import EndCounter from '../../components/EndCounter'
 import Pause from '../../components/Pause'
 import SoundManager from '../../components/SoundManager'
 
@@ -19,22 +20,34 @@ function Game() {
     const [playerId, setPlayerId] = useState(undefined)
     const [playerNSides, setPlayerNSides] = useState(undefined)
 
+    const [endTime, setEndTime] = useState(undefined)
+
     const [otherPlayersVisibility, setOtherPlayersVisibility] = useState('normal') // normal, restricted, none
 
     const navigate = useNavigate()
+
     const handleRedirectHome = useCallback(() => {
         navigate('/', {replace: true})
+    }, [navigate])
+    
+    const handleRedirectEnd = useCallback(() => {
+        navigate('/end', {replace: true})
     }, [navigate])
 
     useEffect(() => {
         socket.emit("getGameInfo")
 
         socket.on("gameInfo", data => {
+            if(gameInfoReceived) return // Already set info.
+            
             if(!data) {
                 handleRedirectHome() // Player doesn't exist in server.
                 return
             }
-            if(gameInfoReceived) return // Already set info.
+            if(data.state === 'end') {
+                handleRedirectEnd()
+                return
+            }
 
             setMaze(data.maze)
             setPlayerColor(data.player.color)
@@ -45,9 +58,17 @@ function Game() {
             
             if(data.state === 'starting') setStartTime(data.startTime)
             else setStartTime(0)
+            
+            if(data.state === 'finishing') setEndTime(data.endTime)
 
             setGameInfoReceived(true)
         })
+
+        socket.on("gameFinishing", setEndTime)
+
+        socket.on("gameEnd", handleRedirectEnd)
+
+        socket.on("cancelFinish", () => setEndTime(undefined))
     }, [])
 
     useEffect(() => {
@@ -63,7 +84,8 @@ function Game() {
         <>
             {/* <SoundManager /> */}
             <Pause setOtherPlayersVisibility={setOtherPlayersVisibility} />
-            <Counter time={startTime} />
+            <StartCounter time={startTime} />
+            { endTime && <EndCounter time={endTime} /> }
             <GameScreen state={gameState} freeze={startTime} maze={maze} color={playerColor} playerId={playerId} playerNSides={playerNSides} otherPlayersVisibility={otherPlayersVisibility} />
         </>
     )

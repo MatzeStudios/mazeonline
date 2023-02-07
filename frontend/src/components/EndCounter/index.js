@@ -6,7 +6,7 @@ import './style.css'
 import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
 import '../../fonts/Inter/static/Inter-Regular.ttf'
 
-function Counter(props) {
+function EndCounter(props) {
     const initialTimer = props.time
 
     const [intervalRef, setIntervalRef] = useState()
@@ -20,22 +20,9 @@ function Counter(props) {
                 setTime(t => t-1)
                 return
             }
-            document.querySelector('.counter-number').animate(
-                [
-                    { opacity: '1' },
-                    { opacity: '0' }
-                  ],
-
-                  {
-                    duration: 500,
-                    iterations: 1,
-                  }
-            )
+            
             setTime(t => t-1)
-            setTimeout(() => {
-                setTime(t => t-1)
-                clearInterval(intervalRef)
-            }, 500) // delay to clear "Go!" text
+            clearInterval(intervalRef)
         }
     }, [time]);
 
@@ -50,9 +37,8 @@ function Counter(props) {
         return () => clearInterval(intervalRef)
     }, [])
 
-    if( time > 0 ) return <p className='counter-number'>{time}</p>
-    else if(time === 0) return <p className='counter-number'>Go!</p>
+    if( time > 0 ) return <p className='end-counter-number'>{time}</p>
     return null
 }
 
-export default Counter
+export default EndCounter

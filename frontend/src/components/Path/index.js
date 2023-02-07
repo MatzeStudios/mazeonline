@@ -34,6 +34,7 @@ function Path(props) {
     })
 
     const draw = useCallback(g => {
+        console.log("draw path")
         appendVisitedCell(xp, yp, visitedCells)
         if(visitedCells.length === 0) return
         

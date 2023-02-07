@@ -81,7 +81,7 @@ function Player(props) {
 
     const maze = props.maze
     const color = props.color
-    let freeze = props.freeze
+    const freeze = props.freeze
     const mousePosition = props.mousePosition;
     const rightMouseButtonPressed = props.rightMouseButtonPressed;
     const nSides = props.nSides
@@ -184,15 +184,13 @@ function Player(props) {
     }, []);
 
     const draw = useCallback(g => {
+        console.log("draw player")
         g.clear()
-        if(freeze)
-            g.beginFill(0xff0000, 1)
-        else
-            g.beginFill(utils.string2hex(color), 1)
+        g.beginFill(utils.string2hex(color), 1)
         g.lineStyle(THIN_LINE_WIDTH,0,1)
         drawPlayer(0, 0, PLAYER_RADIUS, g, nSides)
         g.endFill()
-    }, [freeze]);
+    }, []);
 
     return(
         <Graphics draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} />

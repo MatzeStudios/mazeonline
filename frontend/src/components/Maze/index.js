@@ -1,6 +1,6 @@
 import { Graphics } from '@inlet/react-pixi'
 import * as PIXI from 'pixi.js'
-import React from "react"
+import React, { useCallback } from "react"
 import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'
 
 const N = 1
@@ -38,7 +38,20 @@ function Maze(props) {
     const maze = props.maze
     const freeze = props.freeze
 
-    const draw = g => { // removed useCallback because map is only drawn once
+    const drawEndPoints = useCallback(g => {
+
+        console.log("draw endPoints")
+
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xff0000, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
+        g.drawRect(maze.ex*BASE_SIZE, maze.ey*BASE_SIZE, BASE_SIZE, BASE_SIZE)
+
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x00ff00, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
+        g.drawRect(maze.sx*BASE_SIZE, maze.sy*BASE_SIZE, BASE_SIZE, BASE_SIZE)
+    }, [])
+
+    const drawMaze = useCallback(g => {
+
+        console.log("draw maze")
 
         g.clear()
 
@@ -66,17 +79,13 @@ function Maze(props) {
             }
         }
         
-        if(freeze){
-            g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xff0000, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
-            g.drawRect(maze.ex*BASE_SIZE, maze.ey*BASE_SIZE, BASE_SIZE, BASE_SIZE)
+    }, [])
 
-            g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x00ff00, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
-            g.drawRect(maze.sx*BASE_SIZE, maze.sy*BASE_SIZE, BASE_SIZE, BASE_SIZE)
-        }
-    }
-
-    return( 
-        <Graphics draw={draw} x={0} y={0} />
+    return(
+        <>
+        <Graphics draw={drawMaze} x={0} y={0} />
+        { freeze && <Graphics draw={drawEndPoints} x={0} y={0} /> }
+        </>
     )
 }
 

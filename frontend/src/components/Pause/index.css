@@ -36,7 +36,7 @@
     width: 25%;
     background-color: white;
     position: absolute;
-    transition: all 0.2s;
+    transition: all 0.4s cubic-bezier(.51,0,.57,1.29);
 }
 
 .container-menu {

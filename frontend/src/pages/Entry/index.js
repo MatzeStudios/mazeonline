@@ -43,7 +43,7 @@ function Entry() {
             </div>
             <ColorSelector onSelect={color => setColor(color)} />
             <div className='container-players-online'>
-                <p className='text-num-players'> {numPlayers} </p>
+                <p className='text-num-players'> {numPlayers ? numPlayers : "?"} </p>
                 <p className='text-players-online'> Jogadores Online </p>
             </div>
             <Controls border={true}/>

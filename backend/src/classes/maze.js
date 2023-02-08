@@ -36,6 +36,17 @@ const random_item = (items) => items[Math.floor(Math.random()*items.length)];
 
 const get_random_integer = (min, max) => Math.floor(Math.random() * (max - min)) + Math.floor(min);
 
+const printMatrix = (arr) => {
+    let arrText = ''
+    for (var i = 0; i < arr.length; i++) {
+        for (var j = 0; j < arr[i].length; j++) {
+            arrText+=arr[i][j]+' ';
+        }
+        console.log(arrText);
+        arrText='';
+    }
+}
+
 class Maze {
     constructor(width, height, n_paths=1) {
         this.width = width;
@@ -119,39 +130,39 @@ class Maze {
         this.carve_passages_from(get_random_integer(0,this.width), get_random_integer(0,this.height));
     }
 
-    recursive_dist_to(cx, cy, cdist, dist_matrix) {
-        dist_matrix[cy][cx] = cdist;
+    // recursive_dist_to(cx, cy, cdist, dist_matrix) {
+    //     dist_matrix[cy][cx] = cdist;
         
-        let dirs = [N, E, W, S];
+    //     let dirs = [N, E, W, S];
 
-        dirs.forEach(dir => {
-            if((this.grid[cy][cx] & dir) != 0) {
-                let nx = cx + dx(dir);
-                let ny = cy + dy(dir);
+    //     dirs.forEach(dir => {
+    //         if((this.grid[cy][cx] & dir) != 0) {
+    //             let nx = cx + dx(dir);
+    //             let ny = cy + dy(dir);
     
-                if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height && dist_matrix[ny][nx] == -1) {
-                    this.recursive_dist_to(nx, ny, cdist+1, dist_matrix);
-                }
-            }
-        });
-    }
+    //             if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height && dist_matrix[ny][nx] == -1) {
+    //                 this.recursive_dist_to(nx, ny, cdist+1, dist_matrix);
+    //             }
+    //         }
+    //     });
+    // }
 
-    distance_to(cx, cy) {
-        // Calculate the distance from a cell (cx, cy) to every other cell in the maze, returns a matrix of distances.
-        // The maze needs to be perfect when this function is called, otherwise it runs forever.
-        const dist_matrix = []
+    // distance_to(cx, cy) {
+    //     // Calculate the distance from a cell (cx, cy) to every other cell in the maze, returns a matrix of distances.
+    //     // The maze needs to be perfect when this function is called, otherwise it runs forever.
+        // const dist_matrix = []
 
-        for (var i = 0; i < this.height; i++) {
-            let line = [];
-            for (var j = 0; j < this.width; j++) {
-                line.push(-1);
-            }
-            dist_matrix.push(line);
-        }
+        // for (var i = 0; i < this.height; i++) {
+        //     let line = [];
+        //     for (var j = 0; j < this.width; j++) {
+        //         line.push(-1);
+        //     }
+        //     dist_matrix.push(line);
+        // }
 
-        this.recursive_dist_to(cx, cy, 0, dist_matrix);
-        return dist_matrix;
-    }
+    //     this.recursive_dist_to(cx, cy, 0, dist_matrix);
+    //     return dist_matrix;
+    // }
 
     // interactive distance_to: 
     // initalize dist_matrix with all entries equal to -1
@@ -164,6 +175,54 @@ class Maze {
     //           or if the entry was -1, in that case changing to a bigger value but that is okay.
     //
     // repeat the last step until no values are changed in the dist_matrix.
+
+    increment_cell(x, y, m) {
+        if(m[y][x] === -1) return false;
+
+        let dirs = [N, E, W, S];
+        let changed = false;
+
+        dirs.forEach(dir => {
+            let nx = x + dx(dir);
+            let ny = y + dy(dir);
+
+            if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height
+                    && (this.grid[y][x] & dir) !== 0  && (m[ny][nx] === -1 || m[ny][nx] > m[y][x]+1) ) {
+                        m[ny][nx] = m[y][x]+1;
+                        changed = true;
+            }
+        });
+
+        return changed;
+    }
+
+    increment_cells(dist_matrix) {
+        let changed = false;
+
+        for (var y = 0; y < this.height; y++) 
+            for (var x = 0; x < this.width; x++) 
+                changed |= this.increment_cell(x, y, dist_matrix);
+
+        return changed
+    }
+
+    distance_to(cx, cy) {
+
+        const dist_matrix = []
+
+        for (var i = 0; i < this.height; i++) {
+            let line = [];
+            for (var j = 0; j < this.width; j++) {
+                line.push(-1);
+            }
+            dist_matrix.push(line);
+        }
+
+        dist_matrix[cy][cx] = 0;
+        while(this.increment_cells(dist_matrix));
+
+        return dist_matrix;
+    }
 
     more_paths(xi, yi, xf, yf, n_new_paths) {
         // Creates (n_new_paths) new paths from (xi,yi) to (xf,yf). In a perfect maze there is only

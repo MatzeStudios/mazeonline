@@ -15,7 +15,7 @@ import '../../fonts/Inter/static/Inter-Regular.ttf'
 function Entry() {
     const [nickname, setNickname] = useState('')
     const [color, setColor] = useState('')
-    const [numPlayers, setNumPlayers] = useState('')
+    const [numPlayers, setNumPlayers] = useState('?')
     const navigate = useNavigate()
     const handleOnClick = useCallback(() => {
         navigate('/game', {replace: true})
@@ -43,7 +43,7 @@ function Entry() {
             </div>
             <ColorSelector onSelect={color => setColor(color)} />
             <div className='container-players-online'>
-                <p className='text-num-players'> {numPlayers ? numPlayers : "?"} </p>
+                <p className='text-num-players'> {numPlayers} </p>
                 <p className='text-players-online'> Jogadores Online </p>
             </div>
             <Controls border={true}/>

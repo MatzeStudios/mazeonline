@@ -64,21 +64,54 @@ class Maze {
         
     }
 
+    // carve_passages_from(cx, cy) {
+    //     // Recursive function used to generate the maze.
+    //     let dirs = [N, E, W, S];
+    //     shuffle(dirs);
+
+    //     for(let i=0; i<4; i++) {
+    //         let dir = dirs[i]
+    //         let nx = cx + dx(dir);
+    //         let ny = cy + dy(dir);
+
+    //         if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height && this.grid[ny][nx] == 0) {
+    //             this.grid[cy][cx] |= dir;
+    //             this.grid[ny][nx] |= opposite(dir);
+    //             this.carve_passages_from(nx, ny)
+    //         }
+    //     };
+    // }
+
     carve_passages_from(cx, cy) {
-        // Recursive function used to generate the maze.
-        let dirs = [N, E, W, S];
-        shuffle(dirs);
+        let stack = []
+        stack.push([cx,cy])
+        
+        while(stack.length > 0) {
+            let curr = stack[stack.length - 1]
+            cx = curr[0]
+            cy = curr[1]
 
-        dirs.forEach(dir => {
-            let nx = cx + dx(dir);
-            let ny = cy + dy(dir);
+            let dirs = [N, E, W, S];
+            shuffle(dirs);
 
-            if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height && this.grid[ny][nx] == 0) {
-                this.grid[cy][cx] |= dir;
-                this.grid[ny][nx] |= opposite(dir);
-                this.carve_passages_from(nx, ny)
+            let carved = false
+
+            for(let i=0; i<4; i++) {
+                let dir = dirs[i]
+                let nx = cx + dx(dir);
+                let ny = cy + dy(dir);
+
+                if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height && this.grid[ny][nx] == 0) {
+                    this.grid[cy][cx] |= dir;
+                    this.grid[ny][nx] |= opposite(dir);
+                    stack.push([nx,ny]);
+                    carved = true;
+                    break;
+                }
             }
-        });
+
+            if(!carved) stack.pop();
+        }
     }
 
     carve_passages() {
@@ -119,6 +152,18 @@ class Maze {
         this.recursive_dist_to(cx, cy, 0, dist_matrix);
         return dist_matrix;
     }
+
+    // interactive distance_to: 
+    // initalize dist_matrix with all entries equal to -1
+    // set cx, cy position to 0.
+    // visit every cell
+    //      if entry is -1 -> go to the next cell
+    //      else let the entry be x, set x+1 to the four side
+    //           except if there's a wall between the cells or the entry in the cell is different from -1 but
+    //           less than x+1, the goal is to only change values to a value that is less than what was already on the cell
+    //           or if the entry was -1, in that case changing to a bigger value but that is okay.
+    //
+    // repeat the last step until no values are changed in the dist_matrix.
 
     more_paths(xi, yi, xf, yf, n_new_paths) {
         // Creates (n_new_paths) new paths from (xi,yi) to (xf,yf). In a perfect maze there is only

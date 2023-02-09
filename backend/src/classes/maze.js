@@ -1,3 +1,4 @@
+const Queue = require("./queue")
 
 const N = 1
 const E = 2
@@ -65,6 +66,7 @@ class Maze {
             } // Initializes the grid with zeros.
     
             this.carve_passages();
+
             let sucess = this.choose_endpoints(3); // repeat until it can find endpoints
 
             if(sucess) {
@@ -175,36 +177,7 @@ class Maze {
     //           or if the entry was -1, in that case changing to a bigger value but that is okay.
     //
     // repeat the last step until no values are changed in the dist_matrix.
-
-    increment_cell(x, y, m) {
-        if(m[y][x] === -1) return false;
-
-        let dirs = [N, E, W, S];
-        let changed = false;
-
-        dirs.forEach(dir => {
-            let nx = x + dx(dir);
-            let ny = y + dy(dir);
-
-            if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height
-                    && (this.grid[y][x] & dir) !== 0  && (m[ny][nx] === -1 || m[ny][nx] > m[y][x]+1) ) {
-                        m[ny][nx] = m[y][x]+1;
-                        changed = true;
-            }
-        });
-
-        return changed;
-    }
-
-    increment_cells(dist_matrix) {
-        let changed = false;
-
-        for (var y = 0; y < this.height; y++) 
-            for (var x = 0; x < this.width; x++) 
-                changed |= this.increment_cell(x, y, dist_matrix);
-
-        return changed
-    }
+    // changed so that it doesn't visit every cell -> only the ones that have been changed. Implemented with a queue.
 
     distance_to(cx, cy) {
 
@@ -219,7 +192,28 @@ class Maze {
         }
 
         dist_matrix[cy][cx] = 0;
-        while(this.increment_cells(dist_matrix));
+
+        let visitQue = new Queue(this.width + this.height)
+        visitQue.enqueue([cx,cy])
+
+        while(!visitQue.isEmpty()) {
+            let current = visitQue.dequeue();
+            let x = current[0];
+            let y = current[1];
+
+            let dirs = [N, E, W, S];
+    
+            dirs.forEach(dir => {
+                let nx = x + dx(dir);
+                let ny = y + dy(dir);
+    
+                if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height
+                        && (this.grid[y][x] & dir) !== 0  && (dist_matrix[ny][nx] === -1 || dist_matrix[ny][nx] > dist_matrix[y][x]+1) ) {
+                            dist_matrix[ny][nx] = dist_matrix[y][x]+1;
+                            visitQue.enqueue([nx,ny])
+                }
+            });
+        }
 
         return dist_matrix;
     }
@@ -453,8 +447,6 @@ class Maze {
     // ---------------------------- Third logic:
     // - choose an endpoint randomly, located in/close the border of the map
     // - choose the other endpoint as a point close to the diametricaly opossing point of the first one
-
-    
 
     choose_endpoints(border) {
 

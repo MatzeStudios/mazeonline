@@ -245,7 +245,7 @@ class Maze {
                 let nx = cx + dx(dir);
                 let ny = cy + dy(dir);
     
-                if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height && (dists_end[ny][nx] === cdist-1) ) {
+                if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height && (this.grid[cy][cx] & dir) !== 0 && (dists_end[ny][nx] === cdist-1) ) {
                     cx = nx;
                     cy = ny;
                     cdist = dists_end[cy][cx]
@@ -348,7 +348,7 @@ class Maze {
         if(choice) {
             this.grid[choice.y1][choice.x1] |= choice.dir;
             this.grid[choice.y2][choice.x2] |= opposite(choice.dir);
-                  
+            
             console.log(`Parede removida: dividia (${choice.x1},${choice.y1}) e (${choice.x2},${choice.y2}).`);
         }
         else {

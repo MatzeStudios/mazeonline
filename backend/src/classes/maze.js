@@ -48,6 +48,13 @@ const printMatrix = (arr) => {
     }
 }
 
+const find_coord = (coordinates, coord) => {
+    for(let i=0; i<coordinates.length; i++) {
+        if(coordinates[i][0] === coord[0] && coordinates[i][1] === coord[1]) return i;
+    }
+    return -1;
+}
+
 class Maze {
     constructor(width, height, n_paths=1) {
         this.width = width;
@@ -70,7 +77,7 @@ class Maze {
             let sucess = this.choose_endpoints(3); // repeat until it can find endpoints
 
             if(sucess) {
-                this.more_paths(this.sx,this.sy,this.ex,this.ey,n_paths-1);
+                for(let i=0; i<n_paths-1; i++) this.open_path(this.sx,this.sy,this.ex,this.ey);
                 break;
             }
         }
@@ -218,7 +225,40 @@ class Maze {
         return dist_matrix;
     }
 
-    more_paths(xi, yi, xf, yf, n_new_paths) {
+    shortest_path() {
+        // returns a list of coordinates from the start of the maze to the finish, following the shortest route
+
+        let dists_end = this.distance_to(this.ex, this.ey);
+
+        let path = []
+
+        let dirs = [N, E, W, S];
+
+        let cx = this.sx;
+        let cy = this.sy;
+        let cdist = dists_end[cy][cx]
+        path.push([cx,cy])
+
+        while(cx != this.ex || cy != this.ey) {
+            for(let i=0; i<4; i++) {
+                let dir = dirs[i];
+                let nx = cx + dx(dir);
+                let ny = cy + dy(dir);
+    
+                if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height && (dists_end[ny][nx] === cdist-1) ) {
+                    cx = nx;
+                    cy = ny;
+                    cdist = dists_end[cy][cx]
+                    path.push([cx,cy])
+                    break;
+                }
+            }
+        }
+
+        return path;
+    }
+
+    open_path(xi, yi, xf, yf) {
         // Creates (n_new_paths) new paths from (xi,yi) to (xf,yf). In a perfect maze there is only
         // one path between this cells, whatever they are. The function does not create paths that are
         // less than 0.7 times the main path distance, if it has been calculated.
@@ -267,39 +307,53 @@ class Maze {
 
         shuffle(border);
 
-        for(var i = 0; i < n_new_paths; i++) {
-            if(i >= border.length) break; // Não tem mais bordas -> vai embora sem criar (n_new_paths).
+        let paredes = [] // uma parede é definida por um objeto da forma
+                     // {x1: number, y1: number, x2: number, y2: number, dir:number}
+                     // dir é dado em releção a (x1,y1)
+
+        for(let i = 0; i < border.length; i++) {
 
             let px = border[i][0]
             let py = border[i][1]
 
-            let over = false;
             dirs.forEach(dir => {
-                if(!over) {
-                    let nx = px + dx(dir);
-                    let ny = py + dy(dir);
-        
-                    if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height
-                                                                && groups[ny][nx] == 1 && (this.grid[py][px] & dir) == 0) {
-                        
-                        if((this.main_path_length == undefined ||
-                            dists_i[py][px] + dists_f[ny][nx] > Math.floor(this.main_path_length * 0.7)) &&
-                            dists_i[py][px] !== 0 && dists_f[ny][nx] !== 0) {
-                            // não remove se a remoção criar um caminho muito pequeno
-                            // ou se a distancia até o final ou incio for zero -> criaria um endpoint não cercado por 3 paredes.
-                            this.grid[py][px] |= dir;
-                            this.grid[ny][nx] |= opposite(dir);
-                            over = true;
-
-                            console.log(`Borda removida: dividia (${px},${py}) e (${nx},${ny}). Distancia até o inicio: ${dists_i[py][px]}. Distancia até o final: ${dists_f[ny][nx]}. Total = ${dists_i[py][px] + dists_f[ny][nx]}`);
-                        }
+                let nx = px + dx(dir);
+                let ny = py + dy(dir);
+    
+                if(nx >= 0 && ny >= 0 && nx < this.width && ny < this.height
+                                                            && groups[ny][nx] == 1 && (this.grid[py][px] & dir) == 0) {
+                    
+                    if((this.main_path_length == undefined ||
+                        dists_i[py][px] + dists_f[ny][nx] > Math.floor(this.main_path_length * 0.7)) &&
+                        dists_i[py][px] !== 0 && dists_f[ny][nx] !== 0) {
+                        // não escolhe se a remoção criar um caminho muito pequeno
+                        // ou se a distancia até o final ou incio for zero -> criaria um endpoint não cercado por 3 paredes.
+                        paredes.push({x1: px, y1: py, x2: nx, y2: ny, dir:dir})
                     }
                 }
             });
+        }
 
-            // se over ainda é false, não removeu pois o caminho ficaria pequeno
-            if(!over) n_new_paths++;
-        }   
+        let s_path = this.shortest_path();
+
+        for(let i=paredes.length-1; i>=0; i--) {
+            let wall = paredes[i];
+            if(find_coord(s_path, [wall.x1, wall.y1]) !== -1 || find_coord(s_path, [wall.x2, wall.y2]) !== -1) {
+                paredes.splice(i, 1);
+            }
+        }
+        
+        let choice = random_item(paredes);
+
+        if(choice) {
+            this.grid[choice.y1][choice.x1] |= choice.dir;
+            this.grid[choice.y2][choice.x2] |= opposite(choice.dir);
+                  
+            console.log(`Parede removida: dividia (${choice.x1},${choice.y1}) e (${choice.x2},${choice.y2}).`);
+        }
+        else {
+            console.log("Não há paredes para remover.")
+        }
     }
 
     // ---------------------------- Choose endpoints logic
@@ -450,13 +504,6 @@ class Maze {
 
     choose_endpoints(border) {
 
-        const is_possible = (possible, pair) => {
-            for(let i=0; i<possible.length; i++) {
-                if(possible[i][0] === pair[0] && possible[i][1] === pair[1]) return true;
-            }
-            return false;
-        }
-
         let possible = []
 
         for (var y = 0; y < this.height; y++) {
@@ -474,7 +521,7 @@ class Maze {
             let s = possible[i];
             let e = [this.width - s[0] -1, this.height - s[1] -1];
 
-            if(is_possible(possible, e)) {
+            if(find_coord(possible, e) !== -1) {
                 this.sx = s[0];
                 this.sy = s[1];
         

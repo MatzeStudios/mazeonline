@@ -56,10 +56,11 @@ const find_coord = (coordinates, coord) => {
 }
 
 class Maze {
-    constructor(width, height, n_paths=1) {
+    constructor(width, height, n_paths=1, force_new_path=false) {
         this.width = width;
         this.height = height;
         this.n_paths = n_paths;
+        this.force_new_path = force_new_path
 
         while(true) {
             this.grid = [];
@@ -336,10 +337,13 @@ class Maze {
 
         let s_path = this.shortest_path();
 
+        let bad_paredes = []
+
         for(let i=paredes.length-1; i>=0; i--) {
             let wall = paredes[i];
             if(find_coord(s_path, [wall.x1, wall.y1]) !== -1 || find_coord(s_path, [wall.x2, wall.y2]) !== -1) {
                 paredes.splice(i, 1);
+                bad_paredes.push(wall);
             }
         }
         
@@ -351,8 +355,22 @@ class Maze {
             
             console.log(`Parede removida: dividia (${choice.x1},${choice.y1}) e (${choice.x2},${choice.y2}).`);
         }
+        else if(this.force_new_path) {
+            console.log("Não há paredes boas para remover.")
+
+            choice = random_item(bad_paredes);
+            if(choice) {
+                this.grid[choice.y1][choice.x1] |= choice.dir;
+                this.grid[choice.y2][choice.x2] |= opposite(choice.dir);
+                
+                console.log(`Parede ruim removida: dividia (${choice.x1},${choice.y1}) e (${choice.x2},${choice.y2}).`);
+            }
+            else {
+                console.log("Não há paredes para remover (nem boas, nem ruins).")
+            }
+        }
         else {
-            console.log("Não há paredes para remover.")
+            console.log("Não há paredes boas para remover, selecionado para não forçar.")
         }
     }
 
@@ -541,22 +559,25 @@ class Maze {
     printConsole() {
         // prints the maze and some info in the console.
 
-        let str = "";
+        if(this.width < 70 && this.height < 70) {
+            let str = "";
 
-        str += " " + "_".repeat(this.width * 2 - 1) + "\n";
-
-        for(var y = 0; y < this.height; y++) {
-            str += "|";
-            for(var x = 0; x < this.width; x++) {
-                str += ((this.grid[y][x] & S) != 0) ? " " : "_";
-                if((this.grid[y][x] & E) != 0)
-                    str += (((this.grid[y][x] | this.grid[y][x+1]) & S) != 0) ? " " : "_";
-                else
-                    str += "|";
+            str += " " + "_".repeat(this.width * 2 - 1) + "\n";
+    
+            for(var y = 0; y < this.height; y++) {
+                str += "|";
+                for(var x = 0; x < this.width; x++) {
+                    str += ((this.grid[y][x] & S) != 0) ? " " : "_";
+                    if((this.grid[y][x] & E) != 0)
+                        str += (((this.grid[y][x] | this.grid[y][x+1]) & S) != 0) ? " " : "_";
+                    else
+                        str += "|";
+                }
+                str += "\n";
             }
-            str += "\n";
+            console.log(str)
         }
-        console.log(str)
+        else console.log("Labirinto grande demais -> não impresso no console.")
 
         if(this.sx != undefined && this.sy != undefined && this.ex != undefined && this.ey != undefined) {
             console.log(`Start = (${this.sx}, ${this.sy}); End = (${this.ex}, ${this.ey}). Tamanho do caminho principal: ${this.main_path_length}`)

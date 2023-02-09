@@ -29,7 +29,7 @@ class Game {
     }
 
     createMaze() {
-        this.maze = new Maze(15,15,2)
+        this.maze = new Maze(15,15,2,true)
         console.log("Maze created: ")
         this.maze.printConsole()
 

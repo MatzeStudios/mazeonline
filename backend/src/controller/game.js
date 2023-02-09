@@ -29,7 +29,7 @@ class Game {
     }
 
     createMaze() {
-        this.maze = new Maze(15,15,2,true)
+        this.maze = new Maze(8,8,2,true)
         console.log("Maze created: ")
         this.maze.printConsole()
 
@@ -108,8 +108,25 @@ class Game {
         this.endStartTime = -1
     }
 
+    updatePoints(finishers) {
+
+        const pointsByPos = (pos) => {
+            if(pos === 1) return 10;
+            if(pos === 2) return 5;
+            if(pos === 3) return 3;
+            return 1;
+        }
+        
+        for(let i=0; i<finishers.length; i++) {
+            finishers[i].addPoints(pointsByPos(i+1));
+        }
+    }
+
     gameEnd(message) {
         console.log(message)
+
+        this.updatePoints(this.finishers)
+
         this.state = 'end'
         this.io.emit("gameEnd")
 

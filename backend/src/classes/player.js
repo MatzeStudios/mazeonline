@@ -1,30 +1,36 @@
 
 class Player {
     constructor(id) {
-        this.x = 0
-        this.y = 0
-        this.id = id
-        this.color = "#FFFFFF"
-        this.nickname = "Unnamed"
-        this.nSides = 3
+        this.x = 0;
+        this.y = 0;
+        this.id = id;
+        this.color = "#FFFFFF";
+        this.nickname = "Unnamed";
+        this.nSides = 3;
+        this.points = 0;
     }
 
     setInicialPosition(maze) {
-        this.x = maze.sx + .5
-        this.y = maze.sy + .5
+        this.x = maze.sx + .5;
+        this.y = maze.sy + .5;
     }
 
     setPosition(x, y) {
-        this.x = x
-        this.y = y
+        this.x = x;
+        this.y = y;
     }
 
     setNickname(nickname) {
-        this.nickname = nickname.trim() == '' ? 'Unnamed' : nickname.trim()
+        this.nickname = nickname.trim() == '' ? 'Unnamed' : nickname.trim();
     }
 
     setColor(color) {
-        this.color = color
+        this.color = color;
+    }
+
+    addPoints(quant) {
+        this.points += quant;
+        this.nSides = 3 + Math.floor(this.points/10)
     }
 }
 

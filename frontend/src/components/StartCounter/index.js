@@ -9,18 +9,20 @@ import '../../fonts/Inter/static/Inter-Regular.ttf'
 function StartCounter(props) {
     const initialTimer = props.time
 
-    const [intervalRef, setIntervalRef] = useState()
     const [time, setTime] = useState(Math.ceil(initialTimer/1000))
 
     const counterUptadeRef = useRef();
 
     useEffect(() => {
-        counterUptadeRef.current = () => {
+        counterUptadeRef.current = (interval) => {
             if(time > 1) {
                 setTime(t => t-1)
                 return
             }
-            document.querySelector('.counter-number').animate(
+            
+            let query = document.querySelector('.counter-number')
+            if(query) 
+                query.animate(
                 [
                     { opacity: '1' },
                     { opacity: '0' }
@@ -31,23 +33,26 @@ function StartCounter(props) {
                     iterations: 1,
                   }
             )
+            
             setTime(t => t-1)
             setTimeout(() => {
                 setTime(t => t-1)
-                clearInterval(intervalRef)
+                clearInterval(interval)
             }, 500) // delay to clear "Go!" text
         }
     }, [time]);
 
     useEffect(() => {
         let interval
-        setTimeout(() => {
+        let initialTimeout = setTimeout(() => {
             setTime(t => t-1)
-            interval = setInterval(() => counterUptadeRef.current(), 1000)
-            setIntervalRef(interval)
+            interval = setInterval(() => counterUptadeRef.current(interval), 1000)
         }, initialTimer % 1000)
 
-        return () => clearInterval(intervalRef)
+        return () => {
+            clearInterval(interval)
+            clearTimeout(initialTimeout);
+        }
     }, [])
 
     if( time > 0 ) return <p className='counter-number'>{time}</p>

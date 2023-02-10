@@ -9,21 +9,18 @@ import '../../fonts/Inter/static/Inter-Regular.ttf'
 function EndCounter(props) {
     const initialTimer = props.time
 
-    const [intervalRef, setIntervalRef] = useState()
     const [time, setTime] = useState(Math.ceil(initialTimer/1000))
 
     const counterUptadeRef = useRef();
 
     useEffect(() => {
-        counterUptadeRef.current = () => {
+        counterUptadeRef.current = (interval) => {
             if(time > 1) {
-                //setTime(t => t-1)
+                setTime(t => t-1)
                 return
             }
-            
-            //setTime(t => t-1)
-            clearInterval(intervalRef)
-            console.log("clear2")
+            setTime(t => t-1)
+            clearInterval(interval)
         }
     }, [time]);
 
@@ -31,16 +28,11 @@ function EndCounter(props) {
         let interval
         let initialTimeout = setTimeout(() => {
             setTime(t => t-1)
-            interval = setInterval(() => {
-                if (counterUptadeRef.current) {
-                    counterUptadeRef.current();
-                }
-            }, 1000)
-            setIntervalRef(interval)
+            interval = setInterval(() => counterUptadeRef.current(interval), 1000)
         }, initialTimer % 1000)
 
         return () => {
-            clearInterval(intervalRef)
+            clearInterval(interval)
             clearTimeout(initialTimeout);
         }
     }, [])

@@ -18,15 +18,6 @@ function ColorSelector({ onSelect }) {
         setSelectedColor(color);
     }
 
-    function handleClick() {
-        const clickEvent = new MouseEvent('click', {
-            view: window,
-            bubbles: true,
-            cancelable: true,
-        });
-        inputRef.current.dispatchEvent(clickEvent);
-    }
-
     const debouncedHandleChange = debounce(handleSelected, 100);
     const handleChange = (event) => {
         debouncedHandleChange(event.target.value);

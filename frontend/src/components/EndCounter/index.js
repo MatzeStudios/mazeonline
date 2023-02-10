@@ -17,24 +17,32 @@ function EndCounter(props) {
     useEffect(() => {
         counterUptadeRef.current = () => {
             if(time > 1) {
-                setTime(t => t-1)
+                //setTime(t => t-1)
                 return
             }
             
-            setTime(t => t-1)
+            //setTime(t => t-1)
             clearInterval(intervalRef)
+            console.log("clear2")
         }
     }, [time]);
 
     useEffect(() => {
         let interval
-        setTimeout(() => {
+        let initialTimeout = setTimeout(() => {
             setTime(t => t-1)
-            interval = setInterval(() => counterUptadeRef.current(), 1000)
+            interval = setInterval(() => {
+                if (counterUptadeRef.current) {
+                    counterUptadeRef.current();
+                }
+            }, 1000)
             setIntervalRef(interval)
         }, initialTimer % 1000)
 
-        return () => clearInterval(intervalRef)
+        return () => {
+            clearInterval(intervalRef)
+            clearTimeout(initialTimeout);
+        }
     }, [])
 
     if( time > 0 ) return <p className='end-counter-number'>{time}</p>

@@ -29,7 +29,7 @@ function End() {
     useEffect(() => {
         socket.emit("getEndInfo")
 
-        socket.on("endInfo", data => {
+        const getInfo = data => {
             if(endInfoReceived) return // Already set info.
             if(!data) {
                 handleRedirectHome()
@@ -39,10 +39,15 @@ function End() {
             setFinishers(data.finishers)
 
             setEndInfoReceived(true)
-        })
+        }
 
+        socket.on("endInfo", getInfo)
         socket.on("nextGame", handleRedirectGame)
 
+        return () => {
+            socket.off("endInfo", getInfo)
+            socket.off("nextGame", handleRedirectGame)
+        }
     }, [])
     
 

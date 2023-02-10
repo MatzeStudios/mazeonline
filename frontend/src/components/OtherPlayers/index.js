@@ -19,7 +19,7 @@ function OtherPlayers(props) {
     const [lastUpdateTime, setLastUpdateTime] = useState(0)
 
     useEffect(() => {
-        socket.on("positions", (data) => {
+        const positions = (data) => {
             for(let i = 0; i < data.length; i++) {
                 let pd = data[i]
                 let j = findById(players, pd.id)
@@ -39,13 +39,22 @@ function OtherPlayers(props) {
                 }
             }
             setLastUpdateTime(Date.now())
-        })
+        }
 
-        socket.on('playerDisconnected', id => {
+        const playerDisconnected = id => {
             let i = findById(players, id)
             if(i === -1) return
             players.splice(i, 1)
-        })
+        }
+
+        socket.on("positions", positions)
+        socket.on('playerDisconnected', playerDisconnected)
+
+        return () => {
+            socket.off("positions", positions)
+            socket.off('playerDisconnected', playerDisconnected)
+        }
+
     }, []);
 
     if(visibility === 'none') return null

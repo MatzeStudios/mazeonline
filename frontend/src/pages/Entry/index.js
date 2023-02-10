@@ -7,30 +7,35 @@ import Controls from "../../components/Controls"
 // styles
 import './index.css'
 
-//fonts 
+//fonts
 import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
 import '../../fonts/Inter/static/Inter-Regular.ttf'
-
 
 function Entry() {
     const [nickname, setNickname] = useState('')
     const [color, setColor] = useState('')
     const [numPlayers, setNumPlayers] = useState('?')
     const navigate = useNavigate()
+    
     const handleOnClick = useCallback(() => {
         navigate('/game', {replace: true})
         socket.emit("playerStart", {nickname: nickname, color: color})
-    }, [navigate, nickname, color])    
+    }, [navigate, nickname, color])
 
     useEffect(() => {
         socket.emit("getNumPlayers")
-        socket.on("numPlayers", data => {
-            setNumPlayers(data)
-        })
-    }, [])
+
+        const numPlayersListener = data => setNumPlayers(data)
+
+        socket.on("numPlayers", numPlayersListener)
+      
+        return () => {
+            socket.off("numPlayers", numPlayersListener)
+        }
+      }, [])
 
     return (
-        <div className='page'>  
+        <div className='page'>
             <div className='container-title'>
                 <h1 className='text-title'>mazeonline</h1>
             </div>
@@ -38,7 +43,7 @@ function Entry() {
             <div className='container-input-nickname'>
                 <label className='text-input-title' htmlFor='nickname'>Digite seu nickname</label>
 
-                <input className='input-nickname' type='text' name='nickname' id='nickname' autoFocus onChange={event => setNickname(event.target.value) } onKeyDown={ (event) => {if (event.key === 'Enter') handleOnClick()} } />
+                <input className='input-nickname' type='text' name='nickname' id='nickname' autoFocus onChange={event => setNickname(event.target.value)} onKeyDown={ (event) => {if (event.key === 'Enter') handleOnClick()} } />
                 <button className='button-nickname' type='button' onClick={handleOnClick} ><div className='arrRight' type="submit"></div></button>
             </div>
             <ColorSelector onSelect={color => setColor(color)} />

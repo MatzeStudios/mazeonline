@@ -37,7 +37,7 @@ function Game() {
     useEffect(() => {
         socket.emit("getGameInfo")
 
-        socket.on("gameInfo", data => {
+        const processGameInfo = data => {
             if(gameInfoReceived) return // Already set info.
             
             if(!data) {
@@ -62,13 +62,21 @@ function Game() {
             if(data.state === 'finishing') setEndTime(data.endTime)
 
             setGameInfoReceived(true)
-        })
+        }
 
+        const processCancelFinish = () => setEndTime(undefined)
+
+        socket.on("gameInfo", processGameInfo)
         socket.on("gameFinishing", setEndTime)
-
         socket.on("gameEnd", handleRedirectEnd)
-
-        socket.on("cancelFinish", () => setEndTime(undefined))
+        socket.on("cancelFinish", processCancelFinish)
+        
+        return () => {
+            socket.off("gameInfo", processGameInfo)
+            socket.off("gameFinishing", setEndTime)
+            socket.off("gameEnd", handleRedirectEnd)
+            socket.off("cancelFinish", processCancelFinish)
+        }
     }, [])
 
     useEffect(() => {

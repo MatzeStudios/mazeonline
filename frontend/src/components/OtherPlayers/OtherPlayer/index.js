@@ -4,6 +4,7 @@ import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../../settings/con
 import { drawPlayer } from "../../Player"
 import NamePlate from "../NamePlate"
 import { utils } from 'pixi.js';
+import * as PIXI from 'pixi.js'
 
 function OtherPlayer(props) {
 
@@ -57,7 +58,7 @@ function OtherPlayer(props) {
     const draw = useCallback(g => {
         g.clear()
         g.beginFill(utils.string2hex(player.color), 1)
-        g.lineStyle(THIN_LINE_WIDTH,0,1)
+        g.lineStyle({width: THIN_LINE_WIDTH, color: 0, alpha: 1, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.ROUND})
 
         if(visibility === 'normal') drawPlayer(0, 0, PLAYER_RADIUS, g, player.nSides)
         else drawPlayer(0, 0, PLAYER_RADIUS, g, 1)

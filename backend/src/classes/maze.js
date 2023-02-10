@@ -75,7 +75,7 @@ class Maze {
     
             this.carve_passages();
 
-            let sucess = this.choose_endpoints(3); // repeat until it can find endpoints
+            let sucess = this.choose_endpoints(1); // repeat until it can find endpoints
 
             if(sucess) {
                 for(let i=0; i<n_paths-1; i++) this.open_path(this.sx,this.sy,this.ex,this.ey);

@@ -47,7 +47,6 @@ function OtherPlayers(props) {
                 pp.yp = pp.y
                 pp.xd = pd.x
                 pp.yd = pd.y
-                
             }
             setLastUpdateTime(Date.now())
         }

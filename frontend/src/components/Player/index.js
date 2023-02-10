@@ -4,6 +4,7 @@ import { utils } from 'pixi.js';
 import { Graphics, useTick } from '@inlet/react-pixi'
 import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../settings/constants'
 import socket from "../../services/socket"
+import * as PIXI from 'pixi.js'
 
 const N = 1
 const E = 2
@@ -11,13 +12,13 @@ const W = 4
 const S = 8
 
 export const drawPlayer = (x, y, radius, g, nSides) => {
-    if(nSides === 0) {
-        g.drawCircle(x, y, radius)
+    if(nSides <= 0) {
+        return;
     }
-    else if(nSides === 1) {
+    if(nSides === 1) {
         g.drawCircle(x, y, 2)
     }
-    else {
+    else if(nSides <= 8) {
         const angle = (360 / nSides) * Math.PI / 180
         let rotation = 0
         if(nSides === 3) rotation = - Math.PI / 2
@@ -31,6 +32,19 @@ export const drawPlayer = (x, y, radius, g, nSides) => {
         for (let i = 1; i <= nSides+1; i++)
             g.lineTo(radius * Math.cos(angle * i + rotation), radius * Math.sin(angle * i + rotation))
     }
+    else if(nSides === 9) {
+        g.drawCircle(x, y, radius)
+    }
+    else {
+        let rotation = -Math.PI/2
+        let angle = (360 / 10) * Math.PI / 180
+        g.moveTo(radius * Math.cos(rotation), radius * Math.sin(rotation))
+        for (let i = 1; i <= 11; i++) {
+            let radiusAux = i%2 === 0 ? radius : radius/2
+            g.lineTo(radiusAux * Math.cos(angle * i + rotation), radiusAux * Math.sin(angle * i + rotation))
+        }
+    }
+
 }
 
 const verifyMovement = (xi, yi, xf, yf, maze, freeze) => {
@@ -191,7 +205,7 @@ function Player(props) {
     const draw = useCallback(g => {
         g.clear()
         g.beginFill(utils.string2hex(color), 1)
-        g.lineStyle(THIN_LINE_WIDTH,0,1)
+        g.lineStyle({width: THIN_LINE_WIDTH, color: 0, alpha: 1, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.ROUND})
         drawPlayer(0, 0, PLAYER_RADIUS, g, nSides)
         g.endFill()
     }, []);

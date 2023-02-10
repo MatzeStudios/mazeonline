@@ -36,7 +36,7 @@ class Game {
     }
 
     createMaze() {
-        this.maze = new Maze(8,8,2,true)
+        this.maze = new Maze(3,3,2,false)
         console.log("Maze created: ")
         this.maze.printConsole()
 

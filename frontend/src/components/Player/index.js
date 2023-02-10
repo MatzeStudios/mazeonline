@@ -146,9 +146,14 @@ function Player(props) {
 
         // normalize velocity vector
         const length = Math.sqrt(vx * vx + vy * vy);
-        if(length > 0.1) {
+        const limit = 0.1
+        if(length > limit) {
             vx /= length
             vy /= length
+        }
+        else {
+            vx /= limit
+            vy /= limit
         }
 
         let nx = x + vx * base * delta;

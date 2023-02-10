@@ -50,7 +50,7 @@ function End() {
         <>
             <ul>
             {finishers.map((player, index) => (
-                <li key={player.nickname}>
+                <li key={player.id}>
                 {index + 1}. {player.nickname}
                 </li>
             ))}

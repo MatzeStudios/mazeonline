@@ -63,7 +63,7 @@ const PixiViewportComponent = PixiComponent("Viewport", {
 
         if(screenAspRat < worldAspRat) czOpts.maxWidth = viewport.worldWidth*1.5
         else czOpts.maxHeight = viewport.worldHeight*1.5
-
+        
         viewport.clampZoom(czOpts)
         
         return viewport;
@@ -77,10 +77,10 @@ const PixiViewportComponent = PixiComponent("Viewport", {
                 viewport[p] = newProps[p];
             }
         });
-    },
-    didMount() {
-        console.log("viewport mounted");
-    }
+    }//,
+    // didMount() {
+    //     console.log("viewport mounted");
+    // }
 });
 
 // create a component that can be consumed
@@ -124,9 +124,13 @@ function GameScreen(props) {
 
     }, []);
 
-    useEffect(() => { // adjust zoom clamp of viewport in resize
+    useEffect(() => { // adjust zoom clamp of viewport in resize and screen position
         let viewport = viewportRef.current
         if(!viewport) return
+
+        viewport.fit()
+        viewport.moveCenter(viewport.worldWidth/2, viewport.worldHeight/2)
+
         let czOpts = { minWidth: BASE_SIZE, minHeight: BASE_SIZE }
 
         let screenAspRat = viewport.screenWidth/viewport.screenHeight

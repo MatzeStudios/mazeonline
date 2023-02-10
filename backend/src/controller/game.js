@@ -10,6 +10,13 @@ const Maze = require("../classes/maze")
 const startCount = 5_000
 const endCount =  30_000
 
+const findById = (players, id) => {
+    for(let i = 0; i < players.length; i++) {
+        if(players[i].id === id) return i
+    }
+    return -1
+}
+
 class Game {
     constructor(io) {
         this.io = io
@@ -37,7 +44,14 @@ class Game {
     }
 
     updatePositions() {
-        this.io.emit("positions", this.players)
+        let playersMin = [];
+
+        for(let i = 0; i<this.players.length; i++) {
+            let p = this.players[i];
+            playersMin.push({id: p.id, x: p.x, y: p.y});
+        }
+
+        this.io.emit("positions", playersMin)
     }
 
     playerDisconnected(player) {
@@ -159,6 +173,7 @@ class Game {
             }
 
             player.setInicialPosition(this.maze)
+            this.io.emit("playerConnected", player)
 
             console.log("New player added, players array:")
             console.log(this.players)
@@ -177,6 +192,7 @@ class Game {
             if(this.state === 'starting') infoPackage.startTime = startCount - (Date.now() - this.startTime)
             if(this.state === 'finishing') infoPackage.endTime = endCount - (Date.now() - this.endStartTime)
             infoPackage.player = this.players[this.players.indexOf(player)]
+            infoPackage.players = this.players;
 
             socket.emit("gameInfo", infoPackage)
         })

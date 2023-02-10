@@ -98,6 +98,7 @@ function GameScreen(props) {
     const playerId = props.playerId
     const playerNSides = props.playerNSides
     const otherPlayersVisibility = props.otherPlayersVisibility
+    const players = props.players
 
     const viewportRef = useRef();
 
@@ -213,7 +214,7 @@ function GameScreen(props) {
                     <VisitedCells xp={xp} yp={yp} maze={maze} color={playerColor}/>
                     <Maze maze={maze} freeze={freezePlayer}/>
                     <Path xp={xp} yp={yp} />
-                    <OtherPlayers maze={maze} playerId={playerId} visibility={otherPlayersVisibility} />
+                    <OtherPlayers maze={maze} playerId={playerId} visibility={otherPlayersVisibility} players={players} />
                     <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}
                             color={playerColor}
                             mousePosition={mousePosition}

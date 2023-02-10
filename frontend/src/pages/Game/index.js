@@ -19,6 +19,7 @@ function Game() {
     const [playerColor, setPlayerColor] = useState(undefined)
     const [playerId, setPlayerId] = useState(undefined)
     const [playerNSides, setPlayerNSides] = useState(undefined)
+    const [players, setPlayers] = useState(undefined)
 
     const [endTime, setEndTime] = useState(undefined)
 
@@ -53,6 +54,7 @@ function Game() {
             setPlayerColor(data.player.color)
             setPlayerId(data.player.id)
             setPlayerNSides(data.player.nSides)
+            setPlayers(data.players)
 
             setGameState(data.state)
             
@@ -94,7 +96,7 @@ function Game() {
             <Pause setOtherPlayersVisibility={setOtherPlayersVisibility} />
             <StartCounter time={startTime} />
             { endTime && <EndCounter time={endTime} /> }
-            <GameScreen state={gameState} freeze={startTime} maze={maze} color={playerColor} playerId={playerId} playerNSides={playerNSides} otherPlayersVisibility={otherPlayersVisibility} />
+            <GameScreen state={gameState} freeze={startTime} maze={maze} color={playerColor} playerId={playerId} playerNSides={playerNSides} otherPlayersVisibility={otherPlayersVisibility} players={players} />
         </>
     )
 

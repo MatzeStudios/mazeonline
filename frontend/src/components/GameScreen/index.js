@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef, forwardRef } from "react"
-import { Stage, PixiComponent, useApp, Container } from '@inlet/react-pixi'
-import { Viewport } from "pixi-viewport";
+import React, { useState, useEffect, useRef, forwardRef } from "react"
+import { Stage, PixiComponent, useApp, Container } from "@inlet/react-pixi"
+import { Viewport } from "pixi-viewport"
 
 import socket from "../../services/socket"
 
@@ -8,32 +8,32 @@ import Maze from "../Maze"
 import Player from "../Player"
 import OtherPlayers from "../OtherPlayers"
 import Path from "../Path"
-import VisitedCells  from '../VisitedCells'
+import VisitedCells  from "../VisitedCells"
 import { BASE_SIZE } from "../../settings/constants"
 
 const useResize = () => {
-    const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
+    const [size, setSize] = useState([window.innerWidth, window.innerHeight])
 
     useEffect(() => {
         const onResize = () => {
             requestAnimationFrame(() => {
                 setSize([window.innerWidth, window.innerHeight])        
             })
-        };
+        }
 
-        window.addEventListener('resize', onResize);
+        window.addEventListener("resize", onResize)
 
         return () => {
-            window.removeEventListener('resize', onResize);
+            window.removeEventListener("resize", onResize)
         }
-    }, []);
+    }, [])
 
-    return size;
-};
+    return size
+}
 
 const PixiViewportComponent = PixiComponent("Viewport", {
     create(props) {
-        const { app, ...viewportProps } = props;
+        const { ...viewportProps } = props
 
         const viewport = new Viewport({
             ticker: props.app.ticker,
@@ -43,16 +43,16 @@ const PixiViewportComponent = PixiComponent("Viewport", {
 
         // activate plugins
         (props.plugins || []).forEach((plugin) => {
-            viewport[plugin]();
-        });
+            viewport[plugin]()
+        })
 
         viewport.drag({
-            mouseButtons: 'right'
+            mouseButtons: "right"
         })
 
         viewport.fit()
         viewport.moveCenter(viewport.worldWidth/2, viewport.worldHeight/2)
-        viewport.clamp({ direction: 'all' })
+        viewport.clamp({ direction: "all" })
         
         // this is only runs once, to keep updating the clamp in resize there's
         // a copy of this code inside an useEffect in the Game component.
@@ -66,28 +66,30 @@ const PixiViewportComponent = PixiComponent("Viewport", {
         
         viewport.clampZoom(czOpts)
         
-        return viewport;
+        return viewport
     },
     applyProps(viewport, _oldProps, _newProps) {
-        const { plugins: oldPlugins, children: oldChildren, ...oldProps } = _oldProps;
-        const { plugins: newPlugins, children: newChildren, ...newProps } = _newProps;
+        const { ...oldProps } = _oldProps
+        // eslint-disable-next-line no-unused-vars
+        const { plugins: newPlugins, children: newChildren, ...newProps } = _newProps
 
         Object.keys(newProps).forEach((p) => {
             if (oldProps[p] !== newProps[p]) {
-                viewport[p] = newProps[p];
+                viewport[p] = newProps[p]
             }
-        });
+        })
     }//,
     // didMount() {
     //     console.log("viewport mounted");
     // }
-});
+})
 
 // create a component that can be consumed
 // that automatically pass down the app
 const PixiViewport = forwardRef((props, ref) => (
     <PixiViewportComponent ref={ref} app={useApp()} {...props} />
-));
+))
+PixiViewport.displayName = "PixiViewport"
 
 function GameScreen(props) {
     
@@ -100,30 +102,30 @@ function GameScreen(props) {
     const otherPlayersVisibility = props.otherPlayersVisibility
     const players = props.players
 
-    const viewportRef = useRef();
+    const viewportRef = useRef()
 
-    const [width, height] = useResize();
+    const [width, height] = useResize()
 
-    const [freezePlayer, setFreeze] = useState(true);
+    const [freezePlayer, setFreeze] = useState(true)
 
-    const [xp, setXp] = useState(undefined);
-    const [yp, setYp] = useState(undefined);
+    const [xp, setXp] = useState(undefined)
+    const [yp, setYp] = useState(undefined)
 
-    const [playerFinished, setPlayerFinished] = useState(false);
+    const [playerFinished, setPlayerFinished] = useState(false)
 
-    const [mousePosition, setMousePosition] = useState({x: 0, y: 0});
-    const [rightMouseButtonPressed, setRightMouseButtonPressed] = useState(false);
-    const appRef = useRef(null);
+    const [mousePosition, setMousePosition] = useState({x: 0, y: 0})
+    const [rightMouseButtonPressed, setRightMouseButtonPressed] = useState(false)
+    const appRef = useRef(null)
     
     useEffect(() => {
-        if(gameState === 'starting') {
+        if(gameState === "starting") {
             setTimeout(() => setFreeze(false), freezeDuration)
         }
-        else if(gameState === 'running') {
+        else if(gameState === "running") {
             setFreeze(false)
         }
 
-    }, []);
+    }, [])
 
     useEffect(() => { // adjust zoom clamp of viewport in resize and screen position
         let viewport = viewportRef.current
@@ -145,44 +147,39 @@ function GameScreen(props) {
 
     useEffect(() => {
         const deactivateRightPress = () => {
-            setRightMouseButtonPressed(false);
-        };
-        window.addEventListener('blur', deactivateRightPress);
+            setRightMouseButtonPressed(false)
+        }
+        window.addEventListener("blur", deactivateRightPress)
         return () => {
-            window.removeEventListener('blur', deactivateRightPress);
-        };
+            window.removeEventListener("blur", deactivateRightPress)
+        }
     }, [])
 
     useEffect(() => {
         if(appRef.current === null) return
-        appRef.current.app.stage.interactive = true;
+        appRef.current.app.stage.interactive = true
         const pointerMoveCallback = (event) => {
             requestAnimationFrame(() => {
-                if(viewportRef.current === null) return;
-                const newMousePosition = event.data.global;
+                if(viewportRef.current === null) return
+                const newMousePosition = event.data.global
                 let worldCoords = viewportRef.current.toWorld(newMousePosition.x, newMousePosition.y)
                 worldCoords.x = worldCoords.x/BASE_SIZE - 1
                 worldCoords.y = worldCoords.y/BASE_SIZE - 1
-                setMousePosition(worldCoords);
-            });
+                setMousePosition(worldCoords)
+            })
         }
         const pointerDownCallback = (event) => {
-            if(event.data.button === 0) setRightMouseButtonPressed(true);
+            if(event.data.button === 0) setRightMouseButtonPressed(true)
         }
         const pointerUpCallback = (event) => {
-            if(event.data.button === 0) setRightMouseButtonPressed(false);
+            if(event.data.button === 0) setRightMouseButtonPressed(false)
         }
 
-        appRef.current.app.stage.on('pointermove', pointerMoveCallback);
-        appRef.current.app.stage.on('pointerdown', pointerDownCallback);
-        appRef.current.app.stage.on('pointerup', pointerUpCallback);
+        appRef.current.app.stage.on("pointermove", pointerMoveCallback)
+        appRef.current.app.stage.on("pointerdown", pointerDownCallback)
+        appRef.current.app.stage.on("pointerup", pointerUpCallback)
 
-        // return () => { commented be
-        //     appRef.current.app.stage.off('pointermove', pointerMoveCallback);
-        //     appRef.current.app.stage.off('pointerdown', pointerDownCallback);
-        //     appRef.current.app.stage.off('pointerup', pointerUpCallback);
-        // }
-    }, []);
+    }, [])
 
     useEffect(() => {
         if(!playerFinished && xp === maze.ex && yp === maze.ey) {
@@ -193,22 +190,22 @@ function GameScreen(props) {
 
     return (
         <Stage 
-        width={width}
-        height={height}
-        options={{
-            antialias: false,
-            autoDensity: true,
-            backgroundColor: 0x3d3d3d}}
-        ref={appRef} >
+            width={width}
+            height={height}
+            options={{
+                antialias: false,
+                autoDensity: true,
+                backgroundColor: 0x3d3d3d}}
+            ref={appRef} >
 
             <PixiViewport
-            ref={viewportRef}
-            screenWidth={width}
-            screenHeight={height}
-            worldWidth={(maze.width + 2) * BASE_SIZE}
-            worldHeight={(maze.height + 2) * BASE_SIZE}
-            plugins={["pinch", "wheel", "decelerate"]} //, "drag"]} -> Set separetly
-            disableOnContextMenu={true}
+                ref={viewportRef}
+                screenWidth={width}
+                screenHeight={height}
+                worldWidth={(maze.width + 2) * BASE_SIZE}
+                worldHeight={(maze.height + 2) * BASE_SIZE}
+                plugins={["pinch", "wheel", "decelerate"]} //, "drag"]} -> Set separetly
+                disableOnContextMenu={true}
             >
                 <Container position={[BASE_SIZE, BASE_SIZE]}>
                     <VisitedCells xp={xp} yp={yp} maze={maze} color={playerColor}/>
@@ -216,10 +213,10 @@ function GameScreen(props) {
                     <Path xp={xp} yp={yp} />
                     <OtherPlayers maze={maze} playerId={playerId} visibility={otherPlayersVisibility} players={players} />
                     <Player maze={maze} freeze={freezePlayer} setXp={setXp} setYp={setYp}
-                            color={playerColor}
-                            mousePosition={mousePosition}
-                            rightMouseButtonPressed={rightMouseButtonPressed}
-                            nSides={playerNSides} />
+                        color={playerColor}
+                        mousePosition={mousePosition}
+                        rightMouseButtonPressed={rightMouseButtonPressed}
+                        nSides={playerNSides} />
                 </Container>
             </PixiViewport>
         </Stage>

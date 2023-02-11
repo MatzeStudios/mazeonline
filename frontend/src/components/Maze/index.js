@@ -1,7 +1,7 @@
-import { Graphics } from '@inlet/react-pixi'
-import * as PIXI from 'pixi.js'
+import { Graphics } from "@inlet/react-pixi"
+import * as PIXI from "pixi.js"
 import React, { useCallback } from "react"
-import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'
+import { BASE_SIZE, LARGE_LINE_WIDTH } from "../../settings/constants"
 
 const N = 1
 const E = 2
@@ -78,8 +78,8 @@ function Maze(props) {
 
     return(
         <>
-        <Graphics draw={drawMaze} x={0} y={0} />
-        { freeze && <Graphics draw={drawEndPoints} x={0} y={0} /> }
+            <Graphics draw={drawMaze} x={0} y={0} />
+            { freeze && <Graphics draw={drawEndPoints} x={0} y={0} /> }
         </>
     )
 }

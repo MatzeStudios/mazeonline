@@ -1,24 +1,24 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import {useNavigate} from 'react-router-dom'
+import React, { useEffect, useState, useCallback } from "react"
+import {useNavigate} from "react-router-dom"
 import socket from "../../services/socket"
 import ColorSelector from "../../components/ColorSelector"
 import Controls from "../../components/Controls"
 
 // styles
-import './index.css'
+import "./index.css"
 
 //fonts
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
+import "../../fonts/Bungee_Shade/BungeeShade-Regular.ttf"
+import "../../fonts/Inter/static/Inter-Regular.ttf"
 
 function Entry() {
-    const [nickname, setNickname] = useState('')
-    const [color, setColor] = useState('')
-    const [numPlayers, setNumPlayers] = useState('?')
+    const [nickname, setNickname] = useState("")
+    const [color, setColor] = useState("")
+    const [numPlayers, setNumPlayers] = useState("?")
     const navigate = useNavigate()
     
     const handleOnClick = useCallback(() => {
-        navigate('/game', {replace: true})
+        navigate("/game", {replace: true})
         socket.emit("playerStart", {nickname: nickname, color: color})
     }, [navigate, nickname, color])
 
@@ -32,7 +32,7 @@ function Entry() {
         return () => {
             socket.off("numPlayers", numPlayersListener)
         }
-      }, [])
+    }, [])
 
     return (
         <div className='page'>
@@ -43,7 +43,7 @@ function Entry() {
             <div className='container-input-nickname'>
                 <label className='text-input-title' htmlFor='nickname'>Digite seu nickname</label>
 
-                <input className='input-nickname' type='text' name='nickname' id='nickname' autoFocus onChange={event => setNickname(event.target.value)} onKeyDown={ (event) => {if (event.key === 'Enter') handleOnClick()} } />
+                <input className='input-nickname' type='text' name='nickname' id='nickname' autoFocus onChange={event => setNickname(event.target.value)} onKeyDown={ (event) => {if (event.key === "Enter") handleOnClick()} } />
                 <button className='button-nickname' type='button' onClick={handleOnClick} ><div className='arrRight' type="submit"></div></button>
             </div>
             <ColorSelector onSelect={color => setColor(color)} />

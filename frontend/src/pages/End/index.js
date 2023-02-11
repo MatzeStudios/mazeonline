@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState, useCallback } from "react"
+import { useNavigate } from "react-router-dom"
 import socket from "../../services/socket"
 
 // styles
-import './index.css'
+import "./index.css"
 
 //fonts 
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
+import "../../fonts/Bungee_Shade/BungeeShade-Regular.ttf"
+import "../../fonts/Inter/static/Inter-Regular.ttf"
 
 
 function End() {
@@ -19,11 +19,11 @@ function End() {
     const navigate = useNavigate()
 
     const handleRedirectHome = useCallback(() => {
-        navigate('/', {replace: true})
+        navigate("/", {replace: true})
     }, [navigate])
 
     const handleRedirectGame = useCallback(() => {
-        navigate('/game', {replace: true})
+        navigate("/game", {replace: true})
     }, [navigate])
 
     useEffect(() => {
@@ -54,11 +54,11 @@ function End() {
     if(endInfoReceived) return (
         <>
             <ul>
-            {finishers.map((player, index) => (
-                <li key={player.id}>
-                {index + 1}. {player.nickname}
-                </li>
-            ))}
+                {finishers.map((player, index) => (
+                    <li key={player.id}>
+                        {index + 1}. {player.nickname}
+                    </li>
+                ))}
             </ul>
         </>
     )

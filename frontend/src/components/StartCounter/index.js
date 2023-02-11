@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from "react"
 
-import './style.css'
+import "./style.css"
 
 //fonts 
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
+import "../../fonts/Bungee_Shade/BungeeShade-Regular.ttf"
+import "../../fonts/Inter/static/Inter-Regular.ttf"
 
 function StartCounter(props) {
     const initialTimer = props.time
 
     const [time, setTime] = useState(Math.ceil(initialTimer/1000))
 
-    const counterUptadeRef = useRef();
+    const counterUptadeRef = useRef()
 
     useEffect(() => {
         counterUptadeRef.current = (interval) => {
@@ -20,19 +20,19 @@ function StartCounter(props) {
                 return
             }
             
-            let query = document.querySelector('.counter-number')
+            let query = document.querySelector(".counter-number")
             if(query) 
                 query.animate(
-                [
-                    { opacity: '1' },
-                    { opacity: '0' }
-                  ],
+                    [
+                        { opacity: "1" },
+                        { opacity: "0" }
+                    ],
 
-                  {
-                    duration: 500,
-                    iterations: 1,
-                  }
-            )
+                    {
+                        duration: 500,
+                        iterations: 1,
+                    }
+                )
             
             setTime(t => t-1)
             setTimeout(() => {
@@ -40,7 +40,7 @@ function StartCounter(props) {
                 clearInterval(interval)
             }, 500) // delay to clear "Go!" text
         }
-    }, [time]);
+    }, [time])
 
     useEffect(() => {
         let interval
@@ -51,7 +51,7 @@ function StartCounter(props) {
 
         return () => {
             clearInterval(interval)
-            clearTimeout(initialTimeout);
+            clearTimeout(initialTimeout)
         }
     }, [])
 

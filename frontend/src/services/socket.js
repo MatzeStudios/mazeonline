@@ -10,4 +10,4 @@ const socket = io(ENDPOINT, {
     }
 })
 
-export default socket;
+export default socket

@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from "react"
 
-import './style.css'
+import "./style.css"
 
 //fonts 
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
+import "../../fonts/Bungee_Shade/BungeeShade-Regular.ttf"
+import "../../fonts/Inter/static/Inter-Regular.ttf"
 
 function EndCounter(props) {
     const initialTimer = props.time
 
     const [time, setTime] = useState(Math.ceil(initialTimer/1000))
 
-    const counterUptadeRef = useRef();
+    const counterUptadeRef = useRef()
 
     useEffect(() => {
         counterUptadeRef.current = (interval) => {
@@ -22,7 +22,7 @@ function EndCounter(props) {
             setTime(t => t-1)
             clearInterval(interval)
         }
-    }, [time]);
+    }, [time])
 
     useEffect(() => {
         let interval
@@ -33,7 +33,7 @@ function EndCounter(props) {
 
         return () => {
             clearInterval(interval)
-            clearTimeout(initialTimeout);
+            clearTimeout(initialTimeout)
         }
     }, [])
 

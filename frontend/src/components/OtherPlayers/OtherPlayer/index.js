@@ -1,17 +1,17 @@
 import React, { useCallback, useState, useRef, useEffect } from "react"
-import { Graphics, Text, useTick } from '@inlet/react-pixi'
-import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../../settings/constants'
+import { Graphics, useTick } from "@inlet/react-pixi"
+import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from "../../../settings/constants"
 import { drawPlayer } from "../../Player"
 import NamePlate from "../NamePlate"
-import { utils } from 'pixi.js';
-import * as PIXI from 'pixi.js'
+import { utils } from "pixi.js"
+import * as PIXI from "pixi.js"
 
 function OtherPlayer(props) {
 
     const player = props.player
     const lastUpdateTime = props.lastUpdate
     const visibility = props.visibility
-    const refreshPositionDelay = 50
+    const refreshPositionDelay = 50 * 1.5
     const [x, setX] = useState(player.x)
     const [y, setY] = useState(player.x)
 
@@ -19,7 +19,7 @@ function OtherPlayer(props) {
 
     const ref = useRef(null)
 
-    useTick(delta => {
+    useTick(() => {
 
         if(Date.now() - lastUpdateTime > refreshPositionDelay) return
 
@@ -30,29 +30,29 @@ function OtherPlayer(props) {
 
         setX(player.x)
         setY(player.y)
-    });
+    })
 
     useEffect(() => {
         if(ref.current) {
-            ref.current.cursor = 'pointer'
+            ref.current.cursor = "pointer"
         }
     }, [])
 
     useEffect(() => {
         const handleClick = () => {
             if (showName) {
-                setShowName(false);
+                setShowName(false)
             }
         }
-        document.addEventListener('mousedown', handleClick)
+        document.addEventListener("mousedown", handleClick)
         return () => {
-            document.removeEventListener('mousedown', handleClick)
+            document.removeEventListener("mousedown", handleClick)
         }
-    }, [showName]);
+    }, [showName])
 
     const handleClick = (event) => {
-        event.stopPropagation();
-        setShowName(true);
+        event.stopPropagation()
+        setShowName(true)
     }
 
     const draw = useCallback(g => {
@@ -60,10 +60,10 @@ function OtherPlayer(props) {
         g.beginFill(utils.string2hex(player.color), 1)
         g.lineStyle({width: THIN_LINE_WIDTH, color: 0, alpha: 1, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.ROUND})
 
-        if(visibility === 'normal') drawPlayer(0, 0, PLAYER_RADIUS, g, player.nSides)
+        if(visibility === "normal") drawPlayer(0, 0, PLAYER_RADIUS, g, player.nSides)
         else drawPlayer(0, 0, PLAYER_RADIUS, g, 1)
         g.endFill()
-    }, [player, visibility]);
+    }, [player, visibility])
 
     return(
         <>

@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react"
-import { Graphics } from '@inlet/react-pixi'
-import { utils } from 'pixi.js';
-import { BASE_SIZE } from '../../settings/constants'
-import useEventListener from '@use-it/event-listener'
+import { Graphics } from "@inlet/react-pixi"
+import { utils } from "pixi.js"
+import { BASE_SIZE } from "../../settings/constants"
+import useEventListener from "@use-it/event-listener"
 
 const appendVisitedCell = (x, y, visitedCells) => {
     x = Math.floor(x)
@@ -24,17 +24,17 @@ function VisitedCells(props) {
     useEffect(() => {
         const aux = []
         for (var i = 0; i < maze.height; i++) {
-            let line = [];
+            let line = []
             for (var j = 0; j < maze.width; j++) {
-                line.push(false);
+                line.push(false)
             }
-            aux.push(line);
+            aux.push(line)
         }
         setVisitedCells(aux)
     }, [maze.height, maze.width])
 
-    useEventListener('keydown', (event) => {
-        if(event.key.toLowerCase() === 'e') setIsVisible(c => !c)
+    useEventListener("keydown", (event) => {
+        if(event.key.toLowerCase() === "e") setIsVisible(c => !c)
     })
 
     const draw = useCallback(g => {
@@ -59,7 +59,7 @@ function VisitedCells(props) {
             }
         }
         g.endFill()
-    }, [xp, yp, isVisible, visitedCells, maze.height, maze.width]);
+    }, [xp, yp, isVisible, visitedCells, maze.height, maze.width])
 
     return(
         <Graphics draw={draw} />

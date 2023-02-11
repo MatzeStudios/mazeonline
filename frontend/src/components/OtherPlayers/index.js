@@ -24,12 +24,12 @@ function OtherPlayers(props) {
         updatePositionsRef.current = (data) => {
             for(let i = 0; i < data.length; i++) {
                 let pd = data[i]
-                if(pd.id === id) continue;
+                if(pd.id === id) continue
     
                 let j = findById(players, pd.id)
     
                 if(j === -1) { // player not recognized
-                    continue;
+                    continue
                 }
     
                 let pp = players[j]
@@ -49,13 +49,13 @@ function OtherPlayers(props) {
 
     useEffect(() => {
         for(let i=0; i<initialPlayers.length; i++) {
-            let player = initialPlayers[i];
-            if(player.id === id) continue;
-            player.xp = player.x;
-            player.yp = player.y;
-            player.xd = player.x;
-            player.yd = player.y;
-            players.push(player);
+            let player = initialPlayers[i]
+            if(player.id === id) continue
+            player.xp = player.x
+            player.yp = player.y
+            player.xd = player.x
+            player.yd = player.y
+            players.push(player)
         }
     },[])
 
@@ -70,45 +70,45 @@ function OtherPlayers(props) {
         }
 
         const playerConnected = player => {
-            if(player.id === id) return;
-            player.xp = player.x;
-            player.yp = player.y;
-            player.xd = player.x;
-            player.yd = player.y;
-            players.push(player);
+            if(player.id === id) return
+            player.xp = player.x
+            player.yp = player.y
+            player.xd = player.x
+            player.yd = player.y
+            players.push(player)
         }
 
         const playerInfo = (player) => {
-            let i = findById(players, player.id);
-            if(i !== -1) return;
-            player.xp = player.x;
-            player.yp = player.y;
-            player.xd = player.x;
-            player.yd = player.y;
-            players.push(player);
+            let i = findById(players, player.id)
+            if(i !== -1) return
+            player.xp = player.x
+            player.yp = player.y
+            player.xd = player.x
+            player.yd = player.y
+            players.push(player)
         }
 
         socket.on("positions", updatePos)
-        socket.on('playerDisconnected', playerDisconnected)
-        socket.on('playerConnected', playerConnected)
-        socket.on('playerInfo', playerInfo)
+        socket.on("playerDisconnected", playerDisconnected)
+        socket.on("playerConnected", playerConnected)
+        socket.on("playerInfo", playerInfo)
 
         return () => {
             socket.off("positions", updatePos)
-            socket.off('playerDisconnected', playerDisconnected)
-            socket.off('playerConnected', playerConnected)
-            socket.off('playerInfo', playerInfo)
+            socket.off("playerDisconnected", playerDisconnected)
+            socket.off("playerConnected", playerConnected)
+            socket.off("playerInfo", playerInfo)
         }
-    }, []);
+    }, [])
 
-    if(visibility === 'none') return null
+    if(visibility === "none") return null
     return(
         <>
-            {players.map((item, index) => {
+            {players.map((item) => {
                 return <OtherPlayer lastUpdate={lastUpdateTime} player={item} key={item.id} visibility={visibility}/>
             })}
         </>
-    );
+    )
 }
 
 export default OtherPlayers

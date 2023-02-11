@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import socket from "../../services/socket"
 import OtherPlayer from "./OtherPlayer"
 
@@ -18,10 +18,39 @@ function OtherPlayers(props) {
     const players = useState([])[0]
 
     const [lastUpdateTime, setLastUpdateTime] = useState(0)
+    const updatePositionsRef = useRef()
+
+    useEffect(() => {
+        updatePositionsRef.current = (data) => {
+            for(let i = 0; i < data.length; i++) {
+                let pd = data[i]
+                if(pd.id === id) continue;
+    
+                let j = findById(players, pd.id)
+    
+                if(j === -1) { // player not recognized
+                    continue;
+                }
+    
+                let pp = players[j]
+                
+                if(visibility === "none") {
+                    pp.x = pd.x
+                    pp.y = pd.y
+                }
+                pp.xp = pp.x
+                pp.yp = pp.y
+                pp.xd = pd.x
+                pp.yd = pd.y
+            }
+            setLastUpdateTime(Date.now())
+        }
+    }, [visibility])
 
     useEffect(() => {
         for(let i=0; i<initialPlayers.length; i++) {
             let player = initialPlayers[i];
+            if(player.id === id) continue;
             player.xp = player.x;
             player.yp = player.y;
             player.xd = player.x;
@@ -31,26 +60,9 @@ function OtherPlayers(props) {
     },[])
 
     useEffect(() => {
-        const positions = (data) => {
-            for(let i = 0; i < data.length; i++) {
-                let pd = data[i]
-                if(pd.id === id) continue;
-
-                let j = findById(players, pd.id)
-
-                if(j === -1) { // player not recognized
-                    continue;
-                }
-
-                let pp = players[j]
-                pp.xp = pp.x
-                pp.yp = pp.y
-                pp.xd = pd.x
-                pp.yd = pd.y
-            }
-            setLastUpdateTime(Date.now())
-        }
-
+        
+        const updatePos = (data) => updatePositionsRef.current(data)
+        
         const playerDisconnected = id => {
             let i = findById(players, id)
             if(i === -1) return
@@ -76,25 +88,23 @@ function OtherPlayers(props) {
             players.push(player);
         }
 
-        socket.on("positions", positions)
+        socket.on("positions", updatePos)
         socket.on('playerDisconnected', playerDisconnected)
         socket.on('playerConnected', playerConnected)
         socket.on('playerInfo', playerInfo)
 
         return () => {
-            socket.off("positions", positions)
+            socket.off("positions", updatePos)
             socket.off('playerDisconnected', playerDisconnected)
             socket.off('playerConnected', playerConnected)
             socket.off('playerInfo', playerInfo)
         }
-
     }, []);
 
     if(visibility === 'none') return null
     return(
         <>
             {players.map((item, index) => {
-                if(item.id === id) return null;
                 return <OtherPlayer lastUpdate={lastUpdateTime} player={item} key={item.id} visibility={visibility}/>
             })}
         </>

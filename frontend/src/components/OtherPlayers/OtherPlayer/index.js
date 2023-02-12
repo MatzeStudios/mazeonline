@@ -9,24 +9,34 @@ import * as PIXI from "pixi.js"
 function OtherPlayer(props) {
 
     const player = props.player
-    const lastUpdateTime = props.lastUpdate
     const visibility = props.visibility
-    const refreshPositionDelay = 50 * 1.5
+    const refreshPositionDelay = props.refreshDelay
+    const lastUpdateTime = props.lastUpdateTime
     const [x, setX] = useState(player.x)
-    const [y, setY] = useState(player.x)
+    const [y, setY] = useState(player.y)
+    const [xP, setXP] = useState(player.x)
+    const [yP, setYP] = useState(player.y)
+    const [xD, setXD] = useState(player.x)
+    const [yD, setYD] = useState(player.y)
 
     const [showName, setShowName] = useState(false)
 
     const ref = useRef(null)
 
+    useEffect(() => {
+        setXP(player.xp)
+        setYP(player.yp)
+        setXD(player.xd)
+        setYD(player.yd)
+    }, [lastUpdateTime])
+
     useTick(() => {
 
-        if(Date.now() - lastUpdateTime > refreshPositionDelay) return
+        let t = (Date.now() - lastUpdateTime) / refreshPositionDelay 
+        t = t > 1 ? 1 : t
 
-        let t = (Date.now() - lastUpdateTime) / refreshPositionDelay
-
-        player.x = player.xp + t * (player.xd - player.xp)
-        player.y = player.yp + t * (player.yd - player.yp)
+        player.x = xP + t * (xD - xP)
+        player.y = yP + t * (yD - yP)
 
         setX(player.x)
         setY(player.y)

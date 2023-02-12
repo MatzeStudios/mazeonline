@@ -14,10 +14,12 @@ function OtherPlayers(props) {
     const id = props.playerId
     const visibility = props.visibility
     const initialPlayers = props.players
+    const refreshDelay = props.refreshDelay
+
+    const [lastUpdateTime, setLastUpdateTime] = useState(0)
 
     const players = useState([])[0]
 
-    const [lastUpdateTime, setLastUpdateTime] = useState(0)
     const updatePositionsRef = useRef()
 
     useEffect(() => {
@@ -105,7 +107,7 @@ function OtherPlayers(props) {
     return(
         <>
             {players.map((item) => {
-                return <OtherPlayer lastUpdate={lastUpdateTime} player={item} key={item.id} visibility={visibility}/>
+                return <OtherPlayer player={item} key={item.id} visibility={visibility} refreshDelay={refreshDelay} lastUpdateTime={lastUpdateTime} />
             })}
         </>
     )

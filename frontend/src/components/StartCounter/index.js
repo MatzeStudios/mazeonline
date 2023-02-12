@@ -45,9 +45,8 @@ function StartCounter(props) {
     useEffect(() => {
         let interval
         let initialTimeout = setTimeout(() => {
-            let currTime = time
             counterUptadeRef.current()
-            if(currTime > 1) interval = setInterval(() => counterUptadeRef.current(interval), 1000)
+            if(time > 1) interval = setInterval(() => counterUptadeRef.current(interval), 1000)
         }, initialTimer % 1000)
 
         return () => {

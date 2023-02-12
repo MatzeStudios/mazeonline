@@ -30,7 +30,9 @@ class Game {
 
         this.timeOverTimoutId = undefined
 
-        this.updater = setInterval(() => this.updatePositions(), 50)
+        this.refreshDelay = 50
+
+        this.updater = setInterval(() => this.updatePositions(), this.refreshDelay)
 
         this.io.on("connection", (socket) => this.newConnection(socket))
     }
@@ -193,6 +195,7 @@ class Game {
             if(this.state === 'finishing') infoPackage.endTime = endCount - (Date.now() - this.endStartTime)
             infoPackage.player = this.players[this.players.indexOf(player)]
             infoPackage.players = this.players;
+            infoPackage.refreshDelay = this.refreshDelay;
 
             socket.emit("gameInfo", infoPackage)
         })

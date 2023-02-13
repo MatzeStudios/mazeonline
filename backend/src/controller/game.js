@@ -211,6 +211,8 @@ class Game {
         socket.on("finished", () => {
             console.log("Player Finished: " + player.nickname)
 
+            player.finishTime = Date.now() - this.startTime - startCount
+
             if(this.finishers.length === 0) { // first to finish
 
                 this.state = 'finishing'

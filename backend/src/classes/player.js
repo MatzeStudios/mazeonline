@@ -8,6 +8,7 @@ class Player {
         this.nickname = "Unnamed";
         this.nSides = 3;
         this.points = 0;
+        this.finishTime = -1;
     }
 
     setInicialPosition(maze) {

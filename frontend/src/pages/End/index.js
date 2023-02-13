@@ -8,7 +8,12 @@ import "./index.css"
 //fonts 
 import "../../fonts/Bungee_Shade/BungeeShade-Regular.ttf"
 import "../../fonts/Inter/static/Inter-Regular.ttf"
+import PlayerModel from "../../components/PlayerModel"
 
+const finishTimeToString = (ms) => {
+    let t = ms/1000
+    return Math.floor(t / 60) + ":" + (t % 60).toFixed(2)
+}
 
 function End() {
 
@@ -56,7 +61,7 @@ function End() {
             <ul>
                 {finishers.map((player, index) => (
                     <li key={player.id}>
-                        {index + 1}. {player.nickname}
+                        Posição: {index + 1} / Nome: {player.nickname} / Tempo: {finishTimeToString(player.finishTime) } / Modelo: <PlayerModel player={player} sizeMultiplier={1} />
                     </li>
                 ))}
             </ul>

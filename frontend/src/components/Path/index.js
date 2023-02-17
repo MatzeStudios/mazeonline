@@ -1,8 +1,8 @@
-import React, { useState, useCallback } from "react"
-import * as PIXI from "pixi.js"
-import { Graphics } from "@inlet/react-pixi"
-import { BASE_SIZE, LARGE_LINE_WIDTH } from "../../settings/constants"
-import useEventListener from "@use-it/event-listener"
+import React, { useState, useCallback } from 'react'
+import * as PIXI from 'pixi.js'
+import { Graphics } from '@inlet/react-pixi'
+import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'
+import useEventListener from '@use-it/event-listener'
 
 const appendVisitedCell = (x, y, visitedCells) => {
     if (x === undefined || Number.isNaN(x) || y === undefined || Number.isNaN(y)) return
@@ -29,8 +29,8 @@ function Path(props) {
     const visitedCells = useState([])[0]
     const [isVisible, setIsVisible] = useState(false)
 
-    useEventListener("keydown", (event) => {
-        if(event.key.toLowerCase() === "q") setIsVisible(c => !c)
+    useEventListener('keydown', (event) => {
+        if(event.key.toLowerCase() === 'q') setIsVisible(c => !c)
     })
 
     const draw = useCallback(g => {

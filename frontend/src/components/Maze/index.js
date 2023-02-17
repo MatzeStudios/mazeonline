@@ -1,7 +1,7 @@
-import { Graphics } from "@inlet/react-pixi"
-import * as PIXI from "pixi.js"
-import React, { useCallback } from "react"
-import { BASE_SIZE, LARGE_LINE_WIDTH } from "../../settings/constants"
+import { Graphics } from '@inlet/react-pixi'
+import * as PIXI from 'pixi.js'
+import React, { useCallback } from 'react'
+import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'
 
 const N = 1
 const E = 2

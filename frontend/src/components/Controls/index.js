@@ -1,24 +1,24 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from 'react'
 
-import "./style.css"
+import './style.css'
 
 //fonts 
-import "../../fonts/Bungee_Shade/BungeeShade-Regular.ttf"
-import "../../fonts/Inter/static/Inter-Regular.ttf"
+import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
+import '../../fonts/Inter/static/Inter-Regular.ttf'
 
 // icons
-import MouseLeft from "../../../src/assets/mouse-left.svg"
-import MouseRight from "../../../src/assets/mouse-right.svg"
-import MouseScroll from "../../../src/assets/mouse-scroll.svg"
-import ArrowKeyUp from "../../../src/assets/arrow-key-up.svg"
-import ArrowUp from "../../../src/assets/arrow-up.svg"
+import MouseLeft from '../../../src/assets/mouse-left.svg'
+import MouseRight from '../../../src/assets/mouse-right.svg'
+import MouseScroll from '../../../src/assets/mouse-scroll.svg'
+import ArrowKeyUp from '../../../src/assets/arrow-key-up.svg'
+import ArrowUp from '../../../src/assets/arrow-up.svg'
 
 function Controls(props) {
     
     useEffect(() => {
         if(props.border) {
-            var box = document.querySelector(".container-controls")
-            box.style.border = "solid 3px #272727"
+            var box = document.querySelector('.container-controls')
+            box.style.border = 'solid 3px #272727'
         }
     }, [])
 

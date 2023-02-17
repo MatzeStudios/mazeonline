@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useCallback } from "react"
-import { useNavigate } from "react-router-dom"
-import socket from "../../services/socket"
+import React, { useEffect, useState, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import socket from '../../services/socket'
 
-import "./style.css"
+import './style.css'
 
-import GameScreen from "../../components/GameScreen"
-import StartCounter from "../../components/StartCounter"
-import EndCounter from "../../components/EndCounter"
-import Pause from "../../components/Pause"
+import GameScreen from '../../components/GameScreen'
+import StartCounter from '../../components/StartCounter'
+import EndCounter from '../../components/EndCounter'
+import Pause from '../../components/Pause'
 // import SoundManager from "../../components/SoundManager"
 
 function Game() {
@@ -24,20 +24,20 @@ function Game() {
 
     const [endTime, setEndTime] = useState(undefined)
 
-    const [otherPlayersVisibility, setOtherPlayersVisibility] = useState("normal") // normal, restricted, none
+    const [otherPlayersVisibility, setOtherPlayersVisibility] = useState('normal') // normal, restricted, none
 
     const navigate = useNavigate()
 
     const handleRedirectHome = useCallback(() => {
-        navigate("/", {replace: true})
+        navigate('/', {replace: true})
     }, [navigate])
     
     const handleRedirectEnd = useCallback(() => {
-        navigate("/end", {replace: true})
+        navigate('/end', {replace: true})
     }, [navigate])
 
     useEffect(() => {
-        socket.emit("getGameInfo")
+        socket.emit('getGameInfo')
 
         const processGameInfo = data => {
             if(gameInfoReceived) return // Already set info.
@@ -46,7 +46,7 @@ function Game() {
                 handleRedirectHome() // Player doesn't exist in server.
                 return
             }
-            if(data.state === "end") {
+            if(data.state === 'end') {
                 handleRedirectEnd()
                 return
             }
@@ -60,35 +60,35 @@ function Game() {
 
             setGameState(data.state)
             
-            if(data.state === "starting") setStartTime(data.startTime)
+            if(data.state === 'starting') setStartTime(data.startTime)
             else setStartTime(0)
             
-            if(data.state === "finishing") setEndTime(data.endTime)
+            if(data.state === 'finishing') setEndTime(data.endTime)
 
             setGameInfoReceived(true)
         }
 
         const processCancelFinish = () => setEndTime(undefined)
 
-        socket.on("gameInfo", processGameInfo)
-        socket.on("gameFinishing", setEndTime)
-        socket.on("gameEnd", handleRedirectEnd)
-        socket.on("cancelFinish", processCancelFinish)
+        socket.on('gameInfo', processGameInfo)
+        socket.on('gameFinishing', setEndTime)
+        socket.on('gameEnd', handleRedirectEnd)
+        socket.on('cancelFinish', processCancelFinish)
         
         return () => {
-            socket.off("gameInfo", processGameInfo)
-            socket.off("gameFinishing", setEndTime)
-            socket.off("gameEnd", handleRedirectEnd)
-            socket.off("cancelFinish", processCancelFinish)
+            socket.off('gameInfo', processGameInfo)
+            socket.off('gameFinishing', setEndTime)
+            socket.off('gameEnd', handleRedirectEnd)
+            socket.off('cancelFinish', processCancelFinish)
         }
     }, [])
 
     useEffect(() => {
-        const content = document.querySelector("html")
-        content.style.overflow = "hidden"
+        const content = document.querySelector('html')
+        content.style.overflow = 'hidden'
 
         return () => {
-            content.style.overflow = "visible"
+            content.style.overflow = 'visible'
         }
     }, [])
 

@@ -7,7 +7,7 @@
 const Player = require("../classes/player")
 const Maze = require("../classes/maze")
 
-const startCount = 5_000
+const startCount = 1_000
 const endCount =  30_000
 
 const findById = (players, id) => {
@@ -25,6 +25,15 @@ class Game {
         this.state = 'off'
         this.startTime = -1
 
+        this.mapOptions = []
+        this.mapOptions.push({width: 15, height: 15, name:'Pequeno', votes: []})
+        this.mapOptions.push({width: 40, height: 40, name:'Médio', votes: []})
+        this.mapOptions.push({width: 60, height: 60, name:'Grande', votes: []})
+        this.mapOptions.push({width: 100, height: 100, name:'Gigante', votes: []})
+        this.mapOptions.push({width: 150, height: 10, name:'Estreito', votes: []})
+
+        this.selectedMap = 0
+
         this.finishers = []
         this.endStartTime = -1
 
@@ -38,7 +47,8 @@ class Game {
     }
 
     createMaze() {
-        this.maze = new Maze(10,10,2,false)
+
+        this.maze = new Maze(1,2,2,false)
         console.log("Maze created: ")
         this.maze.printConsole()
 
@@ -138,10 +148,19 @@ class Game {
         }
     }
 
+    cleanVotes() {
+        for(let i=0; i<this.mapOptions.length; i++)
+            this.mapOptions[i].votes = []
+    }
+
     gameEnd(message) {
         console.log(message)
 
         this.updatePoints(this.finishers)
+
+        this.nonFinishers = this.players.filter(element => !this.finishers.includes(element));
+
+        this.cleanVotes()
 
         this.state = 'end'
         this.io.emit("gameEnd")
@@ -244,6 +263,7 @@ class Game {
             const infoPackage = {}
 
             infoPackage.finishers = this.finishers
+            infoPackage.nonFinishers = this.nonFinishers
 
             socket.emit("endInfo", infoPackage)
         })

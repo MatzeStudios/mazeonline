@@ -1,0 +1,55 @@
+
+.player-model {
+    width: 2em !important;
+    height: 2em !important;
+}
+
+.finishers-table {
+    border-collapse: collapse;
+    margin: 50px 0;
+    padding-left: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+    font-family: Inter;
+    color: white;
+}
+
+.finishers-table thead tr {
+    background-color: #7BBF7A;
+    color: #000;
+}
+
+.finishers-table td, th {
+    padding: 12px 20px;
+}
+
+.finishers-table tbody tr {
+    border-bottom: thin solid #D9D9D9;
+}
+
+.finishers-table tbody tr:nth-of-type(even) {
+    background-color: #323232;
+}
+
+.finishers-table tbody tr:last-of-type {
+    border-bottom: 2px solid #7BBF7A;
+}
+
+.finishers-table tr td:first-child {
+    padding-right: 5px !important;
+}
+
+.finishers-table tr td:first-child,
+.finishers-table tr td:last-child {
+    padding: 20px;
+}
+
+td.player {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+p.playerName {
+    margin-left: 5px;
+}

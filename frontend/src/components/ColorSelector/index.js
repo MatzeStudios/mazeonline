@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from "react"
-import { debounce } from "lodash"
+import React, { useState, useEffect, useRef } from 'react'
+import { debounce } from 'lodash'
 
 // styles
-import "./index.css"
+import './index.css'
 
 
 function ColorSelector({ onSelect }) {
-    const colors = useState(["#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#0000ff", "#4b0082", "#9400d3"].reverse())[0]
+    const colors = useState(['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3'].reverse())[0]
     const [selectedColor, setSelectedColor] = useState(colors[0])
     const inputRef = useRef(null)
     
@@ -30,7 +30,7 @@ function ColorSelector({ onSelect }) {
                 <div 
                     key={i} 
                     style={{ backgroundColor: color }}
-                    className={`wrapper-player-color ${color === selectedColor ? "selected" : ""}`}
+                    className={`wrapper-player-color ${color === selectedColor ? 'selected' : ''}`}
                     onClick={() => handleSelected(color)}
                 > 
                 </div>

@@ -30,6 +30,7 @@ class Player {
     }
 
     addPoints(quant) {
+        this.pointChange = quant;
         this.points += quant;
         this.nSides = 3 + Math.floor(this.points/10)
     }

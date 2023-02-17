@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef } from 'react'
 
-import "./style.css"
+import './style.css'
 
 //fonts 
-import "../../fonts/Bungee_Shade/BungeeShade-Regular.ttf"
-import "../../fonts/Inter/static/Inter-Regular.ttf"
+import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
+import '../../fonts/Inter/static/Inter-Regular.ttf'
 
 function EndCounter(props) {
     const initialTimer = props.time

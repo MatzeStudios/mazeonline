@@ -1,10 +1,10 @@
-import useEventListener from "@use-it/event-listener"
-import React, { useState, useCallback, useEffect, useRef } from "react"
-import { utils } from "pixi.js"
-import { Graphics, useTick } from "@inlet/react-pixi"
-import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from "../../settings/constants"
-import socket from "../../services/socket"
-import * as PIXI from "pixi.js"
+import useEventListener from '@use-it/event-listener'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
+import { utils } from 'pixi.js'
+import { Graphics, useTick } from '@inlet/react-pixi'
+import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../settings/constants'
+import socket from '../../services/socket'
+import * as PIXI from 'pixi.js'
 
 const N = 1
 const E = 2
@@ -111,20 +111,20 @@ function Player(props) {
     const [downHeld, setDownHeld] = useState(false)
     const [shiftHeld, setShiftHeld] = useState(false)
     
-    useEventListener("keydown", (event) => {
-        if(event.key.toLowerCase() === "w") setUpHeld(true)
-        if(event.key.toLowerCase() === "a") setLeftHeld(true)
-        if(event.key.toLowerCase() === "s") setDownHeld(true)
-        if(event.key.toLowerCase() === "d") setRightHeld(true)
-        if(event.key.toLowerCase() === "shift") setShiftHeld(true)
+    useEventListener('keydown', (event) => {
+        if(event.key.toLowerCase() === 'w') setUpHeld(true)
+        if(event.key.toLowerCase() === 'a') setLeftHeld(true)
+        if(event.key.toLowerCase() === 's') setDownHeld(true)
+        if(event.key.toLowerCase() === 'd') setRightHeld(true)
+        if(event.key.toLowerCase() === 'shift') setShiftHeld(true)
     })
     
-    useEventListener("keyup", (event) => {
-        if(event.key.toLowerCase() === "w") setUpHeld(false)
-        if(event.key.toLowerCase() === "a") setLeftHeld(false)
-        if(event.key.toLowerCase() === "s") setDownHeld(false)
-        if(event.key.toLowerCase() === "d") setRightHeld(false)
-        if(event.key.toLowerCase() === "shift") setShiftHeld(false)
+    useEventListener('keyup', (event) => {
+        if(event.key.toLowerCase() === 'w') setUpHeld(false)
+        if(event.key.toLowerCase() === 'a') setLeftHeld(false)
+        if(event.key.toLowerCase() === 's') setDownHeld(false)
+        if(event.key.toLowerCase() === 'd') setRightHeld(false)
+        if(event.key.toLowerCase() === 'shift') setShiftHeld(false)
     })
 
     useEffect(() => {
@@ -135,9 +135,9 @@ function Player(props) {
             setRightHeld(false)
             setShiftHeld(false)
         }
-        window.addEventListener("blur", deactivatePresses)
+        window.addEventListener('blur', deactivatePresses)
         return () => {
-            window.removeEventListener("blur", deactivatePresses)
+            window.removeEventListener('blur', deactivatePresses)
         }
     }, [])
 
@@ -193,7 +193,7 @@ function Player(props) {
 
     useEffect(() => {
         savedCallback.current = () => {
-            socket.emit("positionUpdate", {x: x, y: y})
+            socket.emit('positionUpdate', {x: x, y: y})
         }
     }, [x,y])
 

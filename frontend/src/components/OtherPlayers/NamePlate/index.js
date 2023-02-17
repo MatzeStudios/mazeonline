@@ -1,9 +1,9 @@
-import React, { useCallback } from "react"
-import { Graphics, Text } from "@inlet/react-pixi"
-import { PLAYER_RADIUS, LARGE_LINE_WIDTH } from "../../../settings/constants"
-import * as PIXI from "pixi.js"
+import React, { useCallback } from 'react'
+import { Graphics, Text } from '@inlet/react-pixi'
+import { PLAYER_RADIUS, LARGE_LINE_WIDTH } from '../../../settings/constants'
+import * as PIXI from 'pixi.js'
 
-import "./style.css"
+import './style.css'
 
 function NamePlate(props) {
     
@@ -12,11 +12,11 @@ function NamePlate(props) {
     const y = props.y
 
     let textStyle = new PIXI.TextStyle({
-        align: "center",
-        fontFamily: "Inter",
+        align: 'center',
+        fontFamily: 'Inter',
         fontSize: 20,
         fontWeight: 400,
-        fill: "#ffffff", // gradient
+        fill: '#ffffff', // gradient
     })
 
     let textMetrics = PIXI.TextMetrics.measureText(name, textStyle)

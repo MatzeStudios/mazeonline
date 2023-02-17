@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useRef, forwardRef } from "react"
-import { Stage, PixiComponent, useApp, Container } from "@inlet/react-pixi"
-import { Viewport } from "pixi-viewport"
+import React, { useState, useEffect, useRef, forwardRef } from 'react'
+import { Stage, PixiComponent, useApp, Container } from '@inlet/react-pixi'
+import { Viewport } from 'pixi-viewport'
 
-import socket from "../../services/socket"
+import socket from '../../services/socket'
 
-import Maze from "../Maze"
-import Player from "../Player"
-import OtherPlayers from "../OtherPlayers"
-import Path from "../Path"
-import VisitedCells  from "../VisitedCells"
-import { BASE_SIZE } from "../../settings/constants"
+import Maze from '../Maze'
+import Player from '../Player'
+import OtherPlayers from '../OtherPlayers'
+import Path from '../Path'
+import VisitedCells  from '../VisitedCells'
+import { BASE_SIZE } from '../../settings/constants'
 
 const useResize = () => {
     const [size, setSize] = useState([window.innerWidth, window.innerHeight])
@@ -21,17 +21,17 @@ const useResize = () => {
             })
         }
 
-        window.addEventListener("resize", onResize)
+        window.addEventListener('resize', onResize)
 
         return () => {
-            window.removeEventListener("resize", onResize)
+            window.removeEventListener('resize', onResize)
         }
     }, [])
 
     return size
 }
 
-const PixiViewportComponent = PixiComponent("Viewport", {
+const PixiViewportComponent = PixiComponent('Viewport', {
     create(props) {
         const { ...viewportProps } = props
 
@@ -47,12 +47,12 @@ const PixiViewportComponent = PixiComponent("Viewport", {
         })
 
         viewport.drag({
-            mouseButtons: "right"
+            mouseButtons: 'right'
         })
 
         viewport.fit()
         viewport.moveCenter(viewport.worldWidth/2, viewport.worldHeight/2)
-        viewport.clamp({ direction: "all" })
+        viewport.clamp({ direction: 'all' })
         
         // this is only runs once, to keep updating the clamp in resize there's
         // a copy of this code inside an useEffect in the Game component.
@@ -89,7 +89,7 @@ const PixiViewportComponent = PixiComponent("Viewport", {
 const PixiViewport = forwardRef((props, ref) => (
     <PixiViewportComponent ref={ref} app={useApp()} {...props} />
 ))
-PixiViewport.displayName = "PixiViewport"
+PixiViewport.displayName = 'PixiViewport'
 
 function GameScreen(props) {
     
@@ -119,10 +119,10 @@ function GameScreen(props) {
     const appRef = useRef(null)
     
     useEffect(() => {
-        if(gameState === "starting") {
+        if(gameState === 'starting') {
             setTimeout(() => setFreeze(false), freezeDuration)
         }
-        else if(gameState === "running") {
+        else if(gameState === 'running') {
             setFreeze(false)
         }
 
@@ -150,9 +150,9 @@ function GameScreen(props) {
         const deactivateRightPress = () => {
             setRightMouseButtonPressed(false)
         }
-        window.addEventListener("blur", deactivateRightPress)
+        window.addEventListener('blur', deactivateRightPress)
         return () => {
-            window.removeEventListener("blur", deactivateRightPress)
+            window.removeEventListener('blur', deactivateRightPress)
         }
     }, [])
 
@@ -176,15 +176,14 @@ function GameScreen(props) {
             if(event.data.button === 0) setRightMouseButtonPressed(false)
         }
 
-        appRef.current.app.stage.on("pointermove", pointerMoveCallback)
-        appRef.current.app.stage.on("pointerdown", pointerDownCallback)
-        appRef.current.app.stage.on("pointerup", pointerUpCallback)
-
+        appRef.current.app.stage.on('pointermove', pointerMoveCallback)
+        appRef.current.app.stage.on('pointerdown', pointerDownCallback)
+        appRef.current.app.stage.on('pointerup', pointerUpCallback)
     }, [])
 
     useEffect(() => {
         if(!playerFinished && xp === maze.ex && yp === maze.ey) {
-            socket.emit("finished")
+            socket.emit('finished')
             setPlayerFinished(true)
         }
     }, [xp, yp])
@@ -205,7 +204,7 @@ function GameScreen(props) {
                 screenHeight={height}
                 worldWidth={(maze.width + 2) * BASE_SIZE}
                 worldHeight={(maze.height + 2) * BASE_SIZE}
-                plugins={["pinch", "wheel", "decelerate"]} //, "drag"]} -> Set separetly
+                plugins={['pinch', 'wheel', 'decelerate']} //, "drag"]} -> Set separetly
                 disableOnContextMenu={true}
             >
                 <Container position={[BASE_SIZE, BASE_SIZE]}>

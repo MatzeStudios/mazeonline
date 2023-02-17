@@ -1,16 +1,22 @@
-import React, { useCallback } from "react"
-import { utils } from "pixi.js"
-import { Stage, Graphics } from "@inlet/react-pixi"
-import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from "../../settings/constants"
-import * as PIXI from "pixi.js"
+import React, { useCallback, useEffect, useRef } from 'react'
+import { utils } from 'pixi.js'
+import { Stage, Graphics } from '@inlet/react-pixi'
+import { PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../settings/constants'
+import * as PIXI from 'pixi.js'
 
-import { drawPlayer } from "../Player" 
+import { drawPlayer } from '../Player' 
 
 function PlayerModel(props) {
 
     const color = props.player.color
     const nSides = props.player.nSides
-    const sizeM = props.sizeMultiplier
+    const sizeM = 6
+
+    const appRef = useRef()
+
+    useEffect(() => {
+        appRef.current.app.renderer.view.classList.add('player-model')
+    }, [])
 
     const draw = useCallback(g => {
         g.clear()
@@ -22,13 +28,14 @@ function PlayerModel(props) {
 
     return(
         <Stage 
-            width={BASE_SIZE * sizeM}
-            height={BASE_SIZE * sizeM}
+            width={PLAYER_RADIUS * sizeM * 2 + THIN_LINE_WIDTH*sizeM}
+            height={PLAYER_RADIUS * sizeM * 2 + THIN_LINE_WIDTH*sizeM}
             options={{
                 antialias: false,
                 autoDensity: true,
-                backgroundColor: 0x3d3d3d}} >
-            <Graphics draw={draw} x={(BASE_SIZE * sizeM)/2} y={(BASE_SIZE * sizeM)/2} />
+                transparent: true}}
+            ref={appRef} >
+            <Graphics draw={draw} x={(PLAYER_RADIUS * sizeM * 2 + THIN_LINE_WIDTH*sizeM)/2} y={(PLAYER_RADIUS * sizeM * 2 + THIN_LINE_WIDTH*sizeM)/2} />
         </Stage>
     )
 }

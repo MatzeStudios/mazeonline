@@ -1,10 +1,10 @@
-import React from "react"
-import { BrowserRouter, Routes as Router, Route } from "react-router-dom"
+import React from 'react'
+import { BrowserRouter, Routes as Router, Route } from 'react-router-dom'
 
 //pages
-import Entry from "./pages/Entry"
-import Game from "./pages/Game"
-import End from "./pages/End"
+import Entry from './pages/Entry'
+import Game from './pages/Game'
+import End from './pages/End'
 
 function Routes() {
     return (

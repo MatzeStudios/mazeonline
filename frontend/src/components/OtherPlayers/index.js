@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react"
-import socket from "../../services/socket"
-import OtherPlayer from "./OtherPlayer"
+import React, { useState, useEffect, useRef } from 'react'
+import socket from '../../services/socket'
+import OtherPlayer from './OtherPlayer'
 
 const findById = (players, id) => {
     for(let i = 0; i < players.length; i++) {
@@ -36,7 +36,7 @@ function OtherPlayers(props) {
     
                 let pp = players[j]
                 
-                if(visibility === "none") {
+                if(visibility === 'none') {
                     pp.x = pd.x
                     pp.y = pd.y
                 }
@@ -90,20 +90,20 @@ function OtherPlayers(props) {
             players.push(player)
         }
 
-        socket.on("positions", updatePos)
-        socket.on("playerDisconnected", playerDisconnected)
-        socket.on("playerConnected", playerConnected)
-        socket.on("playerInfo", playerInfo)
+        socket.on('positions', updatePos)
+        socket.on('playerDisconnected', playerDisconnected)
+        socket.on('playerConnected', playerConnected)
+        socket.on('playerInfo', playerInfo)
 
         return () => {
-            socket.off("positions", updatePos)
-            socket.off("playerDisconnected", playerDisconnected)
-            socket.off("playerConnected", playerConnected)
-            socket.off("playerInfo", playerInfo)
+            socket.off('positions', updatePos)
+            socket.off('playerDisconnected', playerDisconnected)
+            socket.off('playerConnected', playerConnected)
+            socket.off('playerInfo', playerInfo)
         }
     }, [])
 
-    if(visibility === "none") return null
+    if(visibility === 'none') return null
     return(
         <>
             {players.map((item) => {

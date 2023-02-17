@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from 'react'
 
-import "./index.css"
+import './index.css'
 
-import Gear from "../../assets/gear.svg"
-import Close from "../../assets/close.svg"
-import EyeOpen from "../../assets/eye-open.svg"
-import EyeClosed from "../../assets/eye-closed.svg"
-import EyeBlocked from "../../assets/eye-blocked.svg"
+import Gear from '../../assets/gear.svg'
+import Close from '../../assets/close.svg'
+import EyeOpen from '../../assets/eye-open.svg'
+import EyeClosed from '../../assets/eye-closed.svg'
+import EyeBlocked from '../../assets/eye-blocked.svg'
 
 //fonts 
-import "../../fonts/Bungee_Shade/BungeeShade-Regular.ttf"
-import "../../fonts/Inter/static/Inter-Regular.ttf"
+import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
+import '../../fonts/Inter/static/Inter-Regular.ttf'
 
-import Controls from "../Controls"
+import Controls from '../Controls'
 
 function Pause(props) {
 
@@ -27,15 +27,15 @@ function Pause(props) {
 
     useEffect(() => {
         const handleClickOutside = event => {
-            if (showMenu && !event.target.closest(".container-menu")) {
+            if (showMenu && !event.target.closest('.container-menu')) {
                 setShowMenu(false)
             }
         }
 
-        document.body.addEventListener("click", handleClickOutside)
+        document.body.addEventListener('click', handleClickOutside)
 
         return () => {
-            document.body.removeEventListener("click", handleClickOutside)
+            document.body.removeEventListener('click', handleClickOutside)
         }
     }, [showMenu])
 
@@ -52,9 +52,9 @@ function Pause(props) {
 
                         <hr />
                         <div className='container-btn-eye'>
-                            <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility("normal"), setBtnEyeSelected(0)]} > <img src={EyeOpen} alt="button for players visible"  /> </button>
-                            <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility("restricted"), setBtnEyeSelected(1)]} > <img src={EyeClosed} alt="button for players point" /> </button>
-                            <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility("none"), setBtnEyeSelected(2)]} > <img src={EyeBlocked} alt="button for players hidden"  /> </button>
+                            <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('normal'), setBtnEyeSelected(0)]} > <img src={EyeOpen} alt="button for players visible"  /> </button>
+                            <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('restricted'), setBtnEyeSelected(1)]} > <img src={EyeClosed} alt="button for players point" /> </button>
+                            <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('none'), setBtnEyeSelected(2)]} > <img src={EyeBlocked} alt="button for players hidden"  /> </button>
                             <div
                                 className='btn-line-select'
                                 style={{

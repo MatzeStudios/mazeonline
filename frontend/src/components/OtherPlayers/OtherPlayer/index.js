@@ -1,10 +1,10 @@
-import React, { useCallback, useState, useRef, useEffect } from "react"
-import { Graphics, useTick } from "@inlet/react-pixi"
-import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from "../../../settings/constants"
-import { drawPlayer } from "../../Player"
-import NamePlate from "../NamePlate"
-import { utils } from "pixi.js"
-import * as PIXI from "pixi.js"
+import React, { useCallback, useState, useRef, useEffect } from 'react'
+import { Graphics, useTick } from '@inlet/react-pixi'
+import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../../settings/constants'
+import { drawPlayer } from '../../Player'
+import NamePlate from '../NamePlate'
+import { utils } from 'pixi.js'
+import * as PIXI from 'pixi.js'
 
 function OtherPlayer(props) {
 
@@ -44,7 +44,7 @@ function OtherPlayer(props) {
 
     useEffect(() => {
         if(ref.current) {
-            ref.current.cursor = "pointer"
+            ref.current.cursor = 'pointer'
         }
     }, [])
 
@@ -54,9 +54,9 @@ function OtherPlayer(props) {
                 setShowName(false)
             }
         }
-        document.addEventListener("mousedown", handleClick)
+        document.addEventListener('mousedown', handleClick)
         return () => {
-            document.removeEventListener("mousedown", handleClick)
+            document.removeEventListener('mousedown', handleClick)
         }
     }, [showName])
 
@@ -70,7 +70,7 @@ function OtherPlayer(props) {
         g.beginFill(utils.string2hex(player.color), 1)
         g.lineStyle({width: THIN_LINE_WIDTH, color: 0, alpha: 1, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.ROUND})
 
-        if(visibility === "normal") drawPlayer(0, 0, PLAYER_RADIUS, g, player.nSides)
+        if(visibility === 'normal') drawPlayer(0, 0, PLAYER_RADIUS, g, player.nSides)
         else drawPlayer(0, 0, PLAYER_RADIUS, g, 1)
         g.endFill()
     }, [player, visibility])

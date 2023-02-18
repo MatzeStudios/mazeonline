@@ -33,6 +33,7 @@ function Game() {
     }, [navigate])
     
     const handleRedirectEnd = useCallback(() => {
+        window.getSelection().empty()   
         navigate('/end', {replace: true})
     }, [navigate])
 

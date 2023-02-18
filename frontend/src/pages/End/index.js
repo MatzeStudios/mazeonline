@@ -9,6 +9,7 @@ import './index.css'
 import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
 import '../../fonts/Inter/static/Inter-Regular.ttf'
 import FinishersList from '../../components/FinishersList'
+import MapOptions from '../../components/MapOptions'
 
 function End() {
 
@@ -16,6 +17,9 @@ function End() {
 
     const [finishers, setFinishers] = useState()
     const [nonFinishers, setNonFinishers] = useState()
+    const [mapOptions, setMapOptions] = useState()
+    const [votes, setVotes] = useState()
+    const [previousMap, setPreviousMap] = useState()
 
     const navigate = useNavigate()
 
@@ -39,6 +43,9 @@ function End() {
 
             setFinishers(data.finishers)
             setNonFinishers(data.nonFinishers)
+            setMapOptions(data.mapOptions)
+            setVotes(data.votes)
+            setPreviousMap(data.previousMap)
 
             setEndInfoReceived(true)
         }
@@ -61,6 +68,8 @@ function End() {
             </div>
 
             <FinishersList finishers={finishers} nonFinishers={nonFinishers} />
+
+            <MapOptions mapOptions={mapOptions} votes={votes} previousMap={previousMap} />
         </div>
     )
 

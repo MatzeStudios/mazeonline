@@ -17,6 +17,8 @@ const findById = (players, id) => {
     return -1
 }
 
+const random_item = (items) => items[Math.floor(Math.random()*items.length)];
+
 class Game {
     constructor(io) {
         this.io = io
@@ -26,11 +28,12 @@ class Game {
         this.startTime = -1
 
         this.mapOptions = []
-        this.mapOptions.push({width: 15, height: 15, name:'Pequeno', votes: []})
-        this.mapOptions.push({width: 40, height: 40, name:'Médio', votes: []})
-        this.mapOptions.push({width: 60, height: 60, name:'Grande', votes: []})
-        this.mapOptions.push({width: 100, height: 100, name:'Gigante', votes: []})
-        this.mapOptions.push({width: 150, height: 10, name:'Estreito', votes: []})
+        this.mapOptions.push({width: 8, height: 8, name:'Mini', votes: []})
+        this.mapOptions.push({width: 16, height: 16, name:'Pequeno', votes: []})
+        this.mapOptions.push({width: 32, height: 32, name:'Médio', votes: []})
+        this.mapOptions.push({width: 64, height: 64, name:'Grande', votes: []})
+        this.mapOptions.push({width: 128, height: 128, name:'Gigante', votes: []})
+        this.mapOptions.push({width: 128, height: 16, name:'Estreito', votes: []})
 
         this.selectedMap = 0
 
@@ -47,8 +50,9 @@ class Game {
     }
 
     createMaze() {
+        let selected = this.mapOptions[this.selectedMap];
 
-        this.maze = new Maze(1,2,2,false)
+        this.maze = new Maze(selected.width, selected.height, 2, false)
         console.log("Maze created: ")
         this.maze.printConsole()
 
@@ -103,7 +107,7 @@ class Game {
                     this.gameEnd("Everybody finished. One of the players that hadn't finished yet left. state = end")
                 }
             }
-        } 
+        }
 
         if(this.players.length == 0) {
             console.log("No players left. State = off")
@@ -111,6 +115,19 @@ class Game {
 
             this.finishers = []
             this.endStartTime = -1
+            this.selectedMap = 0
+        }
+
+        if(this.state === 'end') { // remove player vote on map
+            for(let i=0; i<this.mapOptions.length; i++) {
+                let votes = this.mapOptions[i].votes
+                let j = votes.indexOf(player.id);
+                if (j !== -1) {
+                    votes.splice(j, 1); // remove vote from the other map
+                    this.io.emit('votes', this.getVotesArray())
+                    break;
+                }
+            }
         }
     }
 
@@ -148,9 +165,54 @@ class Game {
         }
     }
 
+    getVotesArray() {
+        let votes = []
+        for(let i=0; i<this.mapOptions.length; i++) {
+            let n = this.mapOptions[i].votes.length
+            votes.push(n)
+        }
+        return votes
+    }
+
     cleanVotes() {
         for(let i=0; i<this.mapOptions.length; i++)
             this.mapOptions[i].votes = []
+    }
+
+    processVote(id, index) {
+        if(this.mapOptions[index].votes.includes(id)) return; // vote in same map as before -> nothing changes
+        
+        for(let i=0; i<this.mapOptions.length; i++) {
+            let votes = this.mapOptions[i].votes
+            let j = votes.indexOf(id);
+            if (j !== -1) {
+                votes.splice(j, 1); // remove vote from the other map
+                break;
+            }
+        }
+
+        this.mapOptions[index].votes.push(id)
+
+        this.io.emit('votes', this.getVotesArray())
+    }
+
+    pickNextMap() {
+        let votes = this.getVotesArray()
+
+        let maior = 0;
+        for(let i=0; i<votes.length; i++)
+            if(votes[i] > maior)
+                maior = votes[i]
+        
+        if(maior === 0) return; // no votes -> same map as before
+        
+        let opts = []
+        for(let i=0; i<votes.length; i++)
+            if(votes[i] === maior)
+                opts.push(i)
+        
+        this.selectedMap = random_item(opts)
+
     }
 
     gameEnd(message) {
@@ -167,10 +229,11 @@ class Game {
 
         setTimeout(() => {
             if(this.state === 'end') {
+                this.pickNextMap()
                 this.gameStart()
                 this.io.emit("nextGame")
             }
-        }, 5_000)
+        }, 10_000)
     }
 
     newConnection(socket) {
@@ -265,7 +328,20 @@ class Game {
             infoPackage.finishers = this.finishers
             infoPackage.nonFinishers = this.nonFinishers
 
+            let mapOptions = []
+            for(let i=0; i<this.mapOptions.length; i++) {
+                let opt = this.mapOptions[i]
+                mapOptions.push({width: opt.width, height: opt.height, name: opt.name})
+            }
+            infoPackage.mapOptions = mapOptions
+            infoPackage.votes = this.getVotesArray()
+            infoPackage.previousMap = this.selectedMap
+
             socket.emit("endInfo", infoPackage)
+        })
+
+        socket.on('vote', data => {
+            if(this.state === 'end') this.processVote(player.id, data)
         })
     } 
 }

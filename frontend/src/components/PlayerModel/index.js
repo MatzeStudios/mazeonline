@@ -33,7 +33,7 @@ function PlayerModel(props) {
             options={{
                 antialias: false,
                 autoDensity: true,
-                transparent: true}}
+                backgroundAlpha: 0}}
             ref={appRef} >
             <Graphics draw={draw} x={(PLAYER_RADIUS * sizeM * 2 + THIN_LINE_WIDTH*sizeM)/2} y={(PLAYER_RADIUS * sizeM * 2 + THIN_LINE_WIDTH*sizeM)/2} />
         </Stage>

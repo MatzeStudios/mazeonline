@@ -63,13 +63,17 @@ function Controls(props) {
 
                 <div className='wrapper-controls row-2'>
                     <div className='wrapper-flex-column'>
-                        <div className="wrapper-key text-key single-key" id="q">Q</div>
-                        <h3>Marcação de <br />caminho</h3>
+                        <div className='wrapper-help-keys'>
+                            <div className="wrapper-key text-key single-key" id="q">Q</div>
+                            <p>&</p>
+                            <div className="wrapper-key text-key single-key" id="E">E</div>
+                        </div>
+                        <h3>Marcação de <br />Caminho</h3>
                     </div>
                 
                     <div className='wrapper-flex-column'>
-                        <div className="wrapper-key text-key single-key" id="E">E</div>
-                        <h3>Marcação de <br />caminho</h3>
+                        <div className="wrapper-key text-key single-key" id="spacebar">-</div>
+                        <h3>Mostrar Nomes</h3>
                     </div>
 
                     <div className='wrapper-mouse'>

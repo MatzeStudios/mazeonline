@@ -65,7 +65,6 @@
     width: 150px;
     height: 100px;
     user-select: none;
-
 }
 
 .wrapper-key {
@@ -136,6 +135,10 @@
     transform: rotate(90deg);
 }
 
+#spacebar {
+    width: 135px;
+}
+
 .btn-shift {
     width: 120px;
     height: 45px;
@@ -163,5 +166,18 @@
     margin-right: 5px;
 }
 
+.wrapper-help-keys {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 
-
+.wrapper-help-keys p {
+    color: white;
+    text-align: center;
+    
+    margin-bottom: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+}

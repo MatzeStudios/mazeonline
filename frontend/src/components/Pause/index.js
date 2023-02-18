@@ -33,10 +33,10 @@ function Pause(props) {
             }
         }
 
-        document.body.addEventListener('click', handleClickOutside)
+        document.body.addEventListener('mousedown', handleClickOutside)
 
         return () => {
-            document.body.removeEventListener('click', handleClickOutside)
+            document.body.removeEventListener('mousedown', handleClickOutside)
         }
     }, [showMenu])
 
@@ -48,28 +48,24 @@ function Pause(props) {
         <>
             <button className='wrapper-btn-click'  onClick={toggleMenu} ><img src={Gear} alt="gear button for open menu"/></button>
 
-            {
-                showMenu && (
-                    <div className='container-menu'>
-                        <button className='wrapper-btn-click' onClick={toggleMenu} ><img src={Close} alt="close button" /></button>
-                        <Controls border={false} />
+            <div className='container-menu' style={{ display: showMenu ? 'block' : 'none' }}>
+                <button className='wrapper-btn-click' onClick={toggleMenu} ><img src={Close} alt="close button" /></button>
+                <Controls border={false} />
 
 
-                        <hr />
-                        <div className='container-btn-eye'>
-                            <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('normal'), setBtnEyeSelected(0)]} > <img src={EyeOpen} alt="button for players visible"  /> </button>
-                            <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('restricted'), setBtnEyeSelected(1)]} > <img src={EyeClosed} alt="button for players point" /> </button>
-                            <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('none'), setBtnEyeSelected(2)]} > <img src={EyeBlocked} alt="button for players hidden"  /> </button>
-                            <div
-                                className='btn-line-select'
-                                style={{
-                                    transform: `translateX(${btnEyeSelected * 133.333 + 16.666}%)`,
-                                }}
-                            />    
-                        </div>
-                    </div>
-                )
-            }
+                <hr />
+                <div className='container-btn-eye'>
+                    <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('normal'), setBtnEyeSelected(0)]} > <img src={EyeOpen} alt="button for players visible"  /> </button>
+                    <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('restricted'), setBtnEyeSelected(1)]} > <img src={EyeClosed} alt="button for players point" /> </button>
+                    <button className='wrapper-btn-eye' onClick={() => [setOtherPlayersVisibility('none'), setBtnEyeSelected(2)]} > <img src={EyeBlocked} alt="button for players hidden"  /> </button>
+                    <div
+                        className='btn-line-select'
+                        style={{
+                            transform: `translateX(${btnEyeSelected * 133.333 + 16.666}%)`,
+                        }}
+                    />    
+                </div>
+            </div>
 
             {showMenu && <div className="overlay" />}
         </>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import useEventListener from '@use-it/event-listener'
 
 import './index.css'
 
@@ -38,6 +39,10 @@ function Pause(props) {
             document.body.removeEventListener('click', handleClickOutside)
         }
     }, [showMenu])
+
+    useEventListener('keydown', (event) => {
+        if(event.key.toLowerCase() === 'escape') toggleMenu()
+    })
 
     return (
         <>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import socket from '../../services/socket'
 import OtherPlayer from './OtherPlayer'
+import useEventListener from '@use-it/event-listener'
 
 const findById = (players, id) => {
     for(let i = 0; i < players.length; i++) {
@@ -17,10 +18,30 @@ function OtherPlayers(props) {
     const refreshDelay = props.refreshDelay
 
     const [lastUpdateTime, setLastUpdateTime] = useState(0)
+    const [spacebarHeld, setSpacebarHeld] = useState(false)
 
     const players = useState([])[0]
 
     const updatePositionsRef = useRef()
+
+    useEventListener('keydown', (event) => {
+        if(event.code.toLowerCase() === 'space') setSpacebarHeld(true)
+    })
+    
+    useEventListener('keyup', (event) => {
+        if(event.code.toLowerCase() === 'space') setSpacebarHeld(false)
+    })
+
+    useEffect(() => {
+        const deactivatePresses = () => {
+            setSpacebarHeld(false)
+        }
+
+        window.addEventListener('blur', deactivatePresses)
+        return () => {
+            window.removeEventListener('blur', deactivatePresses)
+        }
+    }, [])
 
     useEffect(() => {
         updatePositionsRef.current = (data) => {
@@ -107,7 +128,7 @@ function OtherPlayers(props) {
     return(
         <>
             {players.map((item) => {
-                return <OtherPlayer player={item} key={item.id} visibility={visibility} refreshDelay={refreshDelay} lastUpdateTime={lastUpdateTime} />
+                return <OtherPlayer player={item} key={item.id} visibility={visibility} refreshDelay={refreshDelay} lastUpdateTime={lastUpdateTime} showName={spacebarHeld}/>
             })}
         </>
     )

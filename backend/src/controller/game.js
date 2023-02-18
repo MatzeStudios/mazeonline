@@ -7,7 +7,7 @@
 const Player = require("../classes/player")
 const Maze = require("../classes/maze")
 
-const startCount = 1_000
+const startCount = 3_000
 const endCount =  30_000
 
 const findById = (players, id) => {

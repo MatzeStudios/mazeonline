@@ -12,6 +12,7 @@ function OtherPlayer(props) {
     const visibility = props.visibility
     const refreshPositionDelay = props.refreshDelay
     const lastUpdateTime = props.lastUpdateTime
+    const showNameForce = props.showName
     const [x, setX] = useState(player.x)
     const [y, setY] = useState(player.y)
     const [xP, setXP] = useState(player.x)
@@ -78,7 +79,7 @@ function OtherPlayer(props) {
     return(
         <>
             <Graphics ref={ref} draw={draw} x={x * BASE_SIZE} y={y * BASE_SIZE} interactive pointerdown={handleClick} />
-            { showName && <NamePlate name={player.nickname} x={x * BASE_SIZE} y={y * BASE_SIZE} />}
+            { (showName||showNameForce) && <NamePlate name={player.nickname} x={x * BASE_SIZE} y={y * BASE_SIZE} />}
         </>
     )
 }

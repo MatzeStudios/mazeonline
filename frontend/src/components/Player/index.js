@@ -113,18 +113,30 @@ function Player(props) {
     
     useEventListener('keydown', (event) => {
         if(event.key.toLowerCase() === 'w') setUpHeld(true)
-        if(event.key.toLowerCase() === 'a') setLeftHeld(true)
-        if(event.key.toLowerCase() === 's') setDownHeld(true)
-        if(event.key.toLowerCase() === 'd') setRightHeld(true)
-        if(event.key.toLowerCase() === 'shift') setShiftHeld(true)
+        else if(event.key.toLowerCase() === 'a') setLeftHeld(true)
+        else if(event.key.toLowerCase() === 's') setDownHeld(true)
+        else if(event.key.toLowerCase() === 'd') setRightHeld(true)
+
+        else if(event.key.toLowerCase() === 'arrowup') setUpHeld(true)
+        else if(event.key.toLowerCase() === 'arrowleft') setLeftHeld(true)
+        else if(event.key.toLowerCase() === 'arrowdown') setDownHeld(true)
+        else if(event.key.toLowerCase() === 'arrowright') setRightHeld(true)
+
+        else if(event.key.toLowerCase() === 'shift') setShiftHeld(true)
     })
     
     useEventListener('keyup', (event) => {
         if(event.key.toLowerCase() === 'w') setUpHeld(false)
-        if(event.key.toLowerCase() === 'a') setLeftHeld(false)
-        if(event.key.toLowerCase() === 's') setDownHeld(false)
-        if(event.key.toLowerCase() === 'd') setRightHeld(false)
-        if(event.key.toLowerCase() === 'shift') setShiftHeld(false)
+        else if(event.key.toLowerCase() === 'a') setLeftHeld(false)
+        else if(event.key.toLowerCase() === 's') setDownHeld(false)
+        else if(event.key.toLowerCase() === 'd') setRightHeld(false)
+
+        else if(event.key.toLowerCase() === 'arrowup') setUpHeld(false)
+        else if(event.key.toLowerCase() === 'arrowleft') setLeftHeld(false)
+        else if(event.key.toLowerCase() === 'arrowdown') setDownHeld(false)
+        else if(event.key.toLowerCase() === 'arrowright') setRightHeld(false)
+
+        else if(event.key.toLowerCase() === 'shift') setShiftHeld(false)
     })
 
     useEffect(() => {

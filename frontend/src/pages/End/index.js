@@ -10,6 +10,7 @@ import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
 import '../../fonts/Inter/static/Inter-Regular.ttf'
 import FinishersList from '../../components/FinishersList'
 import MapOptions from '../../components/MapOptions'
+import NextMatchCounter from '../../components/NextMatchCounter'
 
 function End() {
 
@@ -20,6 +21,7 @@ function End() {
     const [mapOptions, setMapOptions] = useState()
     const [votes, setVotes] = useState()
     const [previousMap, setPreviousMap] = useState()
+    const [nextMatchTime, setNextMatchTime] = useState()
 
     const navigate = useNavigate()
 
@@ -46,6 +48,7 @@ function End() {
             setMapOptions(data.mapOptions)
             setVotes(data.votes)
             setPreviousMap(data.previousMap)
+            setNextMatchTime(data.nextMatchTime)
 
             setEndInfoReceived(true)
         }
@@ -68,6 +71,8 @@ function End() {
             </div>
 
             <FinishersList finishers={finishers} nonFinishers={nonFinishers} />
+
+            <NextMatchCounter time={nextMatchTime} />
 
             <MapOptions mapOptions={mapOptions} votes={votes} previousMap={previousMap} />
         </div>

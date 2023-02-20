@@ -5,12 +5,6 @@
     flex-wrap: wrap;
 }
 
-.map-options-title {
-    font-family: Inter;
-    color: white;
-    text-align: left;
-}
-
 .map-option {
     flex: 1;
 

@@ -34,7 +34,6 @@ function MapOptions(props) {
     
     return (
         <>
-            <p className='map-options-title'> Vote em um tamanho de mapa para a próxima rodada. A próxima partida irá começar em breve... </p>
             <div className='map-options-container'>
                 {opts.map((opt, index) => (
                     <div key={index} onClick={() => sendVote(index)} 

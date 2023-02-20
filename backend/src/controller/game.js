@@ -8,7 +8,7 @@ const Player = require("../classes/player")
 const Maze = require("../classes/maze")
 
 const startCount = 3_000
-const endCount =  30_000
+const nextMatchCount = 10_000
 
 const findById = (players, id) => {
     for(let i = 0; i < players.length; i++) {
@@ -27,18 +27,20 @@ class Game {
         this.state = 'off'
         this.startTime = -1
 
-        this.mapOptions = []
-        this.mapOptions.push({width: 8, height: 8, name:'Mini', votes: []})
-        this.mapOptions.push({width: 16, height: 16, name:'Pequeno', votes: []})
-        this.mapOptions.push({width: 32, height: 32, name:'Médio', votes: []})
-        this.mapOptions.push({width: 64, height: 64, name:'Grande', votes: []})
-        this.mapOptions.push({width: 128, height: 128, name:'Gigante', votes: []})
-        this.mapOptions.push({width: 128, height: 16, name:'Estreito', votes: []})
+        this.mapOptions = [
+            {width: 8, height: 8, name:'Mini', votes: [], endCount: 5_000, n_paths: 2, force_paths: false},
+            {width: 16, height: 16, name:'Pequeno', votes: [], endCount: 15_000, n_paths: 2, force_paths: false},
+            {width: 32, height: 32, name:'Médio', votes: [], endCount: 30_000, n_paths: 3, force_paths: true},
+            {width: 64, height: 64, name:'Grande', votes: [], endCount: 60_000, n_paths: 5, force_paths: true},
+            {width: 128, height: 128, name:'Gigante', votes: [], endCount: 120_000, n_paths: 6, force_paths: true},
+            {width: 128, height: 16, name:'Estreito', votes: [], endCount: 45_000, n_paths: 4, force_paths: false}
+        ]
 
         this.selectedMap = 0
 
         this.finishers = []
         this.endStartTime = -1
+        this.endScreenTime = -1
 
         this.timeOverTimoutId = undefined
 
@@ -49,10 +51,14 @@ class Game {
         this.io.on("connection", (socket) => this.newConnection(socket))
     }
 
+    getEndCount() {
+        return this.mapOptions[this.selectedMap].endCount
+    }
+
     createMaze() {
         let selected = this.mapOptions[this.selectedMap];
 
-        this.maze = new Maze(selected.width, selected.height, 2, false)
+        this.maze = new Maze(selected.width, selected.height, selected.n_paths, selected.force_paths)
         console.log("Maze created: ")
         this.maze.printConsole()
 
@@ -224,6 +230,7 @@ class Game {
 
         this.cleanVotes()
 
+        this.endScreenTime = Date.now()
         this.state = 'end'
         this.io.emit("gameEnd")
 
@@ -274,7 +281,7 @@ class Game {
             infoPackage.maze = this.maze
             infoPackage.state = this.state
             if(this.state === 'starting') infoPackage.startTime = startCount - (Date.now() - this.startTime)
-            if(this.state === 'finishing') infoPackage.endTime = endCount - (Date.now() - this.endStartTime)
+            if(this.state === 'finishing') infoPackage.endTime = this.getEndCount() - (Date.now() - this.endStartTime)
             infoPackage.player = this.players[this.players.indexOf(player)]
             infoPackage.players = this.players;
             infoPackage.refreshDelay = this.refreshDelay;
@@ -291,6 +298,8 @@ class Game {
         })
 
         socket.on("finished", () => {
+            if(this.state !== 'running' && this.state !== 'finishing') return
+            
             console.log("Player Finished: " + player.nickname)
 
             player.finishTime = Date.now() - this.startTime - startCount
@@ -301,13 +310,13 @@ class Game {
                 console.log("First to finish. state = finishing")
 
                 this.endStartTime = Date.now()
-                this.io.emit("gameFinishing", endCount)
+                this.io.emit("gameFinishing", this.getEndCount())
 
                 this.timeOverTimoutId = setTimeout(() => {
                     if(this.state === 'finishing') {
                         this.gameEnd("Time over. state = end")
                     }
-                }, endCount)
+                }, this.getEndCount())
             }
 
             this.finishers.push(player)
@@ -333,9 +342,11 @@ class Game {
                 let opt = this.mapOptions[i]
                 mapOptions.push({width: opt.width, height: opt.height, name: opt.name})
             }
+            
             infoPackage.mapOptions = mapOptions
             infoPackage.votes = this.getVotesArray()
             infoPackage.previousMap = this.selectedMap
+            infoPackage.nextMatchTime = nextMatchCount - Date.now() + this.endScreenTime
 
             socket.emit("endInfo", infoPackage)
         })

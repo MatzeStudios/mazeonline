@@ -4,13 +4,15 @@
   "description": "backend from mazeonline",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/index.js"
+    "start": "nodemon server/index.js",
+    "deploy": "node index.js"
   },
   "author": "MatzeStudios",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.2.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "nodemon": "^2.0.20",
     "socket.io": "^4.5.4"

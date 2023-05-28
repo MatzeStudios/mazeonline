@@ -1,10 +1,10 @@
 
 import {io} from 'socket.io-client'
 
-const socket = io(process.env.ENDPOINT, {
+const socket = io(process.env.REACT_APP_ENDPOINT, {
     withCredentials: true,
     extraHeaders: {
-        'my-custom-header': 'abcd'
+        'mazeonline_header': 'true'
     }
 })
 

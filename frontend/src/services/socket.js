@@ -1,9 +1,7 @@
 
 import {io} from 'socket.io-client'
 
-const ENDPOINT = 'localhost:9000'
-
-const socket = io(ENDPOINT, {
+const socket = io(process.env.ENDPOINT, {
     withCredentials: true,
     extraHeaders: {
         'my-custom-header': 'abcd'

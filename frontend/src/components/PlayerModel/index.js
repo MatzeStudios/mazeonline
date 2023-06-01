@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { utils } from 'pixi.js'
-import { Stage, Graphics } from '@inlet/react-pixi'
+import { Stage, Graphics } from '@pixi/react'
 import { PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../settings/constants'
 import * as PIXI from 'pixi.js'
 
@@ -20,7 +19,7 @@ function PlayerModel(props) {
 
     const draw = useCallback(g => {
         g.clear()
-        g.beginFill(utils.string2hex(color), 1)
+        g.beginFill(new PIXI.Color(color).toNumber(), 1)
         g.lineStyle({width: THIN_LINE_WIDTH * sizeM, color: 0, alpha: 1, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.ROUND})
         drawPlayer(0, 0, PLAYER_RADIUS * sizeM, g, nSides)
         g.endFill()

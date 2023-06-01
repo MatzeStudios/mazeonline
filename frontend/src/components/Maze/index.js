@@ -1,4 +1,4 @@
-import { Graphics } from '@inlet/react-pixi'
+import { Graphics } from '@pixi/react'
 import * as PIXI from 'pixi.js'
 import React, { useCallback } from 'react'
 import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Graphics, Text } from '@inlet/react-pixi'
+import { Graphics, Text } from '@pixi/react'
 import { PLAYER_RADIUS, LARGE_LINE_WIDTH } from '../../../settings/constants'
 import * as PIXI from 'pixi.js'
 

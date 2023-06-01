@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import * as PIXI from 'pixi.js'
-import { Graphics } from '@inlet/react-pixi'
+import { Graphics } from '@pixi/react'
 import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'
 import useEventListener from '@use-it/event-listener'
 

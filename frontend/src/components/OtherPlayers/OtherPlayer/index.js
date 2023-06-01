@@ -1,9 +1,8 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react'
-import { Graphics, useTick } from '@inlet/react-pixi'
+import { Graphics, useTick } from '@pixi/react'
 import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../../settings/constants'
 import { drawPlayer } from '../../Player'
 import NamePlate from '../NamePlate'
-import { utils } from 'pixi.js'
 import * as PIXI from 'pixi.js'
 
 function OtherPlayer(props) {
@@ -68,7 +67,7 @@ function OtherPlayer(props) {
 
     const draw = useCallback(g => {
         g.clear()
-        g.beginFill(utils.string2hex(player.color), 1)
+        g.beginFill(new PIXI.Color(player.color).toNumber(), 1)
         g.lineStyle({width: THIN_LINE_WIDTH, color: 0, alpha: 1, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.ROUND})
 
         if(visibility === 'normal') drawPlayer(0, 0, PLAYER_RADIUS, g, player.nSides)

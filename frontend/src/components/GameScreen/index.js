@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react'
-import { Stage, PixiComponent, useApp, Container } from '@inlet/react-pixi'
+import { Stage, PixiComponent, useApp, Container } from '@pixi/react'
 import { Viewport } from 'pixi-viewport'
+import PIXI from 'pixi.js'
 
 import socket from '../../services/socket'
 
@@ -37,7 +38,7 @@ const PixiViewportComponent = PixiComponent('Viewport', {
 
         const viewport = new Viewport({
             ticker: props.app.ticker,
-            interaction: props.app.renderer.plugins.interaction,
+            events: props.app.renderer.events,
             ...viewportProps
         });
 
@@ -70,7 +71,6 @@ const PixiViewportComponent = PixiComponent('Viewport', {
     },
     applyProps(viewport, _oldProps, _newProps) {
         const { ...oldProps } = _oldProps
-        // eslint-disable-next-line no-unused-vars
         const { plugins: newPlugins, children: newChildren, ...newProps } = _newProps
 
         Object.keys(newProps).forEach((p) => {
@@ -78,10 +78,10 @@ const PixiViewportComponent = PixiComponent('Viewport', {
                 viewport[p] = newProps[p]
             }
         })
-    }//,
-    // didMount() {
-    //     console.log("viewport mounted");
-    // }
+    },
+    willUnmount(instance) {
+        instance.destroy = () => {};
+    }
 })
 
 // create a component that can be consumed
@@ -157,8 +157,8 @@ function GameScreen(props) {
     }, [])
 
     useEffect(() => {
-        if(appRef.current === null) return
-        appRef.current.app.stage.interactive = true
+        if(appRef.current === null) return;
+        appRef.current.app.stage.eventMode = 'static'
         const pointerMoveCallback = (event) => {
             requestAnimationFrame(() => {
                 if(viewportRef.current === null) return

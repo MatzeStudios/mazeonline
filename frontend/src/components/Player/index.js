@@ -1,10 +1,9 @@
 import useEventListener from '@use-it/event-listener'
 import React, { useState, useCallback, useEffect, useRef } from 'react'
-import { utils } from 'pixi.js'
-import { Graphics, useTick } from '@inlet/react-pixi'
+import { Graphics, useTick } from '@pixi/react'
+import { LINE_CAP, LINE_JOIN } from '@pixi/graphics'
 import { BASE_SIZE, PLAYER_RADIUS, THIN_LINE_WIDTH } from '../../settings/constants'
 import socket from '../../services/socket'
-import * as PIXI from 'pixi.js'
 
 const N = 1
 const E = 2
@@ -216,8 +215,8 @@ function Player(props) {
 
     const draw = useCallback(g => {
         g.clear()
-        g.beginFill(utils.string2hex(color), 1)
-        g.lineStyle({width: THIN_LINE_WIDTH, color: 0, alpha: 1, cap: PIXI.LINE_CAP.ROUND, join: PIXI.LINE_JOIN.ROUND})
+        g.beginFill(color, 1)
+        g.lineStyle({width: THIN_LINE_WIDTH, color: 0, alpha: 1, cap: LINE_CAP.ROUND, join: LINE_JOIN.ROUND})
         drawPlayer(0, 0, PLAYER_RADIUS, g, nSides)
         g.endFill()
     }, [])

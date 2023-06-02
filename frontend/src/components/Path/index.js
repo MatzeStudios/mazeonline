@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
-import * as PIXI from 'pixi.js'
-import { Graphics } from '@inlet/react-pixi'
+import { Graphics } from '@pixi/react'
+import { LINE_CAP, LINE_JOIN } from '@pixi/graphics'
 import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'
 import useEventListener from '@use-it/event-listener'
 
@@ -39,7 +39,7 @@ function Path(props) {
         
         g.clear()
         if(visitedCells.length === 0 || !isVisible) return
-        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x000000, alpha: 1, cap: PIXI.LINE_CAP.SQUARE, join: PIXI.LINE_JOIN.BEVEL})
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x000000, alpha: 1, cap: LINE_CAP.SQUARE, join: LINE_JOIN.BEVEL})
         g.moveTo((visitedCells[0].x + 0.5) * BASE_SIZE, (visitedCells[0].y + 0.5) * BASE_SIZE)
         for(let i=1;i<visitedCells.length;i++){
             let x = (visitedCells[i].x + 0.5) * BASE_SIZE

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { Graphics, Text } from '@pixi/react'
+import { TextStyle, TextMetrics } from '@pixi/text'
 import { PLAYER_RADIUS, LARGE_LINE_WIDTH } from '../../../settings/constants'
-import * as PIXI from 'pixi.js'
 
 import './style.css'
 
@@ -11,7 +11,7 @@ function NamePlate(props) {
     const x = props.x
     const y = props.y
 
-    let textStyle = new PIXI.TextStyle({
+    let textStyle = new TextStyle({
         align: 'center',
         fontFamily: 'Inter',
         fontSize: 20,
@@ -19,7 +19,7 @@ function NamePlate(props) {
         fill: '#ffffff', // gradient
     })
 
-    let textMetrics = PIXI.TextMetrics.measureText(name, textStyle)
+    let textMetrics = TextMetrics.measureText(name, textStyle)
     let verticalSpacing = textMetrics.height/2 + PLAYER_RADIUS/2 + 5
 
     const draw = useCallback(g => {

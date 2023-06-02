@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { Graphics } from '@pixi/react'
-import * as PIXI from 'pixi.js'
 import { BASE_SIZE } from '../../settings/constants'
 import useEventListener from '@use-it/event-listener'
 
@@ -50,8 +49,7 @@ function VisitedCells(props) {
         if(visitedCells.length === 0 || !isVisible) return
 
         g.lineStyle(0,0,1)
-        let colorHighlight = new PIXI.Color(props.color).toNumber()
-        g.beginFill(colorHighlight, 0.3)
+        g.beginFill(props.color, 0.3)
         for(let y=0; y<maze.height; y++){
             for(let x=0; x<maze.width; x++){
                 if(visitedCells[y][x] && (x != maze.sx || y != maze.sy) && (x != maze.ex || y != maze.ey))

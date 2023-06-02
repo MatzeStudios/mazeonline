@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react'
 import { Stage, PixiComponent, useApp, Container } from '@pixi/react'
 import { Viewport } from 'pixi-viewport'
-import * as PIXI from 'pixi.js'
+import PIXI from 'pixi.js'
 
 import socket from '../../services/socket'
 
@@ -71,7 +71,6 @@ const PixiViewportComponent = PixiComponent('Viewport', {
     },
     applyProps(viewport, _oldProps, _newProps) {
         const { ...oldProps } = _oldProps
-        // eslint-disable-next-line no-unused-vars
         const { plugins: newPlugins, children: newChildren, ...newProps } = _newProps
 
         Object.keys(newProps).forEach((p) => {
@@ -79,6 +78,9 @@ const PixiViewportComponent = PixiComponent('Viewport', {
                 viewport[p] = newProps[p]
             }
         })
+    },
+    willUnmount(instance) {
+        instance.destroy = () => {};
     }
 })
 
@@ -155,7 +157,7 @@ function GameScreen(props) {
     }, [])
 
     useEffect(() => {
-        if(appRef.current === null) return
+        if(appRef.current === null) return;
         appRef.current.app.stage.eventMode = 'static'
         const pointerMoveCallback = (event) => {
             requestAnimationFrame(() => {

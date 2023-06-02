@@ -1,5 +1,5 @@
 import { Graphics } from '@pixi/react'
-import * as PIXI from 'pixi.js'
+import { LINE_CAP } from '@pixi/graphics'
 import React, { useCallback } from 'react'
 import { BASE_SIZE, LARGE_LINE_WIDTH } from '../../settings/constants'
 
@@ -39,10 +39,10 @@ function Maze(props) {
     const freeze = props.freeze
 
     const drawEndPoints = useCallback(g => {
-        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xff0000, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xff0000, alpha: 1, cap: LINE_CAP.ROUND})
         g.drawRect(maze.ex*BASE_SIZE, maze.ey*BASE_SIZE, BASE_SIZE, BASE_SIZE)
 
-        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x00ff00, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0x00ff00, alpha: 1, cap: LINE_CAP.ROUND})
         g.drawRect(maze.sx*BASE_SIZE, maze.sy*BASE_SIZE, BASE_SIZE, BASE_SIZE)
     }, [])
 
@@ -60,7 +60,7 @@ function Maze(props) {
         g.drawRect(maze.ex*BASE_SIZE, maze.ey*BASE_SIZE, BASE_SIZE, BASE_SIZE)
         g.endFill()
 
-        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xffffff, alpha: 1, cap: PIXI.LINE_CAP.ROUND})
+        g.lineStyle({width: LARGE_LINE_WIDTH, color: 0xffffff, alpha: 1, cap: LINE_CAP.ROUND})
         
         g.moveTo(maze.width * BASE_SIZE, maze.height * BASE_SIZE)
         g.lineTo(0, maze.height * BASE_SIZE)

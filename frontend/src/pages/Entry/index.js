@@ -14,8 +14,10 @@ import '../../fonts/Inter/static/Inter-Regular.ttf'
 function Entry() {
     const [nickname, setNickname] = useState('')
     const [color, setColor] = useState('')
-    const [numPlayers, setNumPlayers] = useState('?')
+    const [numPlayers, setNumPlayers] = useState('')
     const navigate = useNavigate()
+
+    const [connectedToServer, setConnectedToServer] = useState(socket.connected)
     
     const handleOnClick = useCallback(() => {
         navigate('/game', {replace: true})
@@ -34,6 +36,10 @@ function Entry() {
         }
     }, [])
 
+    useEffect(() => {
+        setConnectedToServer(socket.connected)
+    }, [socket.connected]);
+
     return (
         <div className='page'>
             <div className='container-title'>
@@ -47,10 +53,18 @@ function Entry() {
                 <button className='button-nickname' type='button' onClick={handleOnClick} ><div className='arrRight' type="submit"></div></button>
             </div>
             <ColorSelector onSelect={color => setColor(color)} />
+
             <div className='container-players-online'>
-                <p className='text-num-players'> {numPlayers} </p>
-                <p className='text-players-online'> Jogadores Online </p>
+                {
+                    connectedToServer ?
+                    <>
+                        <p className='text-num-players'> {numPlayers} </p>
+                        <p className='text-players-online'>Jogadores Online</p>
+                    </> :
+                        <p className='text-players-online'>Conectando...</p>
+                }
             </div>
+            
             <Controls border={true}/>
         </div>
     )

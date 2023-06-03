@@ -26,6 +26,8 @@ function Game() {
 
     const [otherPlayersVisibility, setOtherPlayersVisibility] = useState('normal') // normal, restricted, none
 
+    const [connectedToServer, setConnectedToServer] = useState(true)
+
     const navigate = useNavigate()
 
     const handleRedirectHome = useCallback(() => {
@@ -33,7 +35,7 @@ function Game() {
     }, [navigate])
     
     const handleRedirectEnd = useCallback(() => {
-        window.getSelection().empty()   
+        window.getSelection().empty()
         navigate('/end', {replace: true})
     }, [navigate])
 
@@ -93,6 +95,10 @@ function Game() {
         }
     }, [])
 
+    useEffect(() => {
+        setConnectedToServer(socket.connected)
+    }, [socket.connected]);
+
     if(gameInfoReceived) return (
         <>
             {/* <SoundManager /> */}
@@ -103,7 +109,14 @@ function Game() {
         </>
     )
 
-    else return <p className='loading-container'>Loading...</p>
+    if(connectedToServer) return <p className='loading-container'>Loading...</p>
+
+    return (
+        <div className='loading-container'>
+            <p>Conectando-se ao servidor...</p>
+            <p>Isto pode levar cerca de 30 segundos, caso o servidos esteja sendo iniciado.</p>
+        </div>
+    )
 }
 
 export default Game

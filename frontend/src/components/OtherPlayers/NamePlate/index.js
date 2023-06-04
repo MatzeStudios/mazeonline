@@ -3,8 +3,6 @@ import { Graphics, Text } from '@pixi/react'
 import { TextStyle, TextMetrics } from '@pixi/text'
 import { PLAYER_RADIUS, LARGE_LINE_WIDTH } from '../../../settings/constants'
 
-import './style.css'
-
 function NamePlate(props) {
     
     const name = props.name

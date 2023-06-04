@@ -10,13 +10,13 @@ html, body {
 @font-face {
   font-family: "BungeeShade";
   src: local("BungeeShade"),
-   url("../../fonts/Bungee_Shade/BungeeShade-Regular.ttf") format("truetype");
+   url("./fonts/Bungee_Shade/BungeeShade-Regular.ttf") format("truetype");
   font-weight: 400;
 }
 
 @font-face {
   font-family: "Inter";
   src: local("Inter"),
-  url("../../fonts/Inter/static/Inter-Regular.ttf") format("truetype");
+  url("./fonts/Inter/static/Inter-Regular.ttf") format("truetype");
   font-weight: 400;
 }

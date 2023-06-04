@@ -13,9 +13,8 @@ function NamePlate(props) {
 
     let textStyle = new TextStyle({
         align: 'center',
-        fontFamily: 'Inter',
+        fontFamily: "Inter",
         fontSize: 20,
-        fontWeight: 400,
         fill: '#ffffff', // gradient
     })
 

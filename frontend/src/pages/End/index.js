@@ -5,9 +5,6 @@ import socket from '../../services/socket'
 // styles
 import './index.css'
 
-//fonts 
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
 import FinishersList from '../../components/FinishersList'
 import MapOptions from '../../components/MapOptions'
 import NextMatchCounter from '../../components/NextMatchCounter'

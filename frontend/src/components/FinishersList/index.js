@@ -6,10 +6,6 @@ import PlayerModel from '../../components/PlayerModel'
 
 import './style.css'
 
-//fonts 
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
-
 const finishTimeToString = (ms) => {
     let t = ms/1000
     return Math.floor(t / 60) + ':' + (t % 60).toFixed(2)

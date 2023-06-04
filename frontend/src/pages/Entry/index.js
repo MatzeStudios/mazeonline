@@ -7,10 +7,6 @@ import Controls from '../../components/Controls'
 // styles
 import './index.css'
 
-//fonts
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
-
 function Entry() {
     const [nickname, setNickname] = useState('')
     const [color, setColor] = useState('')

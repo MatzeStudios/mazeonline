@@ -2,10 +2,6 @@ import React, { useEffect } from 'react'
 
 import './style.css'
 
-//fonts 
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
-
 // icons
 import MouseLeft from '../../../src/assets/mouse-left.svg'
 import MouseRight from '../../../src/assets/mouse-right.svg'

@@ -2,10 +2,6 @@ import React, { useEffect, useState, useRef } from 'react'
 
 import './style.css'
 
-//fonts 
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
-
 function NextMatchCounter(props) {
     const initialTimer = props.time
 

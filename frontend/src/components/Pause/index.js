@@ -9,10 +9,6 @@ import EyeOpen from '../../assets/eye-open.svg'
 import EyeClosed from '../../assets/eye-closed.svg'
 import EyeBlocked from '../../assets/eye-blocked.svg'
 
-//fonts 
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
-
 import Controls from '../Controls'
 
 function Pause(props) {

@@ -3,10 +3,6 @@ import socket from '../../services/socket'
 
 import './style.css'
 
-//fonts 
-import '../../fonts/Bungee_Shade/BungeeShade-Regular.ttf'
-import '../../fonts/Inter/static/Inter-Regular.ttf'
-
 function MapOptions(props) {
 
     const opts = props.mapOptions

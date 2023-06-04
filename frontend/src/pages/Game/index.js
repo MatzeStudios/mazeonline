@@ -114,7 +114,7 @@ function Game() {
     return (
         <div className='loading-container'>
             <p>Conectando-se ao servidor...</p>
-            <p>Isto pode levar cerca de 30 segundos, caso o servidos esteja sendo iniciado.</p>
+            <p>Isto pode levar cerca de 30 segundos, caso o servidor esteja sendo iniciado.</p>
         </div>
     )
 }

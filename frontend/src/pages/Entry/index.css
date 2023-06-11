@@ -14,7 +14,7 @@
 }
 
 .text-title {
-    font-family: "BungeeShade";
+    font-family: 'Bungee Shade';
     font-weight: normal;
     font-style: normal;
     font-size: 96px;
@@ -34,7 +34,7 @@
     position: relative;
     left: -400px;
 
-    font-family: "Inter";
+    font-family: 'Inter';
     font-style: normal;
     font-size: 20px;
     line-height: 24px;
@@ -49,7 +49,7 @@
     border-radius: 25px;
     padding: 10px 230px 10px 50px;
 
-    font-family: "Inter";
+    font-family: 'Inter';
     font-style: normal;
     font-size: 96px;
     line-height: 24px;
@@ -90,7 +90,7 @@
 .container-players-online {
     margin-top: 30px;
     margin-bottom: 50px;
-    font-family: "BungeeShade";
+    font-family: 'Bungee Shade';
     font-style: normal;
     
     line-height: 58px;

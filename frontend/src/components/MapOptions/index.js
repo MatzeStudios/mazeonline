@@ -1,0 +1,50 @@
+import React, { useEffect, useState } from 'react'
+import socket from '../../services/socket'
+
+import './style.css'
+
+function MapOptions(props) {
+
+    const opts = props.mapOptions
+    const [votes, setVotes] = useState(props.votes)
+    const previousMap = props.previousMap
+    const [maior, setMaior] = useState()
+
+    useEffect(() => {
+        let aux = 0
+        for(let i=0; i<votes.length; i++) if(votes[i] > aux) aux = votes[i]
+        setMaior(aux)
+    }, [votes])
+
+    useEffect(() => {
+        socket.on('votes', setVotes)
+
+        return () => {
+            socket.off('votes', setVotes)
+        }
+    }, [])
+
+    const sendVote = (index) => {
+        socket.emit('vote', index)
+    }
+    
+    return (
+        <>
+            <div className='map-options-container'>
+                {opts.map((opt, index) => (
+                    <div key={index} onClick={() => sendVote(index)} 
+                        className={`map-option ${ ((maior !== 0 && votes[index] === maior) || (maior === 0 && index === previousMap)) ? 'next-map' : ''}`}>
+                        <h2> {opt.name} </h2>
+
+                        <p className='map-option-dimensions'>{opt.width} x {opt.height}</p>
+
+                        <h3>{votes[index]}</h3> 
+
+                    </div>
+                ))}
+            </div>
+        </>
+    )
+}
+
+export default MapOptions

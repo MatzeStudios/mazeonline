@@ -1,0 +1,15 @@
+.end-counter-number {
+    font-family: 'Bungee Shade';
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #44FF57;
+    font-size: 15vh;
+    pointer-events: none;
+    user-select: none;
+
+}

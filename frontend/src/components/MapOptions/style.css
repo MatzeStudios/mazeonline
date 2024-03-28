@@ -1,0 +1,33 @@
+
+.map-options-container {
+    display: flex;
+    width: 100% ;
+    flex-wrap: wrap;
+}
+
+.map-option {
+    flex: 1;
+
+    margin: 20px;
+    padding: 20px;
+
+    cursor: pointer;
+    background-color: #D9D9D9;
+    box-shadow: 8px 9px 8px #565656;
+
+    border-radius: 10px;
+}
+
+.next-map {
+    background-color: goldenrod;
+}
+
+.map-option h3,h2 {
+    font-family: 'Bungee Shade';
+}
+
+.map-option-dimensions {
+    margin-top: -5px;
+    font-style: italic;
+    color: gray;
+}

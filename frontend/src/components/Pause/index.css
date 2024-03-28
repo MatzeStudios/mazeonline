@@ -1,0 +1,68 @@
+.wrapper-btn-click {
+    all: unset;
+
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+    cursor: pointer;
+    opacity: 0.5;
+    
+    user-select: none;
+}
+
+.wrapper-btn-click:hover {
+    opacity:1 ;
+}
+
+.container-btn-eye {
+    position: relative;
+    
+    float: right;
+    padding-bottom: 20px;
+}
+
+.wrapper-btn-eye {
+    all: unset;
+    cursor: pointer;
+
+    margin: 20px 20px 0px 20px;
+}
+.wrapper-btn-eye:hover {
+    opacity: .5 ;
+}
+
+.btn-line-select {
+    height: 3px;
+    width: 25%;
+    background-color: white;
+    position: absolute;
+    transition: all 0.4s cubic-bezier(.51,0,.57,1.29);
+}
+
+.container-menu {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: #3d3d3d;
+    border: solid 3px #272727;
+
+    z-index: 2;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+canvas.blur {
+    filter: blur(5px);
+}

@@ -1,0 +1,43 @@
+.container-select-player-color {
+    display: flex;
+    flex-direction: row;
+    background-color: #D9D9D9;
+    padding: 0px 50px 0px 20px;
+    border-radius: 100px;
+    box-shadow: 8px 9px 8px #565656;
+}
+
+.wrapper-player-color {
+    margin: 30px;
+    margin-right: 0px;
+    padding: 2px;
+    width: 50px;
+    height: 50px;
+    box-sizing: border-box;
+
+    cursor: pointer;
+}
+
+.wrapper-player-color:hover:not(.selected) {
+    outline: 2px solid rgba(0, 0, 0, 0.459);
+}
+
+/* .color-select {
+    background: linear-gradient(to right, 
+    red, orange, yellow, green, blue, indigo, violet);
+    position: relative;
+    animation: onda 10s linear infinite;
+} */
+
+.selected {
+    outline: 2px solid #000;
+}
+
+@keyframes onda {
+    0% {
+      background-position-x: 0%;
+    }
+    100% {
+      background-position-x: 100%;
+    }
+  }

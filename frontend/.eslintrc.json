@@ -21,7 +21,7 @@
             "error",
             4
         ],
-        "linebreak-style": "no", //[
+        "linebreak-style": "off", //[
         //    "error",
         //    "windows"
         //],

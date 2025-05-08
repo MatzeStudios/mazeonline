@@ -21,10 +21,10 @@
             "error",
             4
         ],
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
+        "linebreak-style": "no", //[
+        //    "error",
+        //    "windows"
+        //],
         "quotes": [
             "error",
             "single"

@@ -63,6 +63,7 @@
     height: 180px;
     border-radius: 25px;
     padding: 10px 230px 10px 50px;
+    margin-top: 10px;
 
     font-family: 'Inter';
     font-style: normal;
@@ -78,11 +79,11 @@
 }
 .button-nickname {
     all: unset;
-    position: relative;
+    position: absolute;
     width: 180px;
     height: 180px;
-    margin-left: -220px;
-    top: 25px;
+    
+    transform: translate(-220px, 20px);
 
     border-radius: 100px;
 
